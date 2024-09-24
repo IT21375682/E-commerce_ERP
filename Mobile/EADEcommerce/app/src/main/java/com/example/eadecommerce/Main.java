@@ -12,14 +12,8 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
-import com.example.eadecommerce.fragments.CartFragment;
-import com.example.eadecommerce.fragments.CategoriesFragment;
-import com.example.eadecommerce.fragments.CommentsFragment;
-import com.example.eadecommerce.fragments.OrdersFragment;
-import com.example.eadecommerce.fragments.ProfileFragment;
 import com.example.eadecommerce.fragments.HomeFragment;  // Import HomeFragment
 import com.google.android.material.navigation.NavigationView;
 
@@ -78,14 +72,13 @@ public class Main extends AppCompatActivity {
             }
         });
 
-        // Set OnClickListener for buttonDrawerMenuRight to load CartFragment
+        // Set OnClickListener for buttonDrawerMenuRight to load CartActivity
         buttonDrawerMenuRight.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Load CartFragment when buttonDrawerMenuRight is clicked
-                FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-                transaction.replace(R.id.mainContent, new CartFragment());
-                transaction.commit();
+                // Launch CartActivity when buttonDrawerMenuRight is clicked
+                Intent intent = new Intent(Main.this, CartActivity.class);
+                startActivity(intent);
             }
         });
 
@@ -93,31 +86,38 @@ public class Main extends AppCompatActivity {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 int itemId = item.getItemId();
-                Fragment selectedFragment = null;
 
                 if (itemId == R.id.navHome) {
-                    selectedFragment = new HomeFragment();
+                    // Load HomeFragment
+                    FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+                    transaction.replace(R.id.mainContent, new HomeFragment());
+                    transaction.commit();
                 } else if (itemId == R.id.navProfile) {
-                    selectedFragment = new ProfileFragment();
+                    // Launch ProfileActivity
+                    Intent intent = new Intent(Main.this, ProfileActivity.class);
+                    startActivity(intent);
                 } else if (itemId == R.id.navCart) {
-                    selectedFragment = new CartFragment();
+                    // Launch CartActivity
+                    Intent intent = new Intent(Main.this, CartActivity.class);
+                    startActivity(intent);
                 } else if (itemId == R.id.navMyOrders) {
-                    selectedFragment = new OrdersFragment();
+                    // Launch OrdersActivity
+                    Intent intent = new Intent(Main.this, OrdersActivity.class);
+                    startActivity(intent);
                 } else if (itemId == R.id.navMyComments) {
-                    selectedFragment = new CommentsFragment();
+                    // Launch CommentsActivity
+                    Intent intent = new Intent(Main.this, CommentsActivity.class);
+                    startActivity(intent);
                 } else if (itemId == R.id.navCategories) {
-                    selectedFragment = new CategoriesFragment();
+                    // Launch CategoriesActivity
+                    Intent intent = new Intent(Main.this, CategoriesActivity.class);
+                    startActivity(intent);
                 } else if (itemId == R.id.navLogout) {
+                    // Handle logout
                     Intent intent = new Intent(Main.this, Login.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     startActivity(intent);
                     finish();
-                }
-
-                if (selectedFragment != null) {
-                    FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-                    transaction.replace(R.id.mainContent, selectedFragment);
-                    transaction.commit();
                 }
 
                 drawerLayout.close();  // Close the drawer after selection
@@ -126,3 +126,4 @@ public class Main extends AppCompatActivity {
         });
     }
 }
+
