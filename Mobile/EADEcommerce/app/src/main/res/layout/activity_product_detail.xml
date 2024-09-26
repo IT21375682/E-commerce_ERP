@@ -313,7 +313,7 @@
                         android:layout_gravity="center_vertical"
                         android:overScrollMode="never"
                         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                        tools:listitem="@layout/comment_item" />
+                        tools:listitem="@layout/product_comment_item" />
                 </LinearLayout>
 
             </LinearLayout>

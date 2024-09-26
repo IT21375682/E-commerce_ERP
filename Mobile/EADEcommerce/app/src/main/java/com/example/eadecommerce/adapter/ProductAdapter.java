@@ -50,7 +50,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
             Intent intent = new Intent(context, ProductDetailActivity.class);
             intent.putExtra("productName", product.getName());
             intent.putExtra("productPrice", product.getPrice());
-            intent.putExtra("productImage", product.getImageUrl());
+            intent.putExtra("productImageUrl", product.getImageUrl());
             intent.putExtra("productCategory", product.getCategory());
 
             // Start new activity

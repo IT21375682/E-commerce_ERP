@@ -1,19 +1,19 @@
 package com.example.eadecommerce.model;
 
-public class CommentData {
+public class ProductCommentData {
     private String comment;
     private String commentGmail;
     private String commentId;
 
     // Default constructor
-    public CommentData() {
+    public ProductCommentData() {
         this.comment = "";
         this.commentGmail = "";
         this.commentId = "";
     }
 
     // Parameterized constructor
-    public CommentData(String comment, String commentGmail, String commentId) {
+    public ProductCommentData(String comment, String commentGmail, String commentId) {
         this.comment = comment;
         this.commentGmail = commentGmail;
         this.commentId = commentId;

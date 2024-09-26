@@ -30,7 +30,7 @@ public class CheckoutActivity extends AppCompatActivity {
     private TextView totalAmountTextView;
     private Button payNowButton;
     private List<CartItem> cartItems;
-    private ImageButton buttonBack;// This should be populated with your cart data
+    private ImageButton buttonBack;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -133,6 +133,13 @@ public class ProfileActivity extends AppCompatActivity {
         // Set click listener on the profile edit icon
         profileEditImage.setOnClickListener(v -> toggleEditMode());
 
+        // Set click listener to open full screen image
+        cusAccountProfileImage.setOnClickListener(v -> {
+            Intent fullScreenIntent = new Intent(ProfileActivity.this, FullScreenImageActivity.class);
+            fullScreenIntent.putExtra("productImage", selectedImageUri);
+            startActivity(fullScreenIntent);
+        });
+
         Button changeImageButton = cusAccountProfileImageEditFrame.findViewById(R.id.cusAccManageButton1);
         Button removeImageButton = cusAccountProfileImageEditFrame.findViewById(R.id.cusAccManageButton2);
         Button btnCusUpdate = cusAccountButtons.findViewById(R.id.btnCusUpdate);

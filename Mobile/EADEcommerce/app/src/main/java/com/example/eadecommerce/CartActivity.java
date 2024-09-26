@@ -63,8 +63,8 @@ public class CartActivity extends AppCompatActivity {
 
 
         // Set up RecyclerView
-        cartRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         cartAdapter = new CartAdapter(cartItems);
+        cartRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         cartRecyclerView.setAdapter(cartAdapter);
 
         // Calculate and display total amount

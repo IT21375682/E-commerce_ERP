@@ -9,19 +9,14 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import com.example.eadecommerce.adapter.CommentAdapter;
+import com.example.eadecommerce.adapter.ProductCommentAdapter;
 import com.example.eadecommerce.fragments.HomeFragment;
-import com.example.eadecommerce.model.CommentData;
-import com.google.android.material.navigation.NavigationView;
+import com.example.eadecommerce.model.ProductCommentData;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -79,18 +74,22 @@ public class ProductDetailActivity extends AppCompatActivity {
         TextView priceTextView = findViewById(R.id.productPriceTextView);
         ImageView productImageView = findViewById(R.id.productImageView);
         TextView categoryTextView = findViewById(R.id.productCategoryTextView);
+        quantityTextView = findViewById(R.id.quantityTextView);
 
         // Get data from Intent
         Intent intent = getIntent();
         String productName = intent.getStringExtra("productName");
         double productPrice = intent.getDoubleExtra("productPrice", 0.0);
-        String productImage = intent.getStringExtra("productImage");
+        String productImage = intent.getStringExtra("productImageUrl");
         String productCategory = intent.getStringExtra("productCategory");
+        int productCount = intent.getIntExtra("productCount", 1);
 
         // Bind data to views
         nameTextView.setText(productName);
         priceTextView.setText(String.format("$%.2f", productPrice));
         categoryTextView.setText(productCategory);
+        quantity = productCount;
+        quantityTextView.setText(String.valueOf(quantity));
 
         // Load product image using Picasso
         loadProductImage(productImage, productImageView);
@@ -116,24 +115,23 @@ public class ProductDetailActivity extends AppCompatActivity {
         commentsRecyclerView = findViewById(R.id.commentsRecyclerView);
 
         // Create mock comments
-        List<CommentData> comments = new ArrayList<>();
-        comments.add(new CommentData("Great product!", "user1@example.com", "user1"));
-        comments.add(new CommentData("I love this!", "user2@example.com", "user2"));
-        comments.add(new CommentData("Could be better.", "user3@example.com", "user3"));
-        comments.add(new CommentData("Amazing quality!", "user4@example.com", "user4"));
+        List<ProductCommentData> comments = new ArrayList<>();
+        comments.add(new ProductCommentData("Great product!", "user1@example.com", "user1"));
+        comments.add(new ProductCommentData("I love this!", "user2@example.com", "user2"));
+        comments.add(new ProductCommentData("Could be better.", "user3@example.com", "user3"));
+        comments.add(new ProductCommentData("Amazing quality!", "user4@example.com", "user4"));
 
         // Log mock comments
-        for (CommentData commentData : comments) {
-            Log.d("CommentList", "Comment: " + commentData.getComment());
-            Log.d("CommentList", "Comment Gmail: " + commentData.getCommentGmail());
-            Log.d("CommentList", "Comment User: " + commentData.getCommentId());
+        for (ProductCommentData productCommentData : comments) {
+            Log.d("CommentList", "Comment: " + productCommentData.getComment());
+            Log.d("CommentList", "Comment Gmail: " + productCommentData.getCommentGmail());
+            Log.d("CommentList", "Comment User: " + productCommentData.getCommentId());
         }
 
         // Set up the adapter
-        CommentAdapter commentAdapter = new CommentAdapter(this, comments);
-        commentsRecyclerView.setAdapter(commentAdapter);
+        ProductCommentAdapter productCommentAdapter = new ProductCommentAdapter(this, comments);
+        commentsRecyclerView.setAdapter(productCommentAdapter);
 
-        quantityTextView = findViewById(R.id.quantityTextView);
         buttonMinus = findViewById(R.id.buttonMinus);
         buttonPlus = findViewById(R.id.buttonPlus);
 
@@ -159,12 +157,25 @@ public class ProductDetailActivity extends AppCompatActivity {
     }
 
     private void loadProductImage(String productImage, ImageView productImageView) {
+        Log.d("ProductDetailActivity", "Loading image: " + productImage);
+
         Picasso.get()
                 .load(productImage)
                 .placeholder(R.drawable.person) // Placeholder image
                 .error(R.drawable.logo_dark) // Error image
-                .into(productImageView);
+                .into(productImageView, new com.squareup.picasso.Callback() {
+                    @Override
+                    public void onSuccess() {
+                        Log.d("ProductDetailActivity", "Image loaded successfully: " + productImage);
+                    }
+
+                    @Override
+                    public void onError(Exception e) {
+                        Log.e("ProductDetailActivity", "Error loading image: " + productImage, e);
+                    }
+                });
     }
+
 
     private void refreshProductDetails(String productName, double productPrice, String productImage, String productCategory) {
         // Optionally, you can add logic here to fetch updated product details

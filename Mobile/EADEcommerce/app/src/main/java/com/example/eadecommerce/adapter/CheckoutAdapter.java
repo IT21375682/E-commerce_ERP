@@ -1,15 +1,19 @@
 package com.example.eadecommerce.adapter;
 
+import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.eadecommerce.CheckoutActivity;
+import com.example.eadecommerce.ProductDetailActivity;
 import com.example.eadecommerce.R;
 import com.example.eadecommerce.model.CartItem;
 import com.squareup.picasso.Picasso;
@@ -41,6 +45,24 @@ public class CheckoutAdapter extends RecyclerView.Adapter<CheckoutAdapter.CartVi
                 .placeholder(R.drawable.logo_dark)
                 .error(R.drawable.logo_dark)
                 .into(holder.itemImageView);
+
+        // Handle item click to open ProductDetailActivity
+        holder.itemLayout.setOnClickListener(v -> {
+            Log.d("Checkout Adapter", "Item clicked");
+
+            // Create an Intent to start ProductDetailActivity
+            Intent intent = new Intent(holder.itemLayout.getContext(), ProductDetailActivity.class);
+
+            // Pass product details to ProductDetailActivity
+            intent.putExtra("productName", item.getName());
+            intent.putExtra("productPrice", item.getPrice());
+            intent.putExtra("productImageUrl", item.getImageUrl());
+            intent.putExtra("productCategory", "Default");
+            intent.putExtra("productCount", item.getCount());
+
+            // Start the ProductDetailActivity
+            holder.itemLayout.getContext().startActivity(intent);
+        });
     }
 
     @Override
@@ -53,6 +75,7 @@ public class CheckoutAdapter extends RecyclerView.Adapter<CheckoutAdapter.CartVi
         public TextView itemPriceTextView;
         public TextView itemCountTextView;
         public ImageView itemImageView;
+        public LinearLayout itemLayout;
 
         public CartViewHolder(View itemView) {
             super(itemView);
@@ -60,6 +83,7 @@ public class CheckoutAdapter extends RecyclerView.Adapter<CheckoutAdapter.CartVi
             itemPriceTextView = itemView.findViewById(R.id.itemPriceTextView);
             itemCountTextView = itemView.findViewById(R.id.itemCountTextView);
             itemImageView = itemView.findViewById(R.id.itemImageView);
+            itemLayout = itemView.findViewById(R.id.itemLayout);
         }
     }
 }

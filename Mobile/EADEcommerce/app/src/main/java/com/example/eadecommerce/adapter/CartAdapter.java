@@ -1,15 +1,19 @@
 package com.example.eadecommerce.adapter;
 
+import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.eadecommerce.CartActivity;
+import com.example.eadecommerce.ProductDetailActivity;
 import com.example.eadecommerce.R;
 import com.example.eadecommerce.model.CartItem;
 import com.squareup.picasso.Picasso;
@@ -60,6 +64,23 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
                 ((CartActivity) holder.itemView.getContext()).showUpdateButton();
             }
         });
+
+        // Handle item click to open ProductDetailActivity
+        holder.itemLayout.setOnClickListener(v -> {
+            Log.d("Cart Adapter", "Item clicked");
+            // Create an Intent to start ProductDetailActivity
+            Intent intent = new Intent(holder.itemLayout.getContext(), ProductDetailActivity.class);
+
+            // Pass product details to ProductDetailActivity
+            intent.putExtra("productName", item.getName());
+            intent.putExtra("productPrice", item.getPrice());
+            intent.putExtra("productImageUrl", item.getImageUrl());
+            intent.putExtra("productCategory", "Default");
+            intent.putExtra("productCount", item.getCount());
+
+            // Start the ProductDetailActivity
+            holder.itemLayout.getContext().startActivity(intent);
+        });
     }
 
     @Override
@@ -87,6 +108,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
         public ImageView itemImageView;
         public Button plusButton;
         public Button minusButton;
+        public LinearLayout itemLayout;
 
         public CartViewHolder(View itemView) {
             super(itemView);
@@ -97,6 +119,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
             itemImageView = itemView.findViewById(R.id.itemImageView);
             plusButton = itemView.findViewById(R.id.plusButton);
             minusButton = itemView.findViewById(R.id.minusButton);
+            itemLayout = itemView.findViewById(R.id.itemLayout);
         }
     }
 }

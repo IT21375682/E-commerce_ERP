@@ -1,31 +1,22 @@
 package com.example.eadecommerce.adapter;
 
-import android.content.Context;
-import android.content.Intent;
-import android.util.Log;
+// CommentAdapter.java
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 import android.widget.TextView;
-
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.eadecommerce.model.CommentData;
 import com.example.eadecommerce.R;
-
+import com.example.eadecommerce.model.Comment;
 
 import java.util.List;
 
 public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentViewHolder> {
+    private List<Comment> comments;
 
-    private Context context;
-    private List<CommentData> comments;
-    private int currentCommentIndex = 0;
-
-    public CommentAdapter(Context context, List<CommentData> comments) {
-        this.context = context;
+    public CommentAdapter(List<Comment> comments) {
         this.comments = comments;
     }
 
@@ -39,45 +30,33 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
 
     @Override
     public void onBindViewHolder(@NonNull CommentViewHolder holder, int position) {
-        CommentData item = comments.get(currentCommentIndex);
-        holder.commentText.setText(item.getComment());
-        holder.commentUserText.setText(item.getCommentGmail());
-
-        holder.arrowLeft.setOnClickListener(v -> showPreviousComment());
-        holder.arrowRight.setOnClickListener(v -> showNextComment());
-    }
-
-    private void showPreviousComment() {
-        if (currentCommentIndex > 0) {
-            currentCommentIndex--;
-            notifyDataSetChanged();
-        }
-    }
-
-    private void showNextComment() {
-        if (currentCommentIndex < comments.size() - 1) {
-            currentCommentIndex++;
-            notifyDataSetChanged();
-        }
+        Comment comment = comments.get(position);
+        holder.vendorNameTextView.setText(comment.getUsername());
+        holder.commentTextView.setText(comment.getCommentText());
+        holder.dateTextView.setText(comment.getDate());
     }
 
     @Override
     public int getItemCount() {
-        return 1; // Always display one comment at a time
+        return comments.size();
     }
 
-    public static class CommentViewHolder extends RecyclerView.ViewHolder {
-        public TextView commentText;
-        public TextView commentUserText;
-        public ImageButton arrowLeft;
-        public ImageButton arrowRight;
+    static class CommentViewHolder extends RecyclerView.ViewHolder {
+        TextView vendorNameTextView;
+        TextView commentTextView;
+        TextView dateTextView;
 
         public CommentViewHolder(@NonNull View itemView) {
             super(itemView);
-            commentText = itemView.findViewById(R.id.commentText);
-            commentUserText = itemView.findViewById(R.id.commentUserText);
-            arrowLeft = itemView.findViewById(R.id.arrowLeft);
-            arrowRight = itemView.findViewById(R.id.arrowRight);
+            vendorNameTextView = itemView.findViewById(R.id.vendorNameTextView);
+            commentTextView = itemView.findViewById(R.id.commentTextView);
+            dateTextView = itemView.findViewById(R.id.dateTextView);
         }
+    }
+
+    // Method to update comments
+    public void updateComments(List<Comment> newComments) {
+        comments = newComments;
+        notifyDataSetChanged();
     }
 }

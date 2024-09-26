@@ -19,4 +19,8 @@
         <item>Price: Low to High</item>
         <item>Price: High to Low</item>
     </string-array>
+    <string-array name="date_filter_options">
+        <item>Sort by Newest</item>
+        <item>Sort by Oldest</item>
+    </string-array>
 </resources>
