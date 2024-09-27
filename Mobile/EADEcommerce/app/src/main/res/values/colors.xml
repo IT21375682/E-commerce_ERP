@@ -7,6 +7,7 @@
     <color name="primary">#051F52</color>
     <color name="secondary">#2B68DD</color>
     <color name="secondaryLight">#5289FF</color>
+    <color name="darkRed">#840707</color>
     <color name="red">#FF0000</color>
     <color name="redLight">#F85252</color>
     <color name="gold">#FFD740</color>

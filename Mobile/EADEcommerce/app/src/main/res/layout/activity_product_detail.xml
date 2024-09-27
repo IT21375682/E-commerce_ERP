@@ -338,9 +338,10 @@
             android:layout_weight="2"
             android:drawableLeft="@drawable/cart"
             android:drawablePadding="0dp"
-            android:paddingStart="10dp"
+            android:paddingHorizontal="20dp"
+            android:paddingVertical="10dp"
             android:text="Add to Cart"
-            android:background="@color/secondary"
+            android:background="@drawable/hint_profile_update"
             android:textColor="@android:color/white" />
         <View
             android:layout_width="0dp"
@@ -355,9 +356,10 @@
             android:layout_weight="2"
             android:drawableLeft="@drawable/cart_checkout"
             android:drawablePadding="0dp"
-            android:paddingStart="10dp"
+            android:paddingHorizontal="20dp"
+            android:paddingVertical="10dp"
             android:text="Buy Now"
-            android:background="@color/primary"
+            android:background="@drawable/cus_button_update"
             android:textColor="@android:color/white" />
     </LinearLayout>
 

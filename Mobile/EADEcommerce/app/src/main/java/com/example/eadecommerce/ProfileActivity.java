@@ -41,6 +41,7 @@ public class ProfileActivity extends AppCompatActivity {
     private ImageView profileEditImage, cusAccountProfileImage;
     private EditText cusAccountCity1, cusAccountPostalCode1, cusAccountCountry1;
     private TextView cusAccountCity2, cusAccountPostalCode2, cusAccountCountry2;
+    private Button btnCusDeActivate;
 
     private EditText editTextFirstName, editTextLastName, editTextNIC, editTextPhoneNo;
     private EditText cusAccountAddressLine1, cusAccountAddressLine2, cusAccountAddressLine3;
@@ -103,6 +104,7 @@ public class ProfileActivity extends AppCompatActivity {
         swipeRefreshLayout.setOnRefreshListener(this::refreshContent);
 
         profileEditImage = findViewById(R.id.profileEditImage);
+        btnCusDeActivate = findViewById(R.id.btnCusDeActivate);
 
         cusAccountProfileImage = findViewById(R.id.cusAccountProfileImage);
         cusAccountProfileImageEditFrame = findViewById(R.id.cusAccountProfileImageEditFrame);
@@ -164,6 +166,7 @@ public class ProfileActivity extends AppCompatActivity {
     private void toggleEditMode() {
         // Toggle visibility of edit options (update, edit buttons, etc.)
         toggleViewVisibility(profileEditImage);
+        toggleViewVisibility(btnCusDeActivate);
         toggleViewVisibility(cusAccountButtons);
         toggleViewVisibility(cusAccountProfileImageEditFrame);
 

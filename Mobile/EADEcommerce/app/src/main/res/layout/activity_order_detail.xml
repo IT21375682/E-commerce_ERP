@@ -345,7 +345,7 @@
                                 </LinearLayout>
 
                                 <LinearLayout
-                                    android:id="@+id/receivedLayout"
+                                    android:id="@+id/processLayout"
                                     android:layout_width="match_parent"
                                     android:layout_height="40dp"
                                     android:orientation="horizontal"
@@ -386,14 +386,14 @@
                                 </LinearLayout>
 
                                 <LinearLayout
-                                    android:id="@+id/receivedLineLayout"
+                                    android:id="@+id/processLineLayout"
                                     android:layout_width="match_parent"
                                     android:layout_height="40dp"
                                     android:orientation="horizontal"
                                     android:paddingHorizontal="20dp"
                                     app:layout_constraintEnd_toEndOf="parent"
                                     app:layout_constraintStart_toStartOf="parent"
-                                    app:layout_constraintTop_toBottomOf="@+id/receivedLayout">
+                                    app:layout_constraintTop_toBottomOf="@+id/processLayout">
 
                                     <RelativeLayout
                                         android:layout_width="0dp"
@@ -423,14 +423,14 @@
                                 </LinearLayout>
 
                                 <LinearLayout
-                                    android:id="@+id/departedLayout"
+                                    android:id="@+id/deliveredLayout"
                                     android:layout_width="match_parent"
                                     android:layout_height="40dp"
                                     android:orientation="horizontal"
                                     android:paddingHorizontal="20dp"
                                     app:layout_constraintEnd_toEndOf="parent"
                                     app:layout_constraintStart_toStartOf="parent"
-                                    app:layout_constraintTop_toBottomOf="@+id/receivedLineLayout">
+                                    app:layout_constraintTop_toBottomOf="@+id/processLineLayout">
 
                                     <RelativeLayout
                                         android:layout_width="0dp"
@@ -462,7 +462,26 @@
                                         android:text="Date"
                                         android:gravity="center" />
                                 </LinearLayout>
+                                <LinearLayout
+                                    android:id="@+id/canceledLayout"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="horizontal"
+                                    android:visibility="gone"
+                                    android:paddingHorizontal="20dp"
+                                    android:paddingVertical="20dp"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toBottomOf="@+id/deliveredLayout">
 
+                                    <TextView
+                                        android:id="@+id/canceledTextView"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="Order was canceled due to"
+                                        android:textSize="18sp"
+                                        android:textColor="@color/red"/>
+                                </LinearLayout>
 
                             </androidx.constraintlayout.widget.ConstraintLayout>
                     </androidx.cardview.widget.CardView>

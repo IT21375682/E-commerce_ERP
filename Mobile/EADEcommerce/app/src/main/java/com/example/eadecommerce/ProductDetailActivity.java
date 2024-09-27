@@ -43,7 +43,7 @@ public class ProductDetailActivity extends AppCompatActivity {
 
 
         // Handle Home click to load HomeFragment
-        buttonCart.setOnClickListener(new View.OnClickListener() {
+        clickcartHome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // Load HomeFragment when clickcart_logo is clicked
