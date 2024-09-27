@@ -19,7 +19,9 @@ builder.Services.AddScoped(sp =>
 
 // Register repositories and services
 builder.Services.AddScoped<IUserRepository>(); // Registering the concrete repository
+builder.Services.AddScoped<IProductRepository>(); // Registering the concrete repository
 builder.Services.AddScoped<UserService>(); // Registering the UserService
+builder.Services.AddScoped<ProductService>(); // Registering the UserService
 
 // Add services to the container.
 builder.Services.AddControllers();
