@@ -6,10 +6,12 @@ namespace E_commerce.Services
     public class UserService
     {
         private readonly IUserRepository _userRepository;
+        private readonly JwtService _jwtService;
 
-        public UserService(IUserRepository userRepository)
+        public UserService(IUserRepository userRepository, JwtService jwtService)
         {
             _userRepository = userRepository;
+            _jwtService = jwtService;
         }
 
         public IEnumerable<User> GetAllUsers()
@@ -22,10 +24,39 @@ namespace E_commerce.Services
             return _userRepository.GetUserById(id);
         }
 
+        public User GetUserByEmail(string email)
+        {
+            return _userRepository.GetUserByEmail(email);
+        }
+
+
         public void CreateUser(User user)
         {
+            user.Password = PasswordHasher.HashPassword(user.Password);
             _userRepository.CreateUser(user);
         }
+
+
+
+        public Task<string> LoginAsync(string email, string password)
+        {
+            if (string.IsNullOrEmpty(email) || string.IsNullOrEmpty(password))
+                throw new ArgumentException("Email or password is missing");
+
+            var user = GetUserByEmail(email);
+            if (user == null)
+                throw new Exception("User not found");
+
+            if (!PasswordHasher.VerifyPassword(password, user.Password))
+                throw new Exception("Invalid password");
+
+            if (_jwtService == null)
+                throw new NullReferenceException("_jwtService is not initialized");
+
+            return Task.FromResult(_jwtService.GenerateToken(user.Email, user.Role, user.Name, user.Id));
+        }
+
+
 
         public void UpdateUser(string id, User user)
         {
