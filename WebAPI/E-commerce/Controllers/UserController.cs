@@ -2,6 +2,7 @@
 using E_commerce.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
 
 namespace E_commerce.Controllers
 {
@@ -9,8 +10,6 @@ namespace E_commerce.Controllers
     [ApiController]
     public class UserController : ControllerBase
     {
-
-      
         private readonly UserService _userService;
 
         public UserController(UserService userService)
@@ -18,21 +17,15 @@ namespace E_commerce.Controllers
             _userService = userService;
         }
 
-
-        // Fetch all users with a custom URL: /api/User/all
-        //[HttpGet("all")]
-     
-        // GET: api/User
+        // GET: api/User - Fetch all users
         [HttpGet]
         public ActionResult<IEnumerable<User>> GetAllUsers()
         {
             var users = _userService.GetAllUsers();
             return Ok(users);
         }
-        
 
-
-         // GET: api/User/{id}
+        // GET: api/User/{id} - Fetch a user by ID
         [HttpGet("{id}")]
         public ActionResult<User> GetUserById(string id)
         {
@@ -44,17 +37,21 @@ namespace E_commerce.Controllers
             return Ok(user);
         }
 
-        // POST: api/User
+        // POST: api/User - Create a new user
         [HttpPost]
         public ActionResult<User> CreateUser([FromBody] User newUser)
         {
+            // Validate the model state before proceeding
+            //if (!ModelState.IsValid)
+            //{
+            //    return BadRequest(ModelState);
+            //}
+
             _userService.CreateUser(newUser);
             return CreatedAtAction(nameof(GetUserById), new { id = newUser.Id }, newUser);
         }
 
-
-
-        // PUT: api/User/{id}
+        // PUT: api/User/{id} - Update an existing user
         [HttpPut("{id}")]
         public IActionResult UpdateUser(string id, [FromBody] User updatedUser)
         {
@@ -64,13 +61,13 @@ namespace E_commerce.Controllers
                 return NotFound();
             }
 
+            // Ensure that the user ID remains the same during update
+            updatedUser.Id = id;
             _userService.UpdateUser(id, updatedUser);
             return NoContent();
         }
 
-
-
-        // DELETE: api/User/{id}
+        // DELETE: api/User/{id} - Delete a user by ID
         [HttpDelete("{id}")]
         public IActionResult DeleteUser(string id)
         {
@@ -84,10 +81,30 @@ namespace E_commerce.Controllers
             return NoContent();
         }
 
-
-
+        //Login
+        [HttpPost("login")]
+        public async Task<IActionResult> Login([FromBody] Login model)
+        {
+            try
+            {
+                var user = await _userService.LoginAsync(model.Email, model.Password);
+                return Ok(new { Token = user });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { Message = ex.Message });
+            }
+        }
     }
 
 
- 
+   
+
+
+
+
+
+
+
+
 }

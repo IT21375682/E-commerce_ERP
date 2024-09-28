@@ -1,0 +1,498 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    android:fillViewport="true"
+    tools:context=".OrderDetailActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <!-- Top Bar with Back Button and Cart Title -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:padding="20dp">
+
+            <ImageButton
+                android:id="@+id/buttonBack"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@null"
+                android:backgroundTint="@null"
+                android:contentDescription="Back"
+                android:src="@drawable/left_arrow2" />
+
+            <TextView
+                android:id="@+id/cartTitleTextView"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_weight="1"
+                android:text="My Order"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+        </LinearLayout>
+
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/swipeRefreshLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginVertical="10dp">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/commentFrame"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginHorizontal="20dp"
+                        android:layout_marginVertical="10dp"
+                        android:paddingVertical="10dp"
+                        app:cardElevation="20dp"
+                        app:layout_constraintTop_toTopOf="parent">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="vertical">
+
+                            <RelativeLayout
+                                android:id="@+id/cusMyBookingArrowUpLayout"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal"
+                                android:paddingVertical="10dp">
+                                <!--                                android:visibility="gone"-->
+                                <TextView
+                                    android:id="@+id/viewTxtUrgent1"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_centerVertical="true"
+                                    android:layout_gravity="start"
+                                    android:layout_marginStart="10dp"
+                                    android:background="@color/red"
+                                    android:gravity="center"
+                                    android:padding="5dp"
+                                    android:text="Urgent"
+                                    android:textColor="@color/white"
+                                    android:textSize="14sp"
+                                    android:textStyle="bold"
+                                    android:visibility="gone" />
+
+                                <TextView
+                                    android:id="@+id/orderId1"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_centerInParent="true"
+                                    android:layout_gravity="center_horizontal"
+                                    android:text="Order No"
+                                    android:textSize="18sp" />
+
+                                <ImageView
+                                    android:id="@+id/cusMyBookingArrowUp"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="30dp"
+                                    android:layout_alignParentEnd="true"
+                                    android:layout_centerVertical="true"
+                                    android:layout_marginEnd="5dp"
+                                    android:paddingHorizontal="20dp"
+                                    android:src="@drawable/expand_more"
+                                    android:textSize="16dp"
+                                    android:textStyle="bold" />
+                            </RelativeLayout>
+
+                            <RelativeLayout
+                                android:id="@+id/cusMyBookingArrowDownLayout"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal"
+                                android:visibility="gone"
+                                android:paddingVertical="10dp">
+
+                                <TextView
+                                    android:id="@+id/orderId2"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_centerInParent="true"
+                                    android:layout_gravity="center_horizontal"
+                                    android:text="Order No"
+                                    android:textSize="18sp" />
+                                <ImageView
+                                    android:id="@+id/cusMyBookingArrowDown"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="30dp"
+                                    android:layout_alignParentEnd="true"
+                                    android:layout_centerVertical="true"
+                                    android:layout_marginEnd="5dp"
+                                    android:paddingHorizontal="20dp"
+                                    android:src="@drawable/expand_more"
+                                    android:rotation="180"
+                                    android:textSize="16dp"
+                                    android:textStyle="bold" />
+
+                            </RelativeLayout>
+
+                            <androidx.recyclerview.widget.RecyclerView
+                                android:visibility="gone"
+                                android:id="@+id/recyclerParcelDetails"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginHorizontal="10dp"
+                                android:orientation="vertical" />
+
+                        </LinearLayout>
+                    </androidx.cardview.widget.CardView>
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginTop="50dp"
+                        app:layout_constraintTop_toBottomOf="@+id/commentFrame">
+
+                        <LinearLayout
+                            android:id="@+id/checkoutLayout"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:padding="20dp">
+
+                            <!-- Title "Summary" -->
+                            <TextView
+                                android:id="@+id/summaryTitleTextView"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:paddingBottom="10dp"
+                                android:text="Summary"
+                                android:textSize="18sp"
+                                android:textStyle="bold" />
+
+                            <!-- Subtotal Row -->
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal"
+                                android:paddingVertical="4dp">
+
+                                <TextView
+                                    android:id="@+id/subtotalTextView"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:text="Subtotal"
+                                    android:textSize="16sp" />
+
+                                <TextView
+                                    android:id="@+id/subtotalAmountTextView"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="$0.00"
+                                    android:textSize="16sp" />
+                            </LinearLayout>
+
+                            <!-- Delivery Fee Row -->
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal"
+                                android:paddingVertical="4dp">
+
+                                <TextView
+                                    android:id="@+id/deliveryFeeTextView"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:text="Delivery Fee"
+                                    android:textSize="16sp" />
+
+                                <TextView
+                                    android:id="@+id/deliveryFeeAmountTextView"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="$0.00"
+                                    android:textSize="16sp" />
+                            </LinearLayout>
+
+                            <!-- Total Row -->
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal"
+                                android:paddingVertical="4dp">
+
+                                <TextView
+                                    android:id="@+id/totalTextView"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:text="Total"
+                                    android:textSize="16sp"
+                                    android:textStyle="bold" />
+
+                                <TextView
+                                    android:id="@+id/totalAmountTextView"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="$0.00"
+                                    android:textSize="16sp"
+                                    android:textStyle="bold" />
+                            </LinearLayout>
+
+                    <androidx.cardview.widget.CardView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginVertical="40dp">
+
+                            <androidx.constraintlayout.widget.ConstraintLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:paddingVertical="20dp">
+
+
+                                <LinearLayout
+                                    android:id="@+id/paymentLayout"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="40dp"
+                                    android:orientation="horizontal"
+                                    android:paddingHorizontal="20dp"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toTopOf="parent">
+
+                                    <RelativeLayout
+                                        android:layout_width="0dp"
+                                        android:layout_height="40dp"
+                                        android:layout_weight="3">
+
+                                        <ImageView
+                                            android:id="@+id/paymentImage"
+                                            android:layout_width="40dp"
+                                            android:layout_height="40dp"
+                                            android:layout_centerInParent="true"
+                                            android:background="@drawable/circle_border_background"
+                                            android:padding="10dp"
+                                            android:src="@drawable/payment" />
+                                    </RelativeLayout>
+
+                                    <TextView
+                                        android:layout_width="0dp"
+                                        android:layout_height="match_parent"
+                                        android:layout_weight="4"
+                                        android:gravity="center_vertical"
+                                        android:text="Payment" />
+
+                                    <TextView
+                                        android:id="@+id/paymentImageButton"
+                                        android:layout_width="0dp"
+                                        android:layout_height="match_parent"
+                                        android:layout_weight="3"
+                                        android:text="Date"
+                                        android:gravity="center" />
+
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:id="@+id/paymentLineLayout"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="40dp"
+                                    android:orientation="horizontal"
+                                    android:paddingHorizontal="20dp"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toBottomOf="@+id/paymentLayout">
+
+                                    <RelativeLayout
+                                        android:layout_width="0dp"
+                                        android:layout_height="40dp"
+                                        android:layout_weight="3">
+
+                                        <View
+                                            android:id="@+id/paymentImageLine"
+                                            android:layout_width="1dp"
+                                            android:layout_height="match_parent"
+                                            android:layout_centerInParent="true"
+                                            android:layout_marginHorizontal="10dp"
+                                            android:background="@color/ordersTextColor" />
+                                    </RelativeLayout>
+
+                                    <TextView
+                                        android:layout_width="0dp"
+                                        android:layout_height="match_parent"
+                                        android:layout_weight="4"
+                                        android:gravity="center_vertical" />
+
+                                    <TextView
+                                        android:layout_width="0dp"
+                                        android:layout_height="match_parent"
+                                        android:layout_weight="3"
+                                        android:gravity="center" />
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:id="@+id/processLayout"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="40dp"
+                                    android:orientation="horizontal"
+                                    android:paddingHorizontal="20dp"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toBottomOf="@+id/paymentLineLayout">
+
+                                    <RelativeLayout
+                                        android:layout_width="0dp"
+                                        android:layout_height="40dp"
+                                        android:layout_weight="3">
+
+                                        <ImageView
+                                            android:id="@+id/receivedImage"
+                                            android:layout_width="40dp"
+                                            android:layout_height="40dp"
+                                            android:layout_centerInParent="true"
+                                            android:background="@drawable/circle_border_background"
+                                            android:padding="10dp"
+                                            android:src="@drawable/pending" />
+                                    </RelativeLayout>
+
+                                    <TextView
+                                        android:layout_width="0dp"
+                                        android:layout_height="match_parent"
+                                        android:layout_weight="4"
+                                        android:gravity="center_vertical"
+                                        android:text="Processed" />
+
+                                    <TextView
+                                        android:id="@+id/receivedImageText"
+                                        android:layout_width="0dp"
+                                        android:layout_height="match_parent"
+                                        android:layout_weight="3"
+                                        android:text="Date"
+                                        android:gravity="center" />
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:id="@+id/processLineLayout"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="40dp"
+                                    android:orientation="horizontal"
+                                    android:paddingHorizontal="20dp"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toBottomOf="@+id/processLayout">
+
+                                    <RelativeLayout
+                                        android:layout_width="0dp"
+                                        android:layout_height="40dp"
+                                        android:layout_weight="3">
+
+                                        <View
+                                            android:id="@+id/receivedImageLine"
+                                            android:layout_width="1dp"
+                                            android:layout_height="match_parent"
+                                            android:layout_centerInParent="true"
+                                            android:layout_marginHorizontal="10dp"
+                                            android:background="@color/ordersTextColor" />
+                                    </RelativeLayout>
+
+                                    <TextView
+                                        android:layout_width="0dp"
+                                        android:layout_height="match_parent"
+                                        android:layout_weight="4"
+                                        android:gravity="center_vertical" />
+
+                                    <TextView
+                                        android:layout_width="0dp"
+                                        android:layout_height="match_parent"
+                                        android:layout_weight="3"
+                                        android:gravity="center" />
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:id="@+id/deliveredLayout"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="40dp"
+                                    android:orientation="horizontal"
+                                    android:paddingHorizontal="20dp"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toBottomOf="@+id/processLineLayout">
+
+                                    <RelativeLayout
+                                        android:layout_width="0dp"
+                                        android:layout_height="40dp"
+                                        android:layout_weight="3">
+
+                                        <ImageView
+                                            android:id="@+id/departedImage"
+                                            android:layout_width="40dp"
+                                            android:layout_height="40dp"
+                                            android:layout_centerInParent="true"
+                                            android:background="@drawable/circle_border_background"
+                                            android:padding="10dp"
+                                            android:src="@drawable/completed" />
+                                    </RelativeLayout>
+
+                                    <TextView
+                                        android:layout_width="0dp"
+                                        android:layout_height="match_parent"
+                                        android:layout_weight="4"
+                                        android:gravity="center_vertical"
+                                        android:text="Delivered" />
+
+                                    <TextView
+                                        android:id="@+id/departedImageText"
+                                        android:layout_width="0dp"
+                                        android:layout_height="match_parent"
+                                        android:layout_weight="3"
+                                        android:text="Date"
+                                        android:gravity="center" />
+                                </LinearLayout>
+                                <LinearLayout
+                                    android:id="@+id/canceledLayout"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="horizontal"
+                                    android:visibility="gone"
+                                    android:paddingHorizontal="20dp"
+                                    android:paddingVertical="20dp"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toBottomOf="@+id/deliveredLayout">
+
+                                    <TextView
+                                        android:id="@+id/canceledTextView"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="Order was canceled due to"
+                                        android:textSize="18sp"
+                                        android:textColor="@color/red"/>
+                                </LinearLayout>
+
+                            </androidx.constraintlayout.widget.ConstraintLayout>
+                    </androidx.cardview.widget.CardView>
+                        </LinearLayout>
+
+                    </RelativeLayout>
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </ScrollView>
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+
+    </LinearLayout>
+</RelativeLayout>
