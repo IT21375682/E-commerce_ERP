@@ -23,6 +23,11 @@ namespace E_commerce.Services
             return _productRepository.GetProductById(id);
         }
 
+        public IEnumerable<Product> GetProductsByCategoryId(string categoryId)
+        {
+            return _productRepository.GetProductsByCategoryId(categoryId);
+        }
+
         public void CreateProduct(Product product)
         {
             _productRepository.CreateProduct(product);
@@ -37,5 +42,24 @@ namespace E_commerce.Services
         {
             _productRepository.DeleteProduct(id);
         }
+        //public void UpdateStock(string productId, int quantity)
+        //{
+        //    _productRepository.UpdateStock(productId, quantity);
+        //}
+
+        //public void RemoveStock(string productId, int quantity)
+        //{
+        //    _productRepository.RemoveStock(productId, quantity);
+        //}
+        public (bool isSuccess, string message) UpdateStock(string productId, int quantity)
+        {
+            return _productRepository.UpdateStock(productId, quantity);
+        }
+
+        public (bool isSuccess, string message) RemoveStock(string productId, int quantity)
+        {
+            return _productRepository.RemoveStock(productId, quantity);
+        }
+
     }
 }

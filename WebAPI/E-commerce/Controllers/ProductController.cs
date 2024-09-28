@@ -34,6 +34,19 @@ namespace E_commerce.Controllers
             return Ok(product);
         }
 
+        [HttpGet("category/{categoryId}")]
+        public ActionResult<IEnumerable<Product>> GetProductsByCategoryId(string categoryId)
+        {
+            var products = _productService.GetProductsByCategoryId(categoryId);
+
+            if (products == null || !products.Any())
+            {
+                return NotFound("No products found for the given category.");
+            }
+
+            return Ok(products);
+        }
+
         [HttpPost]
         public ActionResult<Product> CreateProduct([FromBody] Product newProduct)
         {
@@ -73,5 +86,41 @@ namespace E_commerce.Controllers
             _productService.DeleteProduct(id);
             return NoContent();
         }
+
+        //[HttpPost("{productId}/stock/update")]
+        //public ActionResult UpdateStock(string productId, [FromBody] int quantity)
+        //{
+        //    _productService.UpdateStock(productId, quantity);
+        //    return NoContent();
+        //}
+
+        //[HttpPost("{productId}/stock/remove")]
+        //public ActionResult RemoveStock(string productId, [FromBody] int quantity)
+        //{
+        //    _productService.RemoveStock(productId, quantity);
+        //    return NoContent();
+        //}
+        [HttpPut("{id}/stock")]
+        public ActionResult UpdateStock(string id, [FromBody] int quantity)
+        {
+            var (isSuccess, message) = _productService.UpdateStock(id, quantity);
+            if (isSuccess)
+            {
+                return Ok(message);
+            }
+            return BadRequest(message);
+        }
+
+        [HttpDelete("{id}/stock")]
+        public ActionResult RemoveStock(string id, [FromBody] int quantity)
+        {
+            var (isSuccess, message) = _productService.RemoveStock(id, quantity);
+            if (isSuccess)
+            {
+                return Ok(message);
+            }
+            return BadRequest(message);
+        }
+
     }
 }

@@ -20,11 +20,19 @@ builder.Services.AddScoped(sp =>
     return client.GetDatabase("ECommerceDB");
 });
 
-// Register repositories and services
-builder.Services.AddScoped<IUserRepository>(); // Registering the concrete repository
-builder.Services.AddScoped<IProductRepository>(); // Registering the concrete repository
+// Register repositories
+builder.Services.AddScoped<IUserRepository>(); // Registering the concrete user repository
+builder.Services.AddScoped<IProductRepository>(); // Registering the concrete product repository
+builder.Services.AddScoped<ICategoryRepository>(); // Registering the concrete repository
+builder.Services.AddScoped<IOrderRepository>(); // Registering the concrete order repository
+
+
+
+// Register services
 builder.Services.AddScoped<UserService>(); // Registering the UserService
-builder.Services.AddScoped<ProductService>(); // Registering the UserService
+builder.Services.AddScoped<ProductService>(); // Registering the Product Service
+builder.Services.AddScoped<OrderService>(); // Registering the Order Service
+builder.Services.AddScoped<CategoryService>(); // Registering the UserService
 
 builder.Services.AddScoped<JwtService>(sp =>
 {
