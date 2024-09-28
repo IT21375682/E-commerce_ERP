@@ -88,3 +88,17 @@ C:\Users\shandeep\source\repos\E-commerce\WebAPI\E-commerce\obj\Debug\net8.0\ref
 C:\Users\shandeep\source\repos\E-commerce\WebAPI\E-commerce\obj\Debug\net8.0\E-commerce.pdb
 C:\Users\shandeep\source\repos\E-commerce\WebAPI\E-commerce\obj\Debug\net8.0\E-commerce.genruntimeconfig.cache
 C:\Users\shandeep\source\repos\E-commerce\WebAPI\E-commerce\obj\Debug\net8.0\ref\E-commerce.dll
+C:\Users\shandeep\source\repos\E-commerce\WebAPI\E-commerce\obj\Debug\net8.0\E-commerce.sourcelink.json
+C:\Users\shandeep\source\repos\E-commerce\WebAPI\E-commerce\bin\Debug\net8.0\JWT.dll
+C:\Users\shandeep\source\repos\E-commerce\WebAPI\E-commerce\bin\Debug\net8.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
+C:\Users\shandeep\source\repos\E-commerce\WebAPI\E-commerce\bin\Debug\net8.0\Microsoft.AspNetCore.Identity.MongoDB.dll
+C:\Users\shandeep\source\repos\E-commerce\WebAPI\E-commerce\bin\Debug\net8.0\Microsoft.Bcl.TimeProvider.dll
+C:\Users\shandeep\source\repos\E-commerce\WebAPI\E-commerce\bin\Debug\net8.0\Microsoft.IdentityModel.Abstractions.dll
+C:\Users\shandeep\source\repos\E-commerce\WebAPI\E-commerce\bin\Debug\net8.0\Microsoft.IdentityModel.JsonWebTokens.dll
+C:\Users\shandeep\source\repos\E-commerce\WebAPI\E-commerce\bin\Debug\net8.0\Microsoft.IdentityModel.Logging.dll
+C:\Users\shandeep\source\repos\E-commerce\WebAPI\E-commerce\bin\Debug\net8.0\Microsoft.IdentityModel.Protocols.dll
+C:\Users\shandeep\source\repos\E-commerce\WebAPI\E-commerce\bin\Debug\net8.0\Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
+C:\Users\shandeep\source\repos\E-commerce\WebAPI\E-commerce\bin\Debug\net8.0\Microsoft.IdentityModel.Tokens.dll
+C:\Users\shandeep\source\repos\E-commerce\WebAPI\E-commerce\bin\Debug\net8.0\Newtonsoft.Json.dll
+C:\Users\shandeep\source\repos\E-commerce\WebAPI\E-commerce\bin\Debug\net8.0\System.IdentityModel.Tokens.Jwt.dll
+C:\Users\shandeep\source\repos\E-commerce\WebAPI\E-commerce\bin\Debug\net8.0\System.Security.Permissions.dll
