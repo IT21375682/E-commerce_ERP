@@ -30,15 +30,20 @@ namespace E_commerce.Repositories
         {
             return _users.Find(user => user.Email == email).FirstOrDefault();
         }
-        // Create a new user
+        // Check if a user with the given email already exists
+        public bool IsEmailTaken(string email)
+        {
+            return _users.Find(user => user.Email == email).Any();
+        }
+
+        //Create User
         public void CreateUser(User user)
         {
-            //// Ensure the user has an Id
             if (string.IsNullOrEmpty(user.Id))
             {
-                user.Id = ObjectId.GenerateNewId().ToString(); // Generate a unique Id if not provided
+                user.Id = ObjectId.GenerateNewId().ToString(); // Generate unique Id
             }
-            user.CreatedAt = DateTime.Now; // Set the creation time
+            user.CreatedAt = DateTime.Now;
             _users.InsertOne(user);
         }
 
@@ -61,5 +66,20 @@ namespace E_commerce.Repositories
             var update = Builders<User>.Update.Set(u => u.IsActive, activate);
             _users.UpdateOne(user => user.Id == id, update);
         }
+
+        //Get All active users
+        public IEnumerable<User> GetActiveUsers()
+        {
+            return _users.Find(user => user.IsActive).ToList(); // Fetch only active users
+        }
+
+
+        //Get All active users
+        public IEnumerable<User> GetDeactiveUsers()
+        {
+            return _users.Find(user => !user.IsActive).ToList(); // Fetch only active users
+        }
+
+
     }
 }

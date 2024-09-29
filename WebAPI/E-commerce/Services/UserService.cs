@@ -32,7 +32,13 @@ namespace E_commerce.Services
 
         public void CreateUser(User user)
         {
-            user.Password = PasswordHasher.HashPassword(user.Password);
+            // Check if the email is already taken
+            if (_userRepository.IsEmailTaken(user.Email))
+            {
+                throw new ArgumentException("Email is already in use");
+            }
+
+            user.Password = PasswordHasher.HashPassword(user.Password); // Hash the password
             _userRepository.CreateUser(user);
         }
 
@@ -67,6 +73,22 @@ namespace E_commerce.Services
         {
             _userRepository.DeleteUser(id);
         }
+
+
+        //Get All active Users
+        public IEnumerable<User> GetActiveUsers()
+        {
+            return _userRepository.GetActiveUsers(); // Fetch active users
+        }
+
+
+
+        //Get All Deactive Users
+        public IEnumerable<User> GetDeactiveUsers()
+        {
+            return _userRepository.GetDeactiveUsers(); // Fetch active users
+        }
+
 
 
     }
