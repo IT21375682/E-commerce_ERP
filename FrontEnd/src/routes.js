@@ -4,6 +4,8 @@ import Register from "views/examples/Register.js";
 import Login from "views/examples/Login.js";
 import Tables from "views/examples/VendorTable.js";
 import Icons from "views/examples/Icons.js";
+import AddProduct from "views/examples/AddProduct";
+import ViewProduct from "views/examples/ViewProducts";
 
 var routes = [
   {
@@ -28,10 +30,24 @@ var routes = [
     layout: "/admin",
   },
   {
+    path: "/add-product",
+    name: "Add Product",
+    icon: "ni ni-single-02 text-yellow",
+    component: <AddProduct />,
+    layout: "/admin",
+  },
+  {
     path: "/tables",
     name: "Vendor ",
     icon: "ni ni-bullet-list-67 text-red",
     component: <Tables />,
+    layout: "/admin",
+  },
+  {
+    path: "/view-product",
+    name: "View Product ",
+    icon: "ni ni-bullet-list-67 text-red",
+    component: < ViewProduct/>,
     layout: "/admin",
   },
   {
