@@ -92,7 +92,7 @@ namespace E_commerce.Controllers
         }
 
         // Get all active categories
-        [HttpGet("active")]
+        [HttpGet("active-categories")]
         public ActionResult<IEnumerable<CategoryDto>> GetAllActiveCategoriesNames()
         {
             var activeCategories = _categoryService.GetAllActiveCategoriesNames();
