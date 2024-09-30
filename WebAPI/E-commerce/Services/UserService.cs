@@ -50,6 +50,9 @@ namespace E_commerce.Services
             if (!PasswordHasher.VerifyPassword(password, user.Password))
                 throw new Exception("Invalid password");
 
+            if (!user.IsActive)
+                throw new Exception("User account is not active");
+
             if (_jwtService == null)
                 throw new NullReferenceException("_jwtService is not initialized");
 

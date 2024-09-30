@@ -92,13 +92,18 @@ namespace E_commerce.Controllers
             }
             catch (Exception ex)
             {
+                if (ex.Message == "User account is not active")
+                {
+                    return BadRequest(new { Message = "Your account is not active. Please contact support." });
+                }
                 return BadRequest(new { Message = ex.Message });
             }
         }
+
     }
 
 
-   
+
 
 
 
