@@ -8,6 +8,7 @@ namespace E_commerce.Models
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]  // Tells MongoDB to store this as an ObjectId but treat it as a string in C#
         public string? Id { get; set; }  // Unique product ID
+
         [BsonElement("name")]
         public string Name { get; set; }
 
@@ -37,5 +38,6 @@ namespace E_commerce.Models
 
         [BsonElement("stockLastUpdated")]
         public DateTime StockLastUpdated { get; set; } 
+
     }
 }

@@ -1,4 +1,5 @@
-﻿using E_commerce.Models;
+﻿using E_commerce.DTOs;
+using E_commerce.Models;
 using E_commerce.Services;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
@@ -160,5 +161,25 @@ namespace E_commerce.Controllers
             var result = _productService.GetAllActiveCategoryAndActiveProducts();
             return Ok(result);
         }
+          [HttpGet("active-details")]
+        public ActionResult<IEnumerable<ProductDetailsDto>> GetAllActiveProductsWithDetails()
+        {
+            var products = _productService.GetAllActiveProductsWithDetails();
+            return Ok(products);
+        }
+
+        [HttpGet("active-details/{productId}")]
+        public ActionResult<ProductDetailsDto> GetActiveProductWithDetailsById(string productId)
+        {
+            var product = _productService.GetActiveProductWithDetailsById(productId);
+
+            if (product == null)
+            {
+                return NotFound($"Product with Id {productId} not found or is inactive.");
+            }
+
+            return Ok(product);
+        }
+
     }
 }

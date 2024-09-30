@@ -3,6 +3,7 @@ using MongoDB.Driver;
 using System.Collections.Generic;
 using System;
 using MongoDB.Bson;
+using E_commerce.DTOs;
 
 namespace E_commerce.Repositories
 {
@@ -80,6 +81,15 @@ namespace E_commerce.Repositories
             return _users.Find(user => !user.IsActive).ToList(); // Fetch only active users
         }
 
-
+        // Retrieve a user by Id
+        public UserDto GetUserNameById(string id)
+        {
+            return _users.Find(user => user.Id == id)
+                         .Project(user => new UserDto
+                         {
+                             Id = user.Id,
+                             Name = user.Name
+                         }).FirstOrDefault();
+        }
     }
 }

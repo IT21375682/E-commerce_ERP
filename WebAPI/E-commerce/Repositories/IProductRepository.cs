@@ -1,10 +1,12 @@
-﻿using E_commerce.Models;
-using E_commerce.Services;
 using MongoDB.Bson;
+﻿using E_commerce.DTOs;
+using E_commerce.Models;
+using E_commerce.Services;
 using MongoDB.Driver;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 
     namespace E_commerce.Repositories
 {
@@ -14,14 +16,18 @@ using System.Linq;
         private readonly IMongoCollection<Category> _categories;
         private readonly IMongoCollection<User> _users;  // Collection for users (vendors)
         private readonly EmailService _emailService;
+        private readonly IMongoCollection<User> _vendors; // Add this to fetch vendor details
+        private readonly IMongoCollection<Comment> _comments; // Add this to fetch average ratings
+
 
         public IProductRepository(IMongoDatabase database, EmailService emailService)
         {
             _products = database.GetCollection<Product>("Products");
-            _categories = database.GetCollection<Category>("Categories");
             _users = database.GetCollection<User>("Users");  // Initialize the users collection
             _emailService = emailService;
-
+            _categories = database.GetCollection<Category>("Category");
+            _vendors = database.GetCollection<User>("Users"); // Assuming users table has vendor info
+            _comments = database.GetCollection<Comment>("Comments"); // Assuming comments have ratings
         }
 
         public IEnumerable<Product> GetAllProducts()
@@ -278,5 +284,88 @@ using System.Linq;
 
             return result;
         }
+        // Method to get active products with category and vendor details
+        public IEnumerable<ProductDetailsDto> GetAllActiveProductsWithDetails()
+        {
+            // Fetch active products
+            var activeProducts = _products.Find(product => product.IsActive).ToList();
+
+            // Get active category IDs
+            var activeCategories = _categories.Find(category => category.IsActive).ToList();
+            var activeCategoryIds = activeCategories.Select(c => c.Id).ToHashSet();
+
+            var categoryLookup = activeCategories.ToDictionary(c => c.Id, c => c.CategoryName);
+            var vendorLookup = _vendors.Find(vendor => true).ToList()
+                .ToDictionary(v => v.Id.ToString(), v => v.Name);
+
+
+            // Build the product details DTOs
+            var productDetails = activeProducts.Select(product => new ProductDetailsDto
+            {
+                ProductId = product.Id,
+                Name = product.Name,
+                ProductImage = product.ProductImage,
+                CategoryId = product.CategoryId,
+                Description = product.Description,
+                Price = product.Price,
+                AvailableStock = product.AvailableStock,
+                IsActive = product.IsActive,
+                VendorId = product.VendorId,
+                CreatedAt = product.CreatedAt,
+                StockLastUpdated = product.StockLastUpdated,
+                ProductCategoryName = categoryLookup.TryGetValue(product.CategoryId, out var categoryName) ? categoryName : null,
+                VendorName = vendorLookup.TryGetValue(product.VendorId, out var vendorName) ? vendorName : null,
+                AverageRating = GetAverageRatingByProductId(product.Id)
+            });
+
+            return productDetails;
+        }
+
+        // Method to get details of a single active product by ID
+        public ProductDetailsDto GetActiveProductWithDetailsById(string productId)
+        {
+            // Fetch the product by ID and check if it's active
+            var product = _products.Find(product => product.Id == productId && product.IsActive).FirstOrDefault();
+
+            if (product == null)
+                return null;
+
+            // Fetch active category details
+            var activeCategory = _categories.Find(category => category.Id == product.CategoryId && category.IsActive).FirstOrDefault();
+            var categoryName = activeCategory?.CategoryName;
+
+            // Fetch vendor details
+            var vendor = _vendors.Find(vendor => vendor.Id == product.VendorId).FirstOrDefault();
+            var vendorName = vendor?.Name;
+
+            // Build the product details DTO
+            return new ProductDetailsDto
+            {
+                ProductId = product.Id,
+                Name = product.Name,
+                ProductImage = product.ProductImage,
+                CategoryId = product.CategoryId,
+                Description = product.Description,
+                Price = product.Price,
+                AvailableStock = product.AvailableStock,
+                IsActive = product.IsActive,
+                VendorId = product.VendorId,
+                CreatedAt = product.CreatedAt,
+                StockLastUpdated = product.StockLastUpdated,
+                ProductCategoryName = categoryName,
+                VendorName = vendorName,
+                AverageRating = GetAverageRatingByProductId(product.Id)
+            };
+        }
+
+
+        private double GetAverageRatingByProductId(string productId)
+        {
+            var ratings = _comments.Find(comment => comment.productId == productId)
+                                   .ToList()
+                                   .Select(c => c.rating);
+            return ratings.Any() ? ratings.Average() : 0;
+        }
+
     }
 }

@@ -1,4 +1,5 @@
-﻿using E_commerce.Models;
+﻿using E_commerce.DTOs;
+using E_commerce.Models;
 using E_commerce.Repositories;
 
 namespace E_commerce.Services
@@ -41,5 +42,13 @@ namespace E_commerce.Services
             {
                 _categoryRepository.DeleteCategory(id);
             }
-        }
+
+            public IEnumerable<CategoryDto> GetAllActiveCategoriesNames()
+            {
+                return _categoryRepository.GetAllActiveCategoriesNames();
+            }
+
+
+
+    }
 }
