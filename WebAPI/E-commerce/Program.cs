@@ -27,6 +27,17 @@ builder.Services.AddScoped(sp =>
     var database = sp.GetRequiredService<IMongoDatabase>();
     return database.GetCollection<Order>("Orders"); // Ensure "Orders" matches your MongoDB collection name
 });
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowSpecificOrigin",
+        policy =>
+        {
+            policy.AllowAnyOrigin() // React app URL
+                  .AllowAnyHeader()
+                  .AllowAnyMethod();
+        });
+});
+
 
 // Register repositories
 builder.Services.AddScoped<IUserRepository>(); // Registering the concrete user repository
@@ -79,7 +90,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
-
+app.UseCors("AllowSpecificOrigin");
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
