@@ -15,7 +15,8 @@ namespace E_commerce.Models
     public class Cart
     {
         [BsonId] // Indicates this is the primary key
-        public ObjectId CartId { get; set; } // MongoDB generated ID
+        [BsonRepresentation(BsonType.ObjectId)]
+        public string? CartId { get; set; } // MongoDB generated ID
         public string UserId { get; set; } // Reference to the user who owns the cart
         public List<CartProductItem> Products { get; set; } = new List<CartProductItem>(); // List of products with their counts
     }

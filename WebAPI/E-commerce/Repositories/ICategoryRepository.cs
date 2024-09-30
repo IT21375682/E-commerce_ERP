@@ -1,4 +1,5 @@
-﻿using E_commerce.Models;
+﻿using E_commerce.DTOs;
+using E_commerce.Models;
 using MongoDB.Driver;
 
 namespace E_commerce.Repositories
@@ -36,5 +37,21 @@ namespace E_commerce.Repositories
             {
                  _category.DeleteOne(category => category.Id == id);
             }
-        }
+
+            public IEnumerable<CategoryDto> GetAllActiveCategoriesNames()
+            {
+                // Using projection to map to DTO
+                return _category.Find(category => category.IsActive)
+                                .Project(category => new CategoryDto
+                                {
+                                    Id = category.Id,
+                                    CategoryName = category.CategoryName
+                                }).ToList();
+            }
+
+
+
+
+
+    }
 }

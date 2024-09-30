@@ -48,7 +48,7 @@ namespace E_commerce.Repositories
         {
             foreach (var item in order.ProductItems)
             {
-                item.Processed = false;
+                item.Delivered = false;
             }
             order.Status = new OrderStatus();
             _orders.InsertOne(order);
@@ -113,6 +113,10 @@ namespace E_commerce.Repositories
                     updates.Add(update.Set(o => o.Status.ProcessingDate, DateTime.Now));
                     break;
                 case "dispatched":
+                    updates.Add(update.Set(o => o.Status.Dispatched, true));
+                    updates.Add(update.Set(o => o.Status.DispatchedDate,    DateTime.Now));
+                    break;
+                case "partially_delivered":
                     updates.Add(update.Set(o => o.Status.Dispatched, true));
                     updates.Add(update.Set(o => o.Status.DispatchedDate, DateTime.Now));
                     break;

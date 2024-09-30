@@ -29,7 +29,7 @@ namespace E_commerce.Models
     {
         public string ProductId { get; set; }  // Product identifier
         public int Count { get; set; }         // Quantity of the product
-        public bool Processed { get; set; }    // Whether the product is processed or not
+        public bool Delivered { get; set; }    // Whether the product is processed or not
     }
 
     // Represents the nested status of an order
@@ -43,6 +43,8 @@ namespace E_commerce.Models
 
         public bool? Dispatched { get; set; } = false;  // Default to false, True if order is dispatched
         public DateTime? DispatchedDate { get; set; } = null;  // Date when order was dispatched
+        public bool? Partially_Delivered { get; set; } = false;   // Default to false, True if order is partially delivered
+        public DateTime? Partially_Delivered_Date { get; set; } = null;  // Date when order was partially delivered
 
         public bool? Delivered { get; set; } = false;   // Default to false, True if order is delivered
         public DateTime? DeliveredDate { get; set; } = null;  // Date when order was delivered

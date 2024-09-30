@@ -5,6 +5,7 @@
  * It includes routes for adding, retrieving, updating, and deleting comments.
  */
 
+using E_commerce.DTOs;
 using E_commerce.Models;
 using E_commerce.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -50,30 +51,41 @@ namespace E_commerce.Controllers
         [HttpPost]
         public IActionResult AddComment([FromBody] Comment comment)
         {
-            _commentService.AddComment(comment);
-            return CreatedAtAction(nameof(GetCommentById), new { id = comment.CommentId }, comment);
+            try
+            {
+                _commentService.AddComment(comment);
+                return CreatedAtAction(nameof(GetCommentById), new { id = comment.id }, comment);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Internal server error: " + ex.Message);
+            }
         }
 
         // GET api/Comment/user/{userId} - Retrieves comments by user ID.
         [HttpGet("user/{userId}")]
-        public ActionResult<List<Comment>> GetCommentsByUserId(string userId)
+        public ActionResult<List<CommentDto>> GetCommentsByUserId(string userId)
         {
-            return _commentService.GetCommentsByUserId(userId);
+            var comments = _commentService.GetCommentsByUserId(userId);
+            return Ok(comments);
         }
 
         // GET api/Comment/vendor/{vendorId} - Retrieves comments by vendor ID.
         [HttpGet("vendor/{vendorId}")]
-        public ActionResult<List<Comment>> GetCommentsByVendorId(string vendorId)
+        public ActionResult<List<CommentDto>> GetCommentsByVendorId(string vendorId)
         {
-            return _commentService.GetCommentsByVendorId(vendorId);
+            var comments = _commentService.GetCommentsByVendorId(vendorId);
+            return Ok(comments);
         }
 
         // GET api/Comment/product/{productId} - Retrieves comments by product ID.
         [HttpGet("product/{productId}")]
-        public ActionResult<List<Comment>> GetCommentsByProductId(string productId)
+        public ActionResult<List<CommentDto>> GetCommentsByProductId(string productId)
         {
-            return _commentService.GetCommentsByProductId(productId);
+            var comments = _commentService.GetCommentsByProductId(productId);
+            return Ok(comments);
         }
+
 
         // PUT api/Comment/{id} - Updates an existing comment.
         [HttpPut("{id}")]
@@ -89,6 +101,37 @@ namespace E_commerce.Controllers
         {
             _commentService.DeleteComment(id);
             return NoContent();
+        }
+
+        // GET api/Comment/vendor/{vendorId}/average-rating - Retrieves the average rating for a specific vendor
+        [HttpGet("vendor/{vendorId}/average-rating")]
+        public ActionResult<double> GetAverageRatingByVendorId(string vendorId)
+        {
+            var averageRating = _commentService.GetAverageRatingByVendorId(vendorId);
+            return Ok(averageRating);
+        }
+
+        // GET api/Comment/product/{productId}/average-rating - Retrieves the average rating for a specific product
+        [HttpGet("product/{productId}/average-rating")]
+        public ActionResult<double> GetAverageRatingByProductId(string productId)
+        {
+            var averageRating = _commentService.GetAverageRatingByProductId(productId);
+            return Ok(averageRating);
+        }
+
+        // POST api/Comment - Adds or updates a comment based on userId, vendorId, and productId.
+        [HttpPost("mycomment")]
+        public IActionResult AddOrUpdateComment([FromBody] Comment comment)
+        {
+            try
+            {
+                _commentService.AddOrUpdateComment(comment);
+                return Ok(comment); // Return the comment after adding/updating
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Internal server error: " + ex.Message);
+            }
         }
     }
 }

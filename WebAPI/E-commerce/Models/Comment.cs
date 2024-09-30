@@ -14,13 +14,14 @@ namespace E_commerce.Models
     public class Comment
     {
         [BsonId] // MongoDB auto-generated ID
-        public ObjectId CommentId { get; set; }   // Unique ID for the comment
+        [BsonRepresentation(BsonType.ObjectId)]
+        public string? id { get; set; }   // Unique ID for the comment
 
-        public string UserId { get; set; }   // ID of the user who posted the comment
-        public string VendorId { get; set; } // ID of the vendor being commented on
-        public string ProductId { get; set; }    // ID of the product being commented on
-        public DateTime Date { get; set; } = DateTime.Now; // Date of the comment
-        public int Rating { get; set; }  // Rating for the product/vendor
-        public string CommentText { get; set; }  // Actual comment text
+        public string userId { get; set; }   // ID of the user who posted the comment
+        public string vendorId { get; set; } // ID of the vendor being commented on
+        public string productId { get; set; }    // ID of the product being commented on
+        public DateTime date { get; set; } = DateTime.Now; // Date of the comment
+        public int rating { get; set; } = 0;  // Rating for the product/vendor
+        public string commentText { get; set; } = "";  // Actual comment text
     }
 }

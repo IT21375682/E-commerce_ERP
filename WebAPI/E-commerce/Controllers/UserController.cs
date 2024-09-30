@@ -1,4 +1,5 @@
-﻿using E_commerce.Models;
+﻿using E_commerce.DTOs;
+using E_commerce.Models;
 using E_commerce.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -98,6 +99,18 @@ namespace E_commerce.Controllers
                 }
                 return BadRequest(new { Message = ex.Message });
             }
+        }
+
+        // GET: api/User/{id} - Fetch a user name by ID
+        [HttpGet("Only/{id}")]
+        public ActionResult<UserDto> GetUserNameById(string id)
+        {
+            var user = _userService.GetUserNameById(id);
+            if (user == null)
+            {
+                return NotFound();
+            }
+            return Ok(user);
         }
 
     }

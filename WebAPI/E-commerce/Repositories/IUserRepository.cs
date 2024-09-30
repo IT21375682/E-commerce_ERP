@@ -3,6 +3,7 @@ using MongoDB.Driver;
 using System.Collections.Generic;
 using System;
 using MongoDB.Bson;
+using E_commerce.DTOs;
 
 namespace E_commerce.Repositories
 {
@@ -61,5 +62,17 @@ namespace E_commerce.Repositories
             var update = Builders<User>.Update.Set(u => u.IsActive, activate);
             _users.UpdateOne(user => user.Id == id, update);
         }
+
+        // Retrieve a user by Id
+        public UserDto GetUserNameById(string id)
+        {
+            return _users.Find(user => user.Id == id)
+                         .Project(user => new UserDto
+                         {
+                             Id = user.Id,
+                             Name = user.Name
+                         }).FirstOrDefault();
+        }
+
     }
 }

@@ -105,8 +105,6 @@ app.UseRouting();
 // Apply CORS policy
 app.UseCors("AllowSpecificOrigin");
 
-//app.UseHttpsRedirection();
-
 app.UseAuthorization();
 
 app.MapControllers();

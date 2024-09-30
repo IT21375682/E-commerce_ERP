@@ -1,4 +1,5 @@
-﻿using E_commerce.Models;
+﻿using E_commerce.DTOs;
+using E_commerce.Models;
 using E_commerce.Repositories;
 
 namespace E_commerce.Services
@@ -71,6 +72,10 @@ namespace E_commerce.Services
             _userRepository.DeleteUser(id);
         }
 
+        public UserDto GetUserNameById(string id)
+        {
+            return _userRepository.GetUserNameById(id);
+        }
 
     }
 }
