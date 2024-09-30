@@ -25,6 +25,27 @@ namespace E_commerce.Controllers
             return Ok(users);
         }
 
+        //GET :api/User/active- Fetch all Active users only
+        [HttpGet("active")] // New endpoint to get active users
+        public ActionResult<IEnumerable<User>> GetActiveUsers()
+        {
+            var activeUsers = _userService.GetActiveUsers();
+            return Ok(activeUsers);
+        }
+
+
+
+
+
+        //GET :api/User/Deactive- Fetch all Active users only
+        [HttpGet("Deactive")] // New endpoint to get active users
+        public ActionResult<IEnumerable<User>> GetDeactiveUsers()
+        {
+            var DeactiveUsers = _userService.GetDeactiveUsers();
+            return Ok(DeactiveUsers);
+        }
+
+
         // GET: api/User/{id} - Fetch a user by ID
         [HttpGet("{id}")]
         public ActionResult<User> GetUserById(string id)
@@ -37,19 +58,22 @@ namespace E_commerce.Controllers
             return Ok(user);
         }
 
-        // POST: api/User - Create a new user
+
         [HttpPost]
         public ActionResult<User> CreateUser([FromBody] User newUser)
         {
-            // Validate the model state before proceeding
-            //if (!ModelState.IsValid)
-            //{
-            //    return BadRequest(ModelState);
-            //}
-
-            _userService.CreateUser(newUser);
-            return CreatedAtAction(nameof(GetUserById), new { id = newUser.Id }, newUser);
+            try
+            {
+                _userService.CreateUser(newUser);
+                return CreatedAtAction(nameof(GetUserById), new { id = newUser.Id }, newUser);
+            }
+            catch (ArgumentException ex)
+            {
+                // Return a 400 Bad Request with the error message
+                return BadRequest(new { message = ex.Message });
+            }
         }
+
 
         // PUT: api/User/{id} - Update an existing user
         [HttpPut("{id}")]

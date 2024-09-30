@@ -20,6 +20,19 @@ builder.Services.AddScoped(sp =>
     return client.GetDatabase("ECommerceDB");
 });
 
+// Add CORS services
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowSpecificOrigin",
+        policy =>
+        {
+            policy.AllowAnyOrigin() // React app URL
+                  .AllowAnyHeader()
+                  .AllowAnyMethod();
+        });
+});
+
+
 // Register repositories
 builder.Services.AddScoped<IUserRepository>(); // Registering the concrete user repository
 builder.Services.AddScoped<IProductRepository>(); // Registering the concrete product repository
@@ -90,7 +103,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
-
+app.UseCors("AllowSpecificOrigin");
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment() || true)
 {
