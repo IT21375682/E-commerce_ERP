@@ -4,6 +4,7 @@ using E_commerce.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using E_commerce.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,7 +21,12 @@ builder.Services.AddScoped(sp =>
     return client.GetDatabase("ECommerceDB");
 });
 
-// Add CORS services
+// Register IMongoCollection<Order>
+builder.Services.AddScoped(sp =>
+{
+    var database = sp.GetRequiredService<IMongoDatabase>();
+    return database.GetCollection<Order>("Orders"); // Ensure "Orders" matches your MongoDB collection name
+});
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowSpecificOrigin",
@@ -38,7 +44,8 @@ builder.Services.AddScoped<IUserRepository>(); // Registering the concrete user 
 builder.Services.AddScoped<IProductRepository>(); // Registering the concrete product repository
 builder.Services.AddScoped<ICategoryRepository>(); // Registering the concrete repository
 builder.Services.AddScoped<IOrderRepository>(); // Registering the concrete order repository
-
+builder.Services.AddScoped<ICommentRepository>(); // Registering the concrete comment repository
+builder.Services.AddScoped<ICartRepository>(); // Registering the concrete cart repository
 
 
 // Register services
@@ -46,6 +53,10 @@ builder.Services.AddScoped<UserService>(); // Registering the UserService
 builder.Services.AddScoped<ProductService>(); // Registering the Product Service
 builder.Services.AddScoped<OrderService>(); // Registering the Order Service
 builder.Services.AddScoped<CategoryService>(); // Registering the UserService
+builder.Services.AddScoped<EmailService>(); // Registering the EmailService
+builder.Services.AddScoped<CommentService>(); // Registering the CommentService
+builder.Services.AddScoped<CartService>(); // Registering the CartService
+
 
 builder.Services.AddScoped<JwtService>(sp =>
 {
@@ -72,6 +83,23 @@ builder.Services.AddAuthentication(options =>
     };
 });
 
+// Add CORS services
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowSpecificOrigin",
+        policy =>
+        {
+            policy.AllowAnyOrigin() // React app URL
+                  .AllowAnyHeader()
+                  .AllowAnyMethod();
+        });
+});
+
+// Add controllers and views
+builder.Services.AddControllersWithViews();
+
+// Bind the server to all network interfaces (0.0.0.0) to make it accessible externally
+builder.WebHost.UseUrls("http://192.168.82.187:5004");
 
 
 
@@ -85,16 +113,25 @@ builder.Services.AddSwaggerGen();
 var app = builder.Build();
 app.UseCors("AllowSpecificOrigin");
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+if (app.Environment.IsDevelopment() || true)
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
+// app.UseHttpsRedirection(); // Uncomment if you plan to use HTTPS
+app.UseStaticFiles();
+app.UseRouting();
+
+// Apply CORS policy
+app.UseCors("AllowSpecificOrigin");
 
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.MapControllerRoute(
+    name: "default",
+    pattern: "{controller=Home}/{action=Index}/{id?}");
 
 app.Run();

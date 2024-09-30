@@ -1,4 +1,5 @@
-﻿using E_commerce.Models;
+﻿using E_commerce.DTOs;
+using E_commerce.Models;
 using E_commerce.Repositories;
 
 namespace E_commerce.Services
@@ -56,6 +57,9 @@ namespace E_commerce.Services
             if (!PasswordHasher.VerifyPassword(password, user.Password))
                 throw new Exception("Invalid password");
 
+            if (!user.IsActive)
+                throw new Exception("User account is not active");
+
             if (_jwtService == null)
                 throw new NullReferenceException("_jwtService is not initialized");
 
@@ -74,6 +78,10 @@ namespace E_commerce.Services
             _userRepository.DeleteUser(id);
         }
 
+        public UserDto GetUserNameById(string id)
+        {
+            return _userRepository.GetUserNameById(id);
+        }
 
         //Get All active Users
         public IEnumerable<User> GetActiveUsers()

@@ -1,4 +1,5 @@
-﻿using E_commerce.Models;
+﻿using E_commerce.DTOs;
+using E_commerce.Models;
 using E_commerce.Repositories;
 using System.Collections.Generic;
 
@@ -59,6 +60,36 @@ namespace E_commerce.Services
         public (bool isSuccess, string message) RemoveStock(string productId, int quantity)
         {
             return _productRepository.RemoveStock(productId, quantity);
+        }
+
+        public int GetProductStockById(string productId)
+        {
+            return _productRepository.GetAvailableStockById(productId);
+        }
+
+
+        public IEnumerable<Product> GetAllActiveProducts()
+        {
+            return _productRepository.GetAllActiveProducts();
+        }
+
+        public IEnumerable<Product> GetAllActiveCategoryProducts(string categoryId)
+        {
+            return _productRepository.GetAllActiveCategoryProducts(categoryId);
+        }
+
+        public IEnumerable<(Category, IEnumerable<Product>)> GetAllActiveCategoryAndActiveProducts()
+        {
+            return _productRepository.GetAllActiveCategoryAndActiveProducts();
+        }
+        public IEnumerable<ProductDetailsDto> GetAllActiveProductsWithDetails()
+        {
+            return _productRepository.GetAllActiveProductsWithDetails();
+        }
+
+        public ProductDetailsDto GetActiveProductWithDetailsById(string productId)
+        {
+            return _productRepository.GetActiveProductWithDetailsById(productId);
         }
 
     }
