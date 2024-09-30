@@ -17,6 +17,7 @@ import android.widget.RadioGroup;
 import android.widget.SearchView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.GravityCompat;
@@ -29,11 +30,17 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.example.eadecommerce.adapter.ProductAdapter;
 import com.example.eadecommerce.fragments.HomeFragment;
 import com.example.eadecommerce.model.Product;
+import com.example.eadecommerce.network.ApiService;
+import com.example.eadecommerce.network.RetrofitClient;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class CategoryProductsActivity extends AppCompatActivity {
 
@@ -52,7 +59,7 @@ public class CategoryProductsActivity extends AppCompatActivity {
     private EditText editTextMinPrice;
     private EditText editTextMaxPrice;
     private RadioGroup radioGroupRatings;
-    private TextView cartTitleTextView;
+    private TextView cartTitleTextView, textViewNoProducts;
 
     private RadioButton radioRating1, radioRating2, radioRating3, radioRating4;
 
@@ -113,6 +120,7 @@ public class CategoryProductsActivity extends AppCompatActivity {
         SwipeRefreshLayout swipeRefreshLayout = findViewById(R.id.swipeRefreshLayout);
         recyclerViewProducts = findViewById(R.id.recyclerViewProducts);
         recyclerViewProducts.setLayoutManager(new GridLayoutManager(this, 2)); // 2 columns
+        textViewNoProducts = findViewById(R.id.textViewNoProducts);
 
         Spinner spinnerSort = findViewById(R.id.spinnerSort);
         SearchView searchViewProducts = findViewById(R.id.searchViewProducts);
@@ -142,10 +150,8 @@ public class CategoryProductsActivity extends AppCompatActivity {
         swipeRefreshLayout.setOnRefreshListener(() -> {
             // Clear search and filters
             clearFilters(searchViewProducts, spinnerSort);
-
             // Reload the products
             loadProducts();
-
             // Stop the refresh animation
             swipeRefreshLayout.setRefreshing(false);
         });
@@ -233,6 +239,7 @@ public class CategoryProductsActivity extends AppCompatActivity {
     private void clearFilters(SearchView searchView, Spinner spinner) {
         searchView.setQuery("", false);
         spinner.setSelection(0); // Assuming first item is "Default"
+        selectedRating = 0;
         editTextMinPrice.setText("");
         editTextMaxPrice.setText("");
         radioGroupRatings.clearCheck();
@@ -269,13 +276,18 @@ public class CategoryProductsActivity extends AppCompatActivity {
 
     // Method to apply the filters
     private void applyFilters() {
+
+        if (productList == null || productList.isEmpty()) {
+            // Product list is not yet loaded, so return early
+            return;
+        }
         List<Product> tempFilteredList = new ArrayList<>(productList);
 
         // Step 1: Filter by search query
         if (!currentSearchQuery.isEmpty()) {
             List<Product> searchFilteredList = new ArrayList<>();
             for (Product product : tempFilteredList) {
-                if (product.getName().toLowerCase().contains(currentSearchQuery.toLowerCase()) || product.getVendor().toLowerCase().contains(currentSearchQuery.toLowerCase())) {
+                if (product.getName().toLowerCase().contains(currentSearchQuery.toLowerCase()) || product.getVendorName().toLowerCase().contains(currentSearchQuery.toLowerCase())) {
                     searchFilteredList.add(product);
                 }
             }
@@ -329,6 +341,15 @@ public class CategoryProductsActivity extends AppCompatActivity {
         filteredProductList.clear();
         filteredProductList.addAll(tempFilteredList);
         productAdapter.notifyDataSetChanged();
+
+        // Check if there are no filtered products, and display the "No Products" message
+        if (filteredProductList.isEmpty()) {
+            textViewNoProducts.setVisibility(View.VISIBLE);
+            recyclerViewProducts.setVisibility(View.GONE);
+        } else {
+            textViewNoProducts.setVisibility(View.GONE);
+            recyclerViewProducts.setVisibility(View.VISIBLE);
+        }
     }
 
     // Helper method to get the minimum price
@@ -345,23 +366,41 @@ public class CategoryProductsActivity extends AppCompatActivity {
 
     // Method to load products
     private void loadProducts() {
+        // Clear previous filtered product list
+        if (filteredProductList != null) {
+            filteredProductList.clear();
+        }
 
-        // Load product list
-        productList = new ArrayList<>();
-        productList.add(new Product("Product 1", 19.99, "https://assets.vogue.in/photos/64be31695ad7ce31037005c8/3:4/w_2560%2Cc_limit/Snapinsta.app_362218118_18390206827011278_5161897771700955906_n_1080.jpg", "Category 1",0, "Test"));
-        productList.add(new Product("Product 2", 29.99, "https://wallpapers.com/images/hd/shin-chan-in-black-eyz87euqvvyrlihs.jpg", "Category 1", 5, "Test"));
-        productList.add(new Product("Product 3", 39.99, "https://assets.vogue.in/photos/64be31695ad7ce31037005c8/3:4/w_2560%2Cc_limit/Snapinsta.app_362218118_18390206827011278_5161897771700955906_n_1080.jpg", "Category 1", 3, "Test"));
-        productList.add(new Product("Product 4", 31.99, "https://assets.vogue.in/photos/64be31695ad7ce31037005c8/3:4/w_2560%2Cc_limit/Snapinsta.app_362218118_18390206827011278_5161897771700955906_n_1080.jpg", "Category 2", 3, "Test"));
-        productList.add(new Product("Product 5", 43.99, "https://assets.vogue.in/photos/64be31695ad7ce31037005c8/3:4/w_2560%2Cc_limit/Snapinsta.app_362218118_18390206827011278_5161897771700955906_n_1080.jpg", "Category 2",5, "Dummy"));
-        productList.add(new Product("Product 6", 35.99, "https://assets.vogue.in/photos/64be31695ad7ce31037005c8/3:4/w_2560%2Cc_limit/Snapinsta.app_362218118_18390206827011278_5161897771700955906_n_1080.jpg", "Category 3",2, "Dummy"));
+        // Call the API
+        ApiService apiService = RetrofitClient.getRetrofitInstance().create(ApiService.class);
+        Call<List<Product>> call = apiService.getAllProducts();
 
-        // Initially, all products are displayed
-        filteredProductList = new ArrayList<>(productList);
-        productAdapter = new ProductAdapter(this, filteredProductList);
-        recyclerViewProducts.setAdapter(productAdapter);
+        call.enqueue(new Callback<List<Product>>() {
+            @Override
+            public void onResponse(Call<List<Product>> call, Response<List<Product>> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    // Get products from the API response
+                    productList = new ArrayList<>(response.body());
 
-        // Apply filters to the loaded products
-        applyFilters();
+                    // Initially, all products are displayed
+                    filteredProductList = new ArrayList<>(productList);
+                    productAdapter = new ProductAdapter(CategoryProductsActivity.this, filteredProductList);
+                    recyclerViewProducts.setAdapter(productAdapter);
+
+                    // Apply filters to the loaded products
+                    applyFilters();
+                } else {
+                    // Handle the error response (e.g., show a message)
+                    Toast.makeText(CategoryProductsActivity.this, "Failed to load products", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<Product>> call, Throwable t) {
+                // Handle network error (e.g., no internet connection)
+                Toast.makeText(CategoryProductsActivity.this, "Network error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     @Override

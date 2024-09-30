@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.RatingBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -38,9 +39,9 @@ public class ProductCommentAdapter extends RecyclerView.Adapter<ProductCommentAd
     @Override
     public void onBindViewHolder(@NonNull CommentViewHolder holder, int position) {
         ProductCommentData item = comments.get(currentCommentIndex);
-        holder.commentText.setText(item.getComment());
-        holder.commentUserText.setText(item.getCommentGmail());
-
+        holder.commentText.setText(item.getCommentText());
+        holder.commentUserText.setText(item.getUsername());
+        holder.ratingBarInput.setRating(item.getRating());
         holder.arrowLeft.setOnClickListener(v -> showPreviousComment());
         holder.arrowRight.setOnClickListener(v -> showNextComment());
     }
@@ -69,6 +70,7 @@ public class ProductCommentAdapter extends RecyclerView.Adapter<ProductCommentAd
         public TextView commentUserText;
         public ImageButton arrowLeft;
         public ImageButton arrowRight;
+        public RatingBar ratingBarInput;
 
         public CommentViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -76,6 +78,7 @@ public class ProductCommentAdapter extends RecyclerView.Adapter<ProductCommentAd
             commentUserText = itemView.findViewById(R.id.commentUserText);
             arrowLeft = itemView.findViewById(R.id.arrowLeft);
             arrowRight = itemView.findViewById(R.id.arrowRight);
+            ratingBarInput = itemView.findViewById(R.id.ratingBarInput);
         }
     }
 }

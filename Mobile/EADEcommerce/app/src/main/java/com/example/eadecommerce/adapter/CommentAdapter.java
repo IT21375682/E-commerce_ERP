@@ -10,13 +10,14 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.eadecommerce.R;
 import com.example.eadecommerce.model.Comment;
+import com.example.eadecommerce.model.ProductCommentData;
 
 import java.util.List;
 
 public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentViewHolder> {
-    private List<Comment> comments;
+    private List<ProductCommentData> comments;
 
-    public CommentAdapter(List<Comment> comments) {
+    public CommentAdapter(List<ProductCommentData> comments) {
         this.comments = comments;
     }
 
@@ -30,10 +31,10 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
 
     @Override
     public void onBindViewHolder(@NonNull CommentViewHolder holder, int position) {
-        Comment comment = comments.get(position);
+        ProductCommentData comment = comments.get(position);
         holder.vendorNameTextView.setText(comment.getUsername());
         holder.commentTextView.setText(comment.getCommentText());
-        holder.dateTextView.setText(comment.getDate());
+        holder.dateTextView.setText((CharSequence) comment.getDate());
     }
 
     @Override
@@ -55,7 +56,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
     }
 
     // Method to update comments
-    public void updateComments(List<Comment> newComments) {
+    public void updateComments(List<ProductCommentData> newComments) {
         comments = newComments;
         notifyDataSetChanged();
     }

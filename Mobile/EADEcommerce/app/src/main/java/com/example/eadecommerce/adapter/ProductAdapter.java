@@ -2,6 +2,10 @@ package com.example.eadecommerce.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.util.Base64;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -43,15 +47,27 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
         holder.textViewName.setText(product.getName());
         holder.textViewPrice.setText(String.format("$%.2f", product.getPrice()));
         holder.textViewPrice.setText(String.valueOf(product.getPrice()));
-        Picasso.get().load(product.getImageUrl()).into(holder.imageViewProduct);
+
+        // Decode the base64 image string and set it to the ImageView
+        if (product.getProductImage() != null && !product.getProductImage().isEmpty()) {
+            byte[] decodedString = Base64.decode(product.getProductImage(), Base64.DEFAULT);
+            Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+            holder.imageViewProduct.setImageBitmap(decodedByte);
+        } else {
+            // Set a placeholder image or clear the ImageView if no image is available
+            holder.imageViewProduct.setImageResource(R.drawable.placeholder); // Replace with your placeholder image
+        }
+//        Picasso.get().load(product.getImageUrl()).into(holder.imageViewProduct);
 
         // Handle item click to open ProductDetailActivity
         holder.itemView.setOnClickListener(v -> {
             Intent intent = new Intent(context, ProductDetailActivity.class);
+            intent.putExtra("productId", product.getId());
             intent.putExtra("productName", product.getName());
             intent.putExtra("productPrice", product.getPrice());
-            intent.putExtra("productImageUrl", product.getImageUrl());
-            intent.putExtra("productCategory", product.getCategory());
+//            intent.putExtra("productImageUrl", product.getImageUrl());
+            intent.putExtra("productCategory", product.getProductCategoryName());
+            Log.d("productId", product.getId());
 
             // Start new activity
             context.startActivity(intent);
