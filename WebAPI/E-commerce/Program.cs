@@ -4,6 +4,7 @@ using E_commerce.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using E_commerce.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,6 +21,13 @@ builder.Services.AddScoped(sp =>
     return client.GetDatabase("ECommerceDB");
 });
 
+// Register IMongoCollection<Order>
+builder.Services.AddScoped(sp =>
+{
+    var database = sp.GetRequiredService<IMongoDatabase>();
+    return database.GetCollection<Order>("Orders"); // Ensure "Orders" matches your MongoDB collection name
+});
+
 // Register repositories
 builder.Services.AddScoped<IUserRepository>(); // Registering the concrete user repository
 builder.Services.AddScoped<IProductRepository>(); // Registering the concrete product repository
@@ -32,7 +40,8 @@ builder.Services.AddScoped<IOrderRepository>(); // Registering the concrete orde
 builder.Services.AddScoped<UserService>(); // Registering the UserService
 builder.Services.AddScoped<ProductService>(); // Registering the Product Service
 builder.Services.AddScoped<OrderService>(); // Registering the Order Service
-builder.Services.AddScoped<CategoryService>(); // Registering the UserService
+builder.Services.AddScoped<CategoryService>(); // Registering the CategoryService
+builder.Services.AddScoped<EmailService>(); // Registering the EmailService
 
 builder.Services.AddScoped<JwtService>(sp =>
 {

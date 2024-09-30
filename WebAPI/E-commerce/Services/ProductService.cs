@@ -61,5 +61,26 @@ namespace E_commerce.Services
             return _productRepository.RemoveStock(productId, quantity);
         }
 
+
+        public int GetProductStockById(string productId)
+        {
+            return _productRepository.GetAvailableStockById(productId);
+        }
+
+
+        public IEnumerable<Product> GetAllActiveProducts()
+        {
+            return _productRepository.GetAllActiveProducts();
+        }
+
+        public IEnumerable<Product> GetAllActiveCategoryProducts(string categoryId)
+        {
+            return _productRepository.GetAllActiveCategoryProducts(categoryId);
+        }
+
+        public IEnumerable<(Category, IEnumerable<Product>)> GetAllActiveCategoryAndActiveProducts()
+        {
+            return _productRepository.GetAllActiveCategoryAndActiveProducts();
+        }
     }
 }

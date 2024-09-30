@@ -25,6 +25,16 @@ namespace E_commerce.Controllers
             return Ok(category);
         }
 
+        // Get only active categories
+        [HttpGet("active")]
+         public ActionResult<IEnumerable<Category>> GetAllActiveCategories()
+         {
+            var activeCategories = _categoryService.GetAllActiveCategories();
+            return Ok(activeCategories);
+         }
+
+
+
         // Get category by id
         [HttpGet("{id}")]
         public ActionResult<Category> GetCategoryById(string id)

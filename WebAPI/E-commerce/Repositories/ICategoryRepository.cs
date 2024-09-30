@@ -17,6 +17,11 @@ namespace E_commerce.Repositories
                 return _category.Find(category => true).ToList();
             }
 
+            public IEnumerable<Category> GetAllActiveCategories()
+            {
+                return _category.Find(category => category.IsActive == true).ToList();
+            }
+
             public Category GetCategoryById(string id)
             {
                 return _category.Find(category => category.Id == id).FirstOrDefault();

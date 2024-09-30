@@ -17,7 +17,12 @@ namespace E_commerce.Services
                 return _categoryRepository.GetAllCategories();
             }
 
-            public Category GetCategoryById(string id)
+        public IEnumerable<Category> GetAllActiveCategories()
+        {
+            return _categoryRepository.GetAllActiveCategories();
+        }
+
+        public Category GetCategoryById(string id)
             {
                 return _categoryRepository.GetCategoryById(id);
             }
