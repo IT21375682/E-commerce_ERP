@@ -7,7 +7,7 @@ namespace E_commerce.Models
     {
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
-        public String Id { get; set; }  // Unique product ID
+        public string Id { get; set; }  // Unique product ID
         [BsonElement("name")]
         public string Name { get; set; }
 

@@ -15,7 +15,8 @@ namespace E_commerce.Models
     public class Order
     {
         [BsonId] // Indicates this is the primary key
-        public ObjectId Id { get; set; } // MongoDB generated ID
+        [BsonRepresentation(BsonType.ObjectId)]
+        public string Id { get; set; } // MongoDB generated ID
         public string UserId { get; set; }   // Reference to the user who placed the order
         public DateTime Date { get; set; }   // Date when the order was placed
         public decimal Total { get; set; }   // Total price of the order

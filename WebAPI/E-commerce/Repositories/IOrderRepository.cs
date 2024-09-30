@@ -29,8 +29,7 @@ namespace E_commerce.Repositories
         // Fetches an order by its ID
         public Order GetOrderById(string id)
         {
-            var objectId = new ObjectId(id);
-            return _orders.Find(order => order.Id == objectId).FirstOrDefault();
+            return _orders.Find(order => order.Id == id).FirstOrDefault();
         }
 
         // Retrieves all orders for a specific user by userId
@@ -58,10 +57,8 @@ namespace E_commerce.Repositories
         // Updates an existing order
         public void UpdateOrder(string id, Order updatedOrder)
         {
-            var objectId = new ObjectId(id);
-
             // Fetch the existing order to retain the _id
-            var existingOrder = _orders.Find(order => order.Id == objectId).FirstOrDefault();
+            var existingOrder = _orders.Find(order => order.Id == id).FirstOrDefault();
 
             if (existingOrder != null)
             {
@@ -69,7 +66,7 @@ namespace E_commerce.Repositories
                 updatedOrder.Id = existingOrder.Id;
 
                 // Now replace the document with the updated fields while keeping the _id
-                _orders.ReplaceOne(order => order.Id == objectId, updatedOrder);
+                _orders.ReplaceOne(order => order.Id == id, updatedOrder);
             }
         }
 
@@ -77,18 +74,15 @@ namespace E_commerce.Repositories
         // Deletes an order from the database
         public void DeleteOrder(string id)
         {
-            var objectId = new ObjectId(id);
-            _orders.DeleteOne(order => order.Id == objectId);
+            _orders.DeleteOne(order => order.Id == id);
         }
 
         // Updates the processed status of a product in an order
         public void UpdateProductProcessedStatus(string orderId, string productId, bool processed)
         {
-            var objectId = new ObjectId(orderId);
-
             // Filter for the order by Id and the specific product by productId
             var filter = Builders<Order>.Filter.And(
-                Builders<Order>.Filter.Eq(o => o.Id, objectId),
+                Builders<Order>.Filter.Eq(o => o.Id, orderId),
                 Builders<Order>.Filter.ElemMatch(o => o.ProductItems, p => p.ProductId == productId)
             );
 
@@ -103,8 +97,7 @@ namespace E_commerce.Repositories
         // Updates the order status and timestamp
         public void UpdateOrderStatus(string orderId, string statusType)
         {
-            var objectId = new ObjectId(orderId);
-            var filter = Builders<Order>.Filter.Eq(o => o.Id, objectId);
+            var filter = Builders<Order>.Filter.Eq(o => o.Id, orderId);
             var update = Builders<Order>.Update;
 
             var updates = new List<UpdateDefinition<Order>>();
