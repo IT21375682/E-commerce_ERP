@@ -27,298 +27,321 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-        <ScrollView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <LinearLayout
+            <ScrollView
+                android:id="@+id/scrollView"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
-
-                <androidx.cardview.widget.CardView
-                    android:id="@+id/cardImage"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginTop="10dp"
-                    app:cardCornerRadius="8dp"
-                    app:cardElevation="4dp">
-                    <ImageView
-                        android:id="@+id/productImageView"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:maxHeight="400dp"
-                        android:scaleType="fitCenter" />
-                </androidx.cardview.widget.CardView>
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:id="@+id/productNameTextView"
-                        android:text="Name"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="16dp"
-                        android:textSize="20sp"
-                        android:textStyle="bold" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:id="@+id/productCategoryTextView"
-                        android:text="Category"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        android:textSize="14sp" />
-
-                </LinearLayout>
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:id="@+id/productVendorTextView"
-                        android:text="Vendor"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        android:textSize="14sp" />
-
-                </LinearLayout>
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:gravity="start">
-
-                    <RatingBar
-                        android:id="@+id/ratingBar"
-                        android:layout_marginTop="8dp"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:rating="4"
-                        android:numStars="5"
-                        android:progressTint="@color/gold"
-                        android:max="5"
-                        android:progressTintMode="src_atop"
-                        android:stepSize="0.1"
-                        android:isIndicator="true"
-                        style="?android:attr/ratingBarStyleSmall" />
-                </LinearLayout>
+                android:layout_height="match_parent">
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="10dp"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:text="LKR"
-                        android:layout_marginEnd="10dp"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        android:textSize="12sp" />
-                    <TextView
-                        android:id="@+id/productPriceTextView"
-                        android:text="Price"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        android:textStyle="bold"
-                        android:textSize="24sp"
-                        android:layout_weight="1" />
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="10dp"
-                        android:background="@drawable/border_background"
-                        android:orientation="horizontal"
-                        android:gravity="center">
-
-                        <Button
-                            android:id="@+id/buttonMinus"
-                            android:layout_width="50sp"
-                            android:layout_height="wrap_content"
-                            android:text="-"
-                            android:background="@color/secondary"
-                            android:textColor="@android:color/white" />
-
-                        <TextView
-                            android:id="@+id/quantityTextView"
-                            android:layout_width="50sp"
-                            android:gravity="center"
-                            android:layout_gravity="center"
-                            android:layout_height="wrap_content"
-                            android:layout_marginHorizontal="10dp"
-                            android:text="1"
-                            android:textSize="18sp" />
-
-                        <Button
-                            android:id="@+id/buttonPlus"
-                            android:layout_width="50sp"
-                            android:layout_height="wrap_content"
-                            android:text="+"
-                            android:background="@color/secondary"
-                            android:textColor="@android:color/white" />
-                    </LinearLayout>
-
-                </LinearLayout>
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="2dp"
-                    android:layout_marginVertical="10dp"
-                    android:background="@color/divider_color"
-                    android:layout_gravity="center_horizontal" />
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:orientation="vertical">
 
-                    <TextView
-                        android:layout_width="wrap_content"
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/cardImage"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Description"
-                        android:layout_marginTop="8dp"
-                        android:textSize="16sp" />
-                    <TextView
-                        android:id="@+id/productDescriptionTextView"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Sample Description of Product. Directly imported from China at tyour door step."
-                        android:layout_marginTop="8dp"
-                        android:textSize="14sp" />
-<!--                    <TextView-->
-<!--                        android:layout_width="wrap_content"-->
-<!--                        android:layout_height="wrap_content"-->
-<!--                        android:text="Sample Description of Product. Directly imported from China at tyour door step."-->
-<!--                        android:layout_marginTop="8dp"-->
-<!--                        android:textSize="16sp" />-->
-<!--                    <TextView-->
-<!--                        android:layout_width="wrap_content"-->
-<!--                        android:layout_height="wrap_content"-->
-<!--                        android:text="Sample Description of Product. Directly imported from China at tyour door step."-->
-<!--                        android:layout_marginTop="8dp"-->
-<!--                        android:textSize="16sp" />-->
-<!--                    <TextView-->
-<!--                        android:layout_width="wrap_content"-->
-<!--                        android:layout_height="wrap_content"-->
-<!--                        android:text="Sample Description of Product. Directly imported from China at tyour door step."-->
-<!--                        android:layout_marginTop="8dp"-->
-<!--                        android:textSize="16sp" />-->
-<!--                    <TextView-->
-<!--                        android:layout_width="wrap_content"-->
-<!--                        android:layout_height="wrap_content"-->
-<!--                        android:text="Sample Description of Product. Directly imported from China at tyour door step."-->
-<!--                        android:layout_marginTop="8dp"-->
-<!--                        android:textSize="16sp" />-->
-                </LinearLayout>
+                        android:layout_gravity="center"
+                        android:layout_marginTop="10dp"
+                        app:cardCornerRadius="8dp"
+                        app:cardElevation="4dp">
 
-                <androidx.cardview.widget.CardView
-                    android:id="@+id/commentFrame"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginVertical="20dp"
-                    app:cardElevation="8dp"
-                    android:layout_below="@+id/cusAccManagementHeading"
-                    app:layout_constraintTop_toTopOf="parent"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_centerHorizontal="true">
+                        <ImageView
+                            android:id="@+id/productImageView"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:maxHeight="600dp"
+                            android:minHeight="400dp"
+                            android:scaleType="fitCenter" />
+                    </androidx.cardview.widget.CardView>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/productNameTextView"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="16dp"
+                            android:text="Name"
+                            android:textSize="20sp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/productCategoryTextView"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:text="Category"
+                            android:textSize="14sp" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/productVendorTextView"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:text="Vendor"
+                            android:textSize="14sp" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="start"
+                        android:orientation="horizontal">
+
+                        <RatingBar
+                            android:id="@+id/ratingBar"
+                            style="?android:attr/ratingBarStyleSmall"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:isIndicator="true"
+                            android:max="5"
+                            android:numStars="5"
+                            android:progressTint="@color/gold"
+                            android:progressTintMode="src_atop"
+                            android:rating="4"
+                            android:stepSize="0.1" />
+                    </LinearLayout>
+
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:orientation="vertical"
-                        android:padding="20dp">
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="10dp"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:layout_marginEnd="10dp"
+                            android:text="LKR"
+                            android:textSize="12sp" />
+
+                        <TextView
+                            android:id="@+id/productPriceTextView"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:layout_weight="1"
+                            android:text="Price"
+                            android:textSize="24sp"
+                            android:textStyle="bold" />
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="10dp"
+                            android:background="@drawable/border_background"
+                            android:gravity="center"
+                            android:orientation="horizontal">
+
+                            <Button
+                                android:id="@+id/buttonMinus"
+                                android:layout_width="50sp"
+                                android:layout_height="wrap_content"
+                                android:background="@color/secondary"
+                                android:text="-"
+                                android:textColor="@android:color/white" />
+
+                            <TextView
+                                android:id="@+id/quantityTextView"
+                                android:layout_width="50sp"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:layout_marginHorizontal="10dp"
+                                android:gravity="center"
+                                android:text="1"
+                                android:textSize="18sp" />
+
+                            <Button
+                                android:id="@+id/buttonPlus"
+                                android:layout_width="50sp"
+                                android:layout_height="wrap_content"
+                                android:background="@color/secondary"
+                                android:text="+"
+                                android:textColor="@android:color/white" />
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="2dp"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginVertical="10dp"
+                        android:background="@color/divider_color" />
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:text="Description"
+                            android:textSize="16sp" />
+
+                        <TextView
+                            android:id="@+id/productDescriptionTextView"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:text="Sample Description of Product. Directly imported from China at tyour door step."
+                            android:textSize="14sp" />
+                        <!--                    <TextView-->
+                        <!--                        android:layout_width="wrap_content"-->
+                        <!--                        android:layout_height="wrap_content"-->
+                        <!--                        android:text="Sample Description of Product. Directly imported from China at tyour door step."-->
+                        <!--                        android:layout_marginTop="8dp"-->
+                        <!--                        android:textSize="16sp" />-->
+                        <!--                    <TextView-->
+                        <!--                        android:layout_width="wrap_content"-->
+                        <!--                        android:layout_height="wrap_content"-->
+                        <!--                        android:text="Sample Description of Product. Directly imported from China at tyour door step."-->
+                        <!--                        android:layout_marginTop="8dp"-->
+                        <!--                        android:textSize="16sp" />-->
+                        <!--                    <TextView-->
+                        <!--                        android:layout_width="wrap_content"-->
+                        <!--                        android:layout_height="wrap_content"-->
+                        <!--                        android:text="Sample Description of Product. Directly imported from China at tyour door step."-->
+                        <!--                        android:layout_marginTop="8dp"-->
+                        <!--                        android:textSize="16sp" />-->
+                        <!--                    <TextView-->
+                        <!--                        android:layout_width="wrap_content"-->
+                        <!--                        android:layout_height="wrap_content"-->
+                        <!--                        android:text="Sample Description of Product. Directly imported from China at tyour door step."-->
+                        <!--                        android:layout_marginTop="8dp"-->
+                        <!--                        android:textSize="16sp" />-->
+                    </LinearLayout>
+
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/commentFrame"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/cusAccManagementHeading"
+                        android:layout_centerHorizontal="true"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginVertical="20dp"
+                        app:cardElevation="8dp"
+                        app:layout_constraintTop_toTopOf="parent">
 
                         <LinearLayout
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal">
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="Ratings : "
-                                android:textSize="14sp"
-                                android:gravity="center_vertical"
-                                android:layout_gravity="center"/>
-                            <!-- RatingBar for user rating input -->
-                            <RatingBar
-                                android:id="@+id/ratingBarInput"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:rating="4"
-                                android:numStars="5"
-                                android:progressTint="@color/gold"
-                                android:max="5"
-                                android:progressTintMode="src_atop"
-                                android:stepSize="0.1"
-                                android:isIndicator="true"
-                                style="?android:attr/ratingBarStyleSmall" />
-                        </LinearLayout>
-                        <!-- EditText for user comments -->
-                        <EditText
-                            android:id="@+id/commentEditTextInput"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:minHeight="100dp"
-                            android:textSize="14sp"
-                            android:inputType="textMultiLine|textCapSentences"
-                            android:hint="Enter your comments..."
-                            android:gravity="top" />
-                        <Button
-                            android:id="@+id/updateReview"
-                            android:layout_width="wrap_content"
-                            android:textColor="@color/white"
-                            android:layout_height="40dp"
-                            android:gravity="center"
-                            android:layout_gravity="end"
-                            android:textSize="14sp"
-                            android:layout_marginTop="5dp"
-                            android:text="Update"
-                            android:background="@drawable/cus_button_update"/>
-                    </LinearLayout>
-                </androidx.cardview.widget.CardView>
+                            android:layout_height="match_parent"
+                            android:orientation="vertical"
+                            android:padding="20dp">
 
-                <LinearLayout
-                    android:id="@+id/cusMyComments"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:layout_below="@+id/editableProfile">
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="40dp"
-                        android:ellipsize="end"
-                        android:singleLine="true"
-                        android:text="Comments"
-                        android:textSize="16sp"
-                        android:gravity="center_vertical"/>
-                    <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/commentsRecyclerView"
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center"
+                                    android:gravity="center_vertical"
+                                    android:text="Ratings : "
+                                    android:textSize="14sp" />
+                                <!-- RatingBar for user rating input -->
+                                <RatingBar
+                                    android:id="@+id/ratingBarInput"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:max="5"
+                                    android:numStars="5"
+                                    android:progressTint="@color/gold"
+                                    android:progressTintMode="src_atop"
+                                    android:rating="0"
+                                    android:stepSize="1" />
+
+                            </LinearLayout>
+                            <!-- EditText for user comments -->
+                            <EditText
+                                android:id="@+id/commentEditTextInput"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="top"
+                                android:hint="Enter your comments..."
+                                android:inputType="textMultiLine|textCapSentences"
+                                android:minHeight="100dp"
+                                android:textSize="14sp" />
+
+                            <Button
+                                android:id="@+id/updateReview"
+                                android:layout_width="wrap_content"
+                                android:layout_height="40dp"
+                                android:layout_gravity="end"
+                                android:layout_marginTop="5dp"
+                                android:background="@drawable/cus_button_update"
+                                android:gravity="center"
+                                android:text="Update"
+                                android:textColor="@color/white"
+                                android:textSize="14sp" />
+                        </LinearLayout>
+                    </androidx.cardview.widget.CardView>
+
+                    <LinearLayout
+                        android:id="@+id/cusMyComments"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:clipToPadding="false"
-                        android:scrollbars="none"
-                        android:layout_gravity="center_vertical"
-                        android:overScrollMode="never"
-                        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                        tools:listitem="@layout/product_comment_item" />
+                        android:layout_below="@+id/editableProfile"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/noCommentsTextView"
+                            android:layout_width="match_parent"
+                            android:layout_height="40dp"
+                            android:gravity="center"
+                            android:text="No comments yet"
+                            android:textStyle="bold"
+                            android:textSize="16sp"
+                            android:visibility="gone" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="40dp"
+                            android:ellipsize="end"
+                            android:gravity="center_vertical"
+                            android:singleLine="true"
+                            android:text="Comments"
+                            android:textSize="16sp" />
+
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/commentsRecyclerView"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:clipToPadding="false"
+                            android:overScrollMode="never"
+                            android:scrollbars="none"
+                            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                            tools:listitem="@layout/product_comment_item" />
+                    </LinearLayout>
+
                 </LinearLayout>
 
-            </LinearLayout>
-
-        </ScrollView>
+            </ScrollView>
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
     </LinearLayout>
 
@@ -326,40 +349,38 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:gravity="center"
         android:orientation="horizontal"
-        android:paddingVertical="10dp"
         android:paddingHorizontal="20dp"
-        android:gravity="center">
+        android:paddingVertical="10dp">
+
+        <TextView
+            android:id="@+id/textAddToCart"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:drawablePadding="0dp"
+            android:paddingHorizontal="20dp"
+            android:paddingVertical="10dp" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginVertical="10dp"
+            android:layout_weight="0.5" />
 
         <Button
             android:id="@+id/buttonAddToCart"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="2"
-            android:drawableLeft="@drawable/cart"
-            android:drawablePadding="0dp"
-            android:paddingHorizontal="20dp"
-            android:paddingVertical="10dp"
-            android:text="Add to Cart"
-            android:background="@drawable/hint_profile_update"
-            android:textColor="@android:color/white" />
-        <View
-            android:layout_width="0dp"
-            android:layout_weight="0.5"
-            android:layout_height="match_parent"
-            android:layout_marginVertical="10dp"
-            android:layout_gravity="center_horizontal" />
-        <Button
-            android:id="@+id/buttonBuyNow"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="2"
+            android:background="@drawable/cus_button_update"
             android:drawableLeft="@drawable/cart_checkout"
             android:drawablePadding="0dp"
             android:paddingHorizontal="20dp"
             android:paddingVertical="10dp"
-            android:text="Buy Now"
-            android:background="@drawable/cus_button_update"
+            android:text="Add to Cart"
             android:textColor="@android:color/white" />
     </LinearLayout>
 
