@@ -72,6 +72,17 @@
                     android:textColor="@color/red"/>
             </LinearLayout>
 
+            <!-- TextView to show empty cart message -->
+            <TextView
+                android:id="@+id/emptyCartMessage"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Your cart is empty"
+                android:paddingVertical="20dp"
+                android:textSize="18sp"
+                android:textColor="@android:color/darker_gray"
+                android:gravity="center"
+                android:visibility="gone" />
             <!-- RecyclerView for Cart Items -->
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/cartRecyclerView"

@@ -1,5 +1,6 @@
 package com.example.eadecommerce;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.activity.EdgeToEdge;
@@ -25,11 +26,24 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
+import com.auth0.android.jwt.JWT;
 import com.example.eadecommerce.R;
 import com.example.eadecommerce.fragments.HomeFragment;
+import com.example.eadecommerce.model.Address;
+import com.example.eadecommerce.model.UserResponse;
+import com.example.eadecommerce.model.UserUpdate;
+import com.example.eadecommerce.network.ApiService;
+import com.example.eadecommerce.network.JwtUtils;
+import com.example.eadecommerce.network.RetrofitClient;
+import com.example.eadecommerce.responses.LoginResponse;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class ProfileActivity extends AppCompatActivity {
 
@@ -43,18 +57,14 @@ public class ProfileActivity extends AppCompatActivity {
     private TextView cusAccountCity2, cusAccountPostalCode2, cusAccountCountry2;
     private Button btnCusDeActivate;
 
-    private EditText editTextFirstName, editTextLastName, editTextNIC, editTextPhoneNo;
-    private EditText cusAccountAddressLine1, cusAccountAddressLine2, cusAccountAddressLine3;
-    private TextView viewInputFirstName, viewInputLastName, viewInputNIC, viewInputPhoneNo;
-    private TextView cusAccountAddressLine11, cusAccountAddressLine22, cusAccountAddressLine33;
+    private EditText editTextFirstName, editTextNIC, editTextPhoneNo;
+    private EditText cusAccountAddressLine1;
+    private TextView viewInputFirstName, viewInputNIC, viewInputPhoneNo;
+    private TextView cusAccountAddressLine11;
 
     private static final int PICK_IMAGE_REQUEST = 1000;
-    private Uri selectedImageUri;
-    private Uri originalImageUri;
-    private String imageData;
-    private Drawable originalDrawable;
+    private String userId;
 
-    // Other member variables
     private View cusAccountProfileImageEditFrame, cusAccountButtons;
 
     ImageButton buttonBack, buttonCart;
@@ -65,6 +75,11 @@ public class ProfileActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_profile);
+
+        // Get the JWT token from SharedPreferences and Decode the token and get the user ID
+        String token = JwtUtils.getTokenFromSharedPreferences(this);
+        userId = JwtUtils.getUserIdFromToken(token);
+        Log.d("userId", userId);
 
         buttonBack = findViewById(R.id.buttonBack);
         clickcartHome = findViewById(R.id.clickcartHome);
@@ -106,28 +121,25 @@ public class ProfileActivity extends AppCompatActivity {
         profileEditImage = findViewById(R.id.profileEditImage);
         btnCusDeActivate = findViewById(R.id.btnCusDeActivate);
 
-        cusAccountProfileImage = findViewById(R.id.cusAccountProfileImage);
-        cusAccountProfileImageEditFrame = findViewById(R.id.cusAccountProfileImageEditFrame);
-
         editTextFirstName = findViewById(R.id.editTextFirstName);
         viewInputFirstName = findViewById(R.id.editTextFirstName2);
-        editTextLastName = findViewById(R.id.viewInputLastName);
-        viewInputLastName = findViewById(R.id.viewInputLastName2);
+
         editTextNIC = findViewById(R.id.viewInputNIC);
         viewInputNIC = findViewById(R.id.viewInputNIC2);
+
         editTextPhoneNo = findViewById(R.id.viewInputPhoneNo);
         viewInputPhoneNo = findViewById(R.id.viewInputPhoneNo2);
+
         cusAccountAddressLine1 = findViewById(R.id.cusAccountAddressLine1);
-        cusAccountAddressLine2 = findViewById(R.id.cusAccountAddressLine2);
-        cusAccountAddressLine3 = findViewById(R.id.cusAccountAddressLine3);
         cusAccountAddressLine11 = findViewById(R.id.cusAccountAddressLine11);
-        cusAccountAddressLine22 = findViewById(R.id.cusAccountAddressLine22);
-        cusAccountAddressLine33 = findViewById(R.id.cusAccountAddressLine33);
+
         cusAccountCity1 = findViewById(R.id.cusAccountCity1);
-        cusAccountPostalCode1 = findViewById(R.id.cusAccountPostalCode1);
-        cusAccountCountry1 = findViewById(R.id.cusAccountCountry1);
         cusAccountCity2 = findViewById(R.id.cusAccountCity2);
+
+        cusAccountPostalCode1 = findViewById(R.id.cusAccountPostalCode1);
         cusAccountPostalCode2 = findViewById(R.id.cusAccountPostalCode2);
+
+        cusAccountCountry1 = findViewById(R.id.cusAccountCountry1);
         cusAccountCountry2 = findViewById(R.id.cusAccountCountry2);
 
         cusAccountButtons = findViewById(R.id.cusAccountButtons);
@@ -135,31 +147,147 @@ public class ProfileActivity extends AppCompatActivity {
         // Set click listener on the profile edit icon
         profileEditImage.setOnClickListener(v -> toggleEditMode());
 
-        // Set click listener to open full screen image
-        cusAccountProfileImage.setOnClickListener(v -> {
-            Intent fullScreenIntent = new Intent(ProfileActivity.this, FullScreenImageActivity.class);
-            fullScreenIntent.putExtra("productImage", selectedImageUri);
-            startActivity(fullScreenIntent);
-        });
-
-        Button changeImageButton = cusAccountProfileImageEditFrame.findViewById(R.id.cusAccManageButton1);
-        Button removeImageButton = cusAccountProfileImageEditFrame.findViewById(R.id.cusAccManageButton2);
         Button btnCusUpdate = cusAccountButtons.findViewById(R.id.btnCusUpdate);
         Button btnCusCancel = cusAccountButtons.findViewById(R.id.btnCusCancel);
+
+        // Set click listeners for update and cancel buttons
+        btnCusUpdate.setOnClickListener(v -> {
+            // Check if the name is empty or only contains whitespace
+            String updatedName = editTextFirstName.getText().toString().trim();
+            if (updatedName.isEmpty()) {
+                // Show an error message to the user
+                Snackbar.make(findViewById(android.R.id.content), "Name cannot be empty", Snackbar.LENGTH_SHORT).show();
+                return; // Exit the method if the name is invalid
+            }
+            // Call the method to update user details
+            updateUserDetails(userId);
+        });
 
         // Set click listeners
         btnCusCancel.setOnClickListener(v -> {
             toggleEditMode();
-            removeImage();
+            getUserDetails(userId);
         });
 
-        changeImageButton.setOnClickListener(v -> openGallery());
-        removeImageButton.setOnClickListener(v -> removeImage());
+        getUserDetails(userId);
+    }
+
+    private void getUserDetails(String userId) {
+
+        ApiService apiService = RetrofitClient.getRetrofitInstance().create(ApiService.class);
+        Call<UserResponse> call = apiService.getUserById(userId);
+
+        call.enqueue(new Callback<UserResponse>() {
+            @Override
+            public void onResponse(Call<UserResponse> call, Response<UserResponse> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    UserResponse user = response.body();
+
+                    // Set user details into the EditText and TextView fields
+                    editTextFirstName.setText(user.getName());
+                    viewInputFirstName.setText(user.getName());
+
+                    editTextNIC.setText(user.getEmail());
+                    viewInputNIC.setText(user.getEmail());
+
+                    editTextPhoneNo.setText(user.getPhone());
+                    viewInputPhoneNo.setText(user.getPhone());
+
+                    Address address = user.getAddress();
+                    if (address != null) {
+                        cusAccountAddressLine1.setText(address.getStreet());
+                        cusAccountAddressLine11.setText(address.getStreet());
+
+                        cusAccountCity1.setText(address.getCity());
+                        cusAccountCity2.setText(address.getCity());
+
+                        cusAccountPostalCode1.setText(address.getPostalCode());
+                        cusAccountPostalCode2.setText(address.getPostalCode());
+
+                        cusAccountCountry1.setText(address.getCountry());
+                        cusAccountCountry2.setText(address.getCountry());
+                    }
+                } else {
+                    Log.e("CheckoutActivity", "Failed to fetch user details");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<UserResponse> call, Throwable t) {
+                Log.e("CheckoutActivity", "Error: " + t.getMessage());
+            }
+        });
+    }
+
+    // Method to update user details
+    private void updateUserDetails(String userId) {
+        // Get the updated data from the EditTexts
+        String updatedName = editTextFirstName.getText().toString();
+        String updatedPhone = editTextPhoneNo.getText().toString();
+        String updatedStreet = cusAccountAddressLine1.getText().toString();
+        String updatedCity = cusAccountCity1.getText().toString();
+        String updatedPostalCode = cusAccountPostalCode1.getText().toString();
+        String updatedCountry = cusAccountCountry1.getText().toString();
+
+        // Create an Address object
+        Address updatedAddress = new Address(updatedStreet, updatedCity, updatedPostalCode, updatedCountry);
+        // Create a User object to hold the updated data
+        UserUpdate updatedUser = new UserUpdate(updatedName, updatedPhone, updatedAddress);
+
+        ApiService apiService = RetrofitClient.getRetrofitInstance().create(ApiService.class);
+        Call<LoginResponse> call = apiService.updateUser(userId, updatedUser);
+
+        call.enqueue(new Callback<LoginResponse>() {
+            @Override
+            public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    // Get the new JWT token
+                    String token = response.body().getToken();
+                    Log.d("ProfileActivity", "Token received: " + token);
+
+                    // Decode the JWT
+                    JWT jwt = new JWT(token);
+                    String email = jwt.getClaim("email").asString();
+                    String role = jwt.getClaim("role").asString();
+                    String name = jwt.getClaim("Name").asString();
+                    String userId = jwt.getClaim("id").asString();
+
+                    // Log the extracted claims
+                    Log.d("Decoded JWT","Email: "+email);
+                    Log.d("Decoded JWT","Role: "+role);
+                    Log.d("Decoded JWT","Name: "+name);
+                    Log.d("Decoded JWT","User ID: "+userId);
+
+                    // Save the token in SharedPreferences
+                    SharedPreferences preferences = getSharedPreferences("myPrefs", MODE_PRIVATE);
+                    SharedPreferences.Editor editor = preferences.edit();
+                    editor.putString("jwt_token", token);
+                    editor.apply();
+
+                    // Notify user of success and refresh user details
+                    Snackbar.make(findViewById(android.R.id.content), "User updated successfully!", Snackbar.LENGTH_SHORT).show();
+                    toggleEditMode();
+                    getUserDetails(userId);
+                } else {
+                    Log.e("ProfileActivity", "Failed to update user details");
+                    Snackbar.make(findViewById(android.R.id.content), "Failed to update user", Snackbar.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<LoginResponse> call, Throwable t) {
+                Log.e("ProfileActivity", "Error: " + t.getMessage());
+                Snackbar.make(findViewById(android.R.id.content), "Error occurred while updating user", Snackbar.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private void refreshContent() {
-        // Simulate loading process
-        loadingProgressBar.setVisibility(View.VISIBLE);
+        swipeRefreshLayout.setRefreshing(true);
+        // Restart the activity
+        Intent intent = getIntent();
+        finish();
+        startActivity(intent);
         swipeRefreshLayout.setRefreshing(false);
     }
 
@@ -168,18 +296,13 @@ public class ProfileActivity extends AppCompatActivity {
         toggleViewVisibility(profileEditImage);
         toggleViewVisibility(btnCusDeActivate);
         toggleViewVisibility(cusAccountButtons);
-        toggleViewVisibility(cusAccountProfileImageEditFrame);
 
-        // Toggle visibility of input fields (First Name, Last Name, NIC, etc.)
+        // Toggle visibility of input fields (First Name, Phone)
         toggleViewPair(editTextFirstName, viewInputFirstName);
-        toggleViewPair(editTextLastName, viewInputLastName);
-        toggleViewPair(editTextNIC, viewInputNIC);
         toggleViewPair(editTextPhoneNo, viewInputPhoneNo);
 
         // Toggle address lines
         toggleViewPair(cusAccountAddressLine1, cusAccountAddressLine11);
-        toggleViewPair(cusAccountAddressLine2, cusAccountAddressLine22);
-        toggleViewPair(cusAccountAddressLine3, cusAccountAddressLine33);
 
         // Toggle city, postal code, and country fields
         toggleViewPair(cusAccountCity1, cusAccountCity2);
@@ -202,54 +325,6 @@ public class ProfileActivity extends AppCompatActivity {
         } else {
             editView.setVisibility(View.GONE);
             displayView.setVisibility(View.VISIBLE);
-        }
-    }
-
-    private void openGallery() {
-        Intent intent = new Intent(Intent.ACTION_PICK);
-        intent.setType("image/*");
-        imagePickerLauncher.launch(intent);
-    }
-
-    private final ActivityResultLauncher<Intent> imagePickerLauncher =
-            registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
-                if (result.getResultCode() == Activity.RESULT_OK) {
-                    Intent data = result.getData();
-                    if (data != null) {
-                        selectedImageUri = data.getData();
-                        if (selectedImageUri != null) {
-                            if (originalDrawable == null) {
-                                originalDrawable = cusAccountProfileImage.getDrawable();
-                            }
-                            cusAccountProfileImage.setImageURI(selectedImageUri);
-                        }
-                    }
-                }
-            });
-
-    private void removeImage() {
-        if (originalDrawable != null) {
-            cusAccountProfileImage.setImageDrawable(originalDrawable);
-            selectedImageUri = null;
-        } else {
-            cusAccountProfileImage.setImageResource(R.drawable.person);
-        }
-    }
-
-    private void convertImageToBase64(Uri uri) {
-        try {
-            InputStream inputStream = getContentResolver().openInputStream(uri);
-            ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-            byte[] buffer = new byte[1024];
-            int bytesRead;
-            while ((bytesRead = inputStream.read(buffer)) != -1) {
-                bytes.write(buffer, 0, bytesRead);
-            }
-            byte[] imageBytes = bytes.toByteArray();
-            imageData = Base64.encodeToString(imageBytes, Base64.DEFAULT);
-            Log.d("Base64ImageString", imageData);
-        } catch (Exception e) {
-            e.printStackTrace();
         }
     }
 

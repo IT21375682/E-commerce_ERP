@@ -15,6 +15,7 @@ import androidx.core.view.WindowInsetsCompat;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.eadecommerce.model.ProductImageSingleton;
 import com.squareup.picasso.Picasso;
 
 public class FullScreenImageActivity extends AppCompatActivity {
@@ -28,9 +29,9 @@ public class FullScreenImageActivity extends AppCompatActivity {
         ImageView closeButton = findViewById(R.id.closeButton);
 
         // Get image URL from intent
-        Intent intent = getIntent();
-        String productImage = intent.getStringExtra("productImage");
-
+//        Intent intent = getIntent();
+//        String productImage = intent.getStringExtra("productImage");
+        String productImage = ProductImageSingleton.getInstance().getProductImage();
         // Load image using Picasso
 //        Picasso.get()
 //                .load(productImage)

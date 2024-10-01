@@ -41,20 +41,15 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
     public void onBindViewHolder(@NonNull CategoryViewHolder holder, int position) {
         Category category = categories.get(position);
         holder.categoryName.setText(category.getName());
-        holder.productCount.setText(category.getProductCount() + " products");
-        // Load image using an image loading library like Picasso
-        Picasso.get()
-                .load(category.getImageResId())
-                .placeholder(R.drawable.placeholder)
-                .error(R.drawable.logo_dark)
-                .into(holder.categoryImage);
+//        holder.productCount.setText(category.getProductCount() + " products");
 
         // Set click listener to start CategoryProductsActivity
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(context, CategoryProductsActivity.class);
-                intent.putExtra("categoryName", category.getName()); // Pass the category name or ID
+                intent.putExtra("categoryId", category.getId());
+                intent.putExtra("categoryName", category.getName());
                 context.startActivity(intent);
             }
         });
@@ -78,9 +73,9 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
 
         public CategoryViewHolder(@NonNull View itemView) {
             super(itemView);
-            categoryImage = itemView.findViewById(R.id.imageViewCategory);
+//            categoryImage = itemView.findViewById(R.id.imageViewCategory);
             categoryName = itemView.findViewById(R.id.textViewCategoryName);
-            productCount = itemView.findViewById(R.id.textViewProductCount);
+//            productCount = itemView.findViewById(R.id.textViewProductCount);
             layoutCategory = itemView.findViewById(R.id.layoutCategory);
         }
     }

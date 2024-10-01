@@ -64,7 +64,7 @@ public class CategoryProductsActivity extends AppCompatActivity {
     private RadioButton radioRating1, radioRating2, radioRating3, radioRating4;
 
     private Button buttonClearPriceFilter, buttonClearRatingFilter;
-
+    private String categoryId, categoryName;
     private int selectedRating = 0;
 
     @SuppressLint("ClickableViewAccessibility")
@@ -74,7 +74,9 @@ public class CategoryProductsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_category_products);
 
         // Retrieve the category name passed from the adapter
-        String categoryName = getIntent().getStringExtra("categoryName");
+        categoryId = getIntent().getStringExtra("categoryId");
+        categoryName = getIntent().getStringExtra("categoryName");
+
         cartTitleTextView = findViewById(R.id.cartTitleTextView);
         cartTitleTextView.setText(categoryName);
 
@@ -373,7 +375,7 @@ public class CategoryProductsActivity extends AppCompatActivity {
 
         // Call the API
         ApiService apiService = RetrofitClient.getRetrofitInstance().create(ApiService.class);
-        Call<List<Product>> call = apiService.getAllProducts();
+        Call<List<Product>> call = apiService.getCategoryProducts(categoryId);
 
         call.enqueue(new Callback<List<Product>>() {
             @Override

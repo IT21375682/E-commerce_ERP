@@ -1,25 +1,20 @@
 package com.example.eadecommerce.model;
 
 public class Category {
-    private String name;
-    private int productCount;
-    private String imageRes;
+    private String id;
+    private String categoryName;
 
-    public Category(String name, int productCount, String imageRes) {
-        this.name = name;
-        this.productCount = productCount;
-        this.imageRes = imageRes;
+    public Category(String id, String name) {
+        this.id = id;
+        this.categoryName = name;
     }
 
     public String getName() {
-        return name;
+        return categoryName;
     }
 
-    public int getProductCount() {
-        return productCount;
+    public String getId() {
+        return id;
     }
 
-    public String getImageResId() {
-        return imageRes;
-    }
 }

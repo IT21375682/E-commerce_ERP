@@ -60,6 +60,17 @@
                 android:entries="@array/date_filter_options"
                 android:spinnerMode="dropdown" />
 
+            <TextView
+                android:id="@+id/noCommentsTextView"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:gravity="center"
+                android:text="No comments yet"
+                android:textStyle="bold"
+                android:textSize="16sp"
+                android:paddingVertical="20dp"
+                android:visibility="gone" />
+
             <!-- RecyclerView for displaying comments -->
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerViewComments"

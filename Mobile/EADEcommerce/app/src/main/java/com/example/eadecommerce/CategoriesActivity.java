@@ -19,10 +19,17 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.eadecommerce.adapter.CategoryAdapter;
 import com.example.eadecommerce.model.Category;
+import com.example.eadecommerce.network.ApiService;
+import com.example.eadecommerce.network.RetrofitClient;
+import com.example.eadecommerce.responses.LoginResponse;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class CategoriesActivity extends AppCompatActivity {
 
@@ -33,7 +40,7 @@ public class CategoriesActivity extends AppCompatActivity {
     private SwipeRefreshLayout swipeRefreshLayout;
     private ImageButton buttonBack;
 
-    private List<Category> categoryList;
+    private List<Category> categoryList = new ArrayList<>();
     private String currentSearchQuery = "";
     private String currentSortOption = "A-Z"; // Default sort option
 
@@ -54,7 +61,7 @@ public class CategoriesActivity extends AppCompatActivity {
         swipeRefreshLayout = findViewById(R.id.swipeRefreshLayout);
 
         // Set up mock data
-        loadMockData();
+        loadCategories();
 
         // Set up RecyclerView
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -99,7 +106,7 @@ public class CategoriesActivity extends AppCompatActivity {
         // Handle refresh action
         swipeRefreshLayout.setOnRefreshListener(() -> {
             // Reload mock data or fetch new data from server
-            loadMockData();
+            loadCategories();
             applyFilters();
             swipeRefreshLayout.setRefreshing(false); // Stop refresh animation
         });
@@ -114,13 +121,37 @@ public class CategoriesActivity extends AppCompatActivity {
         });
     }
 
-    // Mock data function
-    private void loadMockData() {
-        categoryList = new ArrayList<>();
-        categoryList.add(new Category("Electronics", 100, "https://wallpapers.com/images/hd/shin-chan-in-black-eyz87euqvvyrlihs.jpg"));
-        categoryList.add(new Category("Clothing", 200, "https://assets.vogue.in/photos/64be31695ad7ce31037005c8/3:4/w_2560%2Cc_limit/Snapinsta.app_362218118_18390206827011278_5161897771700955906_n_1080.jpg"));
-        categoryList.add(new Category("Books", 50, "https://assets.vogue.in/photos/64be31695ad7ce31037005c8/3:4/w_2560%2Cc_limit/Snapinsta.app_362218118_18390206827011278_5161897771700955906_n_1080.jpg"));
-        categoryList.add(new Category("Toys", 80, "https://wallpapers.com/images/hd/shin-chan-in-black-eyz87euqvvyrlihs.jpg"));
+    // Data load function
+    private void loadCategories() {
+        // Call the API
+        ApiService apiService = RetrofitClient.getRetrofitInstance().create(ApiService.class);
+        Call<List<Category>> call = apiService.getActiveCategories();
+
+
+        call.enqueue(new Callback<List<Category>>() {
+            @Override
+            public void onResponse(Call<List<Category>> call, Response<List<Category>> response) {
+
+                if (response.isSuccessful() && response.body() != null) {
+                    categoryList.clear(); // Clear previous data
+                    for (Category category : response.body()) {
+                        // Create Category objects and add them to the list
+                        Log.e("CategoriesActivity", category.getId());
+                        Log.e("CategoriesActivity", category.getName());
+                    }
+                    categoryList.addAll(response.body()); // Add new categories
+                    categoryAdapter.updateList(categoryList); // Update the adapter
+                } else {
+                    Log.e("CategoriesActivity", "Failed to retrieve categories");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<Category>> call, Throwable t) {
+                // Handle failure
+                Log.e("CategoriesActivity", "Error: " + t.getMessage());
+            }
+        });
     }
 
     // Apply filters: search and sorting together

@@ -33,15 +33,14 @@ public class CompletedOrderFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_canceled_order, container, false);
+        View view = inflater.inflate(R.layout.fragment_completed_order, container, false);
         ordersRecyclerView = view.findViewById(R.id.ordersRecyclerView);
         filterSpinner = view.findViewById(R.id.filterSpinner);
 
-        // Initialize mock data
-        orderList = new ArrayList<>();
-        orderList.add(new Order("Order #4", "2024-09-24", 50.00));
-        orderList.add(new Order("Order #5", "2024-09-23", 30.00));
-        orderList.add(new Order("Order #6", "2024-09-22", 20.00));
+        // Retrieve the order list from arguments
+        if (getArguments() != null) {
+            orderList = getArguments().getParcelableArrayList("orderList");
+        }
 
         // Set up RecyclerView
         orderAdapter = new CompletedOrderAdapter(orderList, getContext());

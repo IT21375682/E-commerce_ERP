@@ -38,11 +38,10 @@ public class CanceledOrderFragment extends Fragment {
         ordersRecyclerView = view.findViewById(R.id.ordersRecyclerView);
         filterSpinner = view.findViewById(R.id.filterSpinner);
 
-        // Initialize mock data
-        orderList = new ArrayList<>();
-        orderList.add(new Order("Order #7", "2024-09-24", 50.00));
-        orderList.add(new Order("Order #8", "2024-09-23", 30.00));
-        orderList.add(new Order("Order #9", "2024-09-22", 20.00));
+        // Retrieve the order list from arguments
+        if (getArguments() != null) {
+            orderList = getArguments().getParcelableArrayList("orderList");
+        }
 
         // Set up RecyclerView
         orderAdapter = new CanceledOrderAdapter(orderList, getContext());
