@@ -254,7 +254,7 @@ public class OrderDetailActivity extends AppCompatActivity {
         }
 
         // Change for dispatched
-        if (!status.isDispatched()) {
+        if (status.isDispatched()) {
             paymentImageLine.setBackgroundResource(R.color.primary);
             receivedImage.setBackgroundResource(R.drawable.circle_border_background_done);
             receivedImage.setImageResource(R.drawable.pending_done);
@@ -288,7 +288,7 @@ public class OrderDetailActivity extends AppCompatActivity {
         }
 
         // Change for Canceled
-        if (!status.isCanceled()) {
+        if (status.isCanceled()) {
             canceledLayout.setVisibility(View.VISIBLE);
             if(status.getCanceledDate()!=null) {
                 Log.d("Order Detail Activity Cancellation", order.getCancellationNote());

@@ -302,7 +302,7 @@
                                         android:layout_width="0dp"
                                         android:layout_height="match_parent"
                                         android:layout_weight="3"
-                                        android:text="Date"
+                                        android:text=""
                                         android:gravity="center" />
 
                                 </LinearLayout>
@@ -381,7 +381,7 @@
                                         android:layout_width="0dp"
                                         android:layout_height="match_parent"
                                         android:layout_weight="3"
-                                        android:text="Date"
+                                        android:text=""
                                         android:gravity="center" />
                                 </LinearLayout>
                                 <LinearLayout
@@ -458,7 +458,7 @@
                                         android:layout_width="0dp"
                                         android:layout_height="match_parent"
                                         android:layout_weight="3"
-                                        android:text="Date"
+                                        android:text=""
                                         android:gravity="center" />
                                 </LinearLayout>
 <!--                                asdasd-->
@@ -536,7 +536,7 @@
                                         android:layout_width="0dp"
                                         android:layout_height="match_parent"
                                         android:layout_weight="3"
-                                        android:text="Date"
+                                        android:text=""
                                         android:gravity="center" />
                                 </LinearLayout>
                                 <LinearLayout

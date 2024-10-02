@@ -39,6 +39,7 @@ import com.example.eadecommerce.model.Product;
 import com.example.eadecommerce.network.ApiService;
 import com.example.eadecommerce.network.RetrofitClient;
 import com.example.eadecommerce.responses.LoginResponse;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -79,6 +80,7 @@ public class HomeFragment extends Fragment {
     private Button buttonClearRatingFilter;
     private Button buttonClearCategoryFilter;
     private LinearLayout categoryContainer, searchOutLayout;
+    private SwipeRefreshLayout swipeRefreshLayout;
 
     private int selectedRating = 0;
 
@@ -102,7 +104,7 @@ public class HomeFragment extends Fragment {
         });
 
         // Initialize views
-        SwipeRefreshLayout swipeRefreshLayout = view.findViewById(R.id.swipeRefreshLayout);
+        swipeRefreshLayout = view.findViewById(R.id.swipeRefreshLayout);
         recyclerViewProducts = view.findViewById(R.id.recyclerViewProducts);
         recyclerViewProducts.setLayoutManager(new GridLayoutManager(getContext(), 2)); // 2 columns
         textViewNoProducts = view.findViewById(R.id.textViewNoProducts);
@@ -189,8 +191,6 @@ public class HomeFragment extends Fragment {
             clearCategoryFilters();
             // Reload the products
             loadProducts();
-
-            // Stop the refresh animation
             swipeRefreshLayout.setRefreshing(false);
         });
 
@@ -435,7 +435,6 @@ public class HomeFragment extends Fragment {
     // Method to load products
     private void loadProducts() {
         Log.d("ProductLoading", "Called Api");
-
         // Clear previous filtered product list
         if (filteredProductList != null) {
             filteredProductList.clear();
@@ -491,8 +490,7 @@ public class HomeFragment extends Fragment {
                     Log.e("ProductLoading", "Failed to load products. Response code: " + response.code());
 
                     // Handle the error response (e.g., show a message)
-                    Toast.makeText(getContext(), "Failed to load products", Toast.LENGTH_SHORT).show();
-
+                    Snackbar.make(requireView(), "Failed to load products", Snackbar.LENGTH_SHORT).show();
                 }
             }
 
@@ -501,8 +499,7 @@ public class HomeFragment extends Fragment {
                 // Log the error
                 Log.e("ProductLoading", "API call failed: " + t.getMessage());
                 // Handle the failure (e.g., show a message)
-                Toast.makeText(getContext(), "Failed to load products: " + t.getMessage(), Toast.LENGTH_SHORT).show();
-
+                Snackbar.make(requireView(), "Failed to load products: " + t.getMessage(), Snackbar.LENGTH_SHORT).show();
             }
         });
     }
