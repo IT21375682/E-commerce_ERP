@@ -119,15 +119,28 @@ namespace E_commerce.Controllers
                 return BadRequest(new { Message = ex.Message });
             }
         }
+
+
+
+        [HttpPut("{id}/status")]
+        public IActionResult ToggleUserStatus(string id, [FromBody] ToggleStatusRequest request)
+        {
+            if (request == null || !ModelState.IsValid)
+            {
+                return BadRequest("Invalid request.");
+            }
+
+            var existingUser = _userService.GetUserById(id);
+            if (existingUser == null)
+            {
+                return NotFound();
+            }
+
+            _userService.ToggleUserStatus(id, request.IsActive);
+            return NoContent();
+        }
+
     }
-
-
-   
-
-
-
-
-
 
 
 

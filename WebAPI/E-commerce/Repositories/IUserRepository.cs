@@ -80,6 +80,13 @@ namespace E_commerce.Repositories
             return _users.Find(user => !user.IsActive).ToList(); // Fetch only active users
         }
 
+        //Update user active status
+        public void UpdateUser(User user)
+        {
+            _users.ReplaceOne(u => u.Id == user.Id, user);
+        }
+
+
 
     }
 }
