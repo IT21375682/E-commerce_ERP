@@ -17,6 +17,7 @@ namespace E_commerce.Models
         public string Role { get; set; }  // Administrator, Vendor, CSR, Customer
         public bool IsActive { get; set; }  // To track if the user is active or deactivated
         public DateTime CreatedAt { get; set; }  // Date of account creation
+        public bool? IsNew { get; set; } = true;
 
     }
 

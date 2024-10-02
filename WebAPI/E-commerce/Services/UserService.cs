@@ -97,7 +97,20 @@ namespace E_commerce.Services
             return _userRepository.GetDeactiveUsers(); // Fetch active users
         }
 
+        //Regenerate a token after the user is updated
+        public Task<string> GenerateTokenAfterUpdate(string email)
+        {
+            var user = GetUserByEmail(email);
+            if (user == null)
+            {
+                throw new Exception("User not found");
+            }
 
+            if (_jwtService == null)
+                throw new NullReferenceException("_jwtService is not initialized");
+
+            return Task.FromResult(_jwtService.GenerateToken(user.Email, user.Role, user.Name, user.Id));
+        }
 
     }
 }

@@ -5,6 +5,7 @@
  * It provides endpoints to fetch, create, update, and delete orders.
  */
 
+using E_commerce.DTOs;
 using E_commerce.Models;
 using E_commerce.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -216,6 +217,19 @@ namespace E_commerce.Controllers
                 return NotFound(new { Message = ex.Message }); // Return a more structured response
             }
         }
+
+        // GET api/Order/details/{id}
+        [HttpGet("single-order-detail/{id}")]
+        public ActionResult<SingleOrderItemDto> GetSingleOrderOrderDetails(string id)
+        {
+            var orderDetails = _orderService.GetSingleOrderWithProductDetails(id);
+            if (orderDetails == null)
+            {
+                return NotFound();
+            }
+            return Ok(orderDetails);
+        }
+
 
     }
 

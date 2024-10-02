@@ -367,5 +367,43 @@ using System.Numerics;
             return ratings.Any() ? ratings.Average() : 0;
         }
 
+        public IEnumerable<ProductDetailsDto> GetActiveProductsWithDetailsByCategory(string categoryId)
+        {
+            // Fetch active products
+            var activeProducts = _products.Find(product => product.IsActive).ToList();
+
+            activeProducts = activeProducts.Where(p => p.CategoryId == categoryId).ToList();
+
+            // Get active category and vendor details
+            var activeCategories = _categories.Find(category => category.IsActive).ToList();
+            var activeCategoryIds = activeCategories.Select(c => c.Id).ToHashSet();
+
+            var categoryLookup = activeCategories.ToDictionary(c => c.Id, c => c.CategoryName);
+            var vendorLookup = _vendors.Find(vendor => true).ToList()
+                .ToDictionary(v => v.Id.ToString(), v => v.Name);
+
+            // Build the product details DTOs
+            var productDetails = activeProducts.Select(product => new ProductDetailsDto
+            {
+                ProductId = product.Id,
+                Name = product.Name,
+                ProductImage = product.ProductImage,
+                CategoryId = product.CategoryId,
+                Description = product.Description,
+                Price = product.Price,
+                AvailableStock = product.AvailableStock,
+                IsActive = product.IsActive,
+                VendorId = product.VendorId,
+                CreatedAt = product.CreatedAt,
+                StockLastUpdated = product.StockLastUpdated,
+                ProductCategoryName = categoryLookup.TryGetValue(product.CategoryId, out var categoryName) ? categoryName : null,
+                VendorName = vendorLookup.TryGetValue(product.VendorId, out var vendorName) ? vendorName : null,
+                AverageRating = GetAverageRatingByProductId(product.Id)
+            });
+
+            return productDetails;
+        }
+
+
     }
 }

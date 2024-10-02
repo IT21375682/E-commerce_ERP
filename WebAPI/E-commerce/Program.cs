@@ -99,7 +99,7 @@ builder.Services.AddCors(options =>
 builder.Services.AddControllersWithViews();
 
 // Bind the server to all network interfaces (0.0.0.0) to make it accessible externally
-builder.WebHost.UseUrls("http://192.168.82.187:5004");
+builder.WebHost.UseUrls("http://192.168.1.73:5004");
 
 
 
@@ -112,6 +112,7 @@ builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 app.UseCors("AllowSpecificOrigin");
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment() || true)
 {

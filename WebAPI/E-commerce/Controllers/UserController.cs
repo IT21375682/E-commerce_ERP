@@ -137,6 +137,40 @@ namespace E_commerce.Controllers
             return Ok(user);
         }
 
+        // PATCH: api/User/{id} - Partially update an existing user
+        [HttpPatch("UpdateUser/{id}")]
+        public async Task<IActionResult> PatchUser(string id, [FromBody] UserUpdateDto updatedFields)
+        {
+            var existingUser = _userService.GetUserById(id);
+            if (existingUser == null)
+            {
+                return NotFound();
+            }
+
+            // Update only the fields that are provided
+            if (updatedFields.Name != null)
+            {
+                existingUser.Name = updatedFields.Name;
+            }
+            if (updatedFields.Phone != null)
+            {
+                existingUser.Phone = updatedFields.Phone;
+            }
+            if (updatedFields.Address != null)
+            {
+                existingUser.Address = updatedFields.Address;
+            }
+
+            // Update the user in the service
+            _userService.UpdateUser(id, existingUser);
+
+            // Generate a new JWT token after update
+            var token = await _userService.GenerateTokenAfterUpdate(existingUser.Email);
+            return Ok(new { Token = token });
+        }
+
+
+
     }
 
 

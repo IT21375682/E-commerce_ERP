@@ -64,5 +64,12 @@ namespace E_commerce.Services
         {
             return await _cartRepository.GetCartWithProductByUserId(userId);
         }
+
+        // Gets the total number of products in a cart for a specific user
+        public async Task<int> GetProductCountByUserId(string userId)
+        {
+            return await _cartRepository.GetProductCountByUserId(userId);
+        }
+
     }
 }

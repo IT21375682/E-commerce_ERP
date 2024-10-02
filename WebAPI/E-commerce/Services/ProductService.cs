@@ -92,5 +92,11 @@ namespace E_commerce.Services
             return _productRepository.GetActiveProductWithDetailsById(productId);
         }
 
+        public IEnumerable<ProductDetailsDto> GetActiveProductsWithDetailsByCategory(string? categoryId = null)
+        {
+            return _productRepository.GetActiveProductsWithDetailsByCategory(categoryId);
+        }
+
+
     }
 }

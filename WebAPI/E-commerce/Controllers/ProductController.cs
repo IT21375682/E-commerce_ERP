@@ -161,7 +161,8 @@ namespace E_commerce.Controllers
             var result = _productService.GetAllActiveCategoryAndActiveProducts();
             return Ok(result);
         }
-          [HttpGet("active-details")]
+
+        [HttpGet("active-details")]
         public ActionResult<IEnumerable<ProductDetailsDto>> GetAllActiveProductsWithDetails()
         {
             var products = _productService.GetAllActiveProductsWithDetails();
@@ -180,6 +181,14 @@ namespace E_commerce.Controllers
 
             return Ok(product);
         }
+
+        [HttpGet("active-details/category/{categoryId}")]
+        public ActionResult<IEnumerable<ProductDetailsDto>> GetAllActiveProductsWithDetailsByCategory(string? categoryId = null)
+        {
+            var products = _productService.GetActiveProductsWithDetailsByCategory(categoryId);
+            return Ok(products);
+        }
+
 
     }
 }

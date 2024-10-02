@@ -4,6 +4,7 @@
  * Description: This service handles the business logic for order operations such as fetching, creating, updating, and deleting orders.
  */
 
+using E_commerce.DTOs;
 using E_commerce.Models;
 using E_commerce.Repositories;
 using MongoDB.Bson;
@@ -178,6 +179,62 @@ namespace E_commerce.Services
             _orderRepository.UpdateProductDeliveryStatus(orderId, vendorId, productId);
         }
 
+        public SingleOrderItemDto GetSingleOrderWithProductDetails(string orderId)
+        {
+            // Fetch the order by orderId
+            var order = _orderRepository.GetOrderById(orderId);
+            if (order == null)
+            {
+                return null; // Handle order not found case
+            }
+
+            // Initialize the DTO
+            SingleOrderItemDto orderDto = new SingleOrderItemDto
+            {
+                Id = order.Id,
+                UserId = order.UserId,
+                Date = order.Date,
+                Total = order.Total,
+                Status = new SingleOrderStatus
+                {
+                    Pending = order.Status.Pending,
+                    PendingDate = order.Status.PendingDate,
+                    Processing = order.Status.Processing,
+                    ProcessingDate = order.Status.ProcessingDate,
+                    Dispatched = order.Status.Dispatched,
+                    DispatchedDate = order.Status.DispatchedDate,
+                    Partially_Delivered = order.Status.Partially_Delivered,
+                    Partially_Delivered_Date = order.Status.Partially_Delivered_Date,
+                    Delivered = order.Status.Delivered,
+                    DeliveredDate = order.Status.DeliveredDate,
+                    Canceled = order.Status.Canceled,
+                    CanceledDate = order.Status.CanceledDate,
+                    StockReduced = order.Status.StockReduced
+                },
+                CancellationNote = order.CancellationNote,
+                ProductItems = new List<SingleOrderProductItem>()
+            };
+
+            // For each product in the order, fetch additional details like name, price, and image
+            foreach (var productItem in order.ProductItems)
+            {
+                var product = _productRepository.GetProductById(productItem.ProductId);
+                if (product != null)
+                {
+                    orderDto.ProductItems.Add(new SingleOrderProductItem
+                    {
+                        ProductId = productItem.ProductId,
+                        ProductName = product.Name,
+                        ProductPrice = product.Price.ToString(),
+                        ProductImg = product.ProductImage,
+                        Count = productItem.Count,
+                        Delivered = productItem.Delivered
+                    });
+                }
+            }
+
+            return orderDto;
+        }
 
 
     }
