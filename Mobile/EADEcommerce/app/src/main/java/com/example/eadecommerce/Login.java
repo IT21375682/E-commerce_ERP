@@ -60,6 +60,16 @@ public class Login extends AppCompatActivity {
         cusLoginNoUsernamePassword = findViewById(R.id.cus_login_no_username_password);
         layoutPassword = findViewById(R.id.layout_password);
 
+        // Check for an existing session
+        SharedPreferences preferences = getSharedPreferences("myPrefs", MODE_PRIVATE);
+        String token = preferences.getString("jwt_token", null);
+        if (token != null) {
+            // Token exists, navigate to Main activity
+            Intent intent = new Intent(Login.this, Main.class);
+            startActivity(intent);
+            finish();
+        }
+
         // Underline "Register" text
         String registerString = "Register";
         SpannableString mSpannableString = new SpannableString(registerString);

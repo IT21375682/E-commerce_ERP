@@ -31,7 +31,9 @@ import com.example.eadecommerce.adapter.ProductAdapter;
 import com.example.eadecommerce.fragments.HomeFragment;
 import com.example.eadecommerce.model.Product;
 import com.example.eadecommerce.network.ApiService;
+import com.example.eadecommerce.network.JwtUtils;
 import com.example.eadecommerce.network.RetrofitClient;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -64,7 +66,7 @@ public class CategoryProductsActivity extends AppCompatActivity {
     private RadioButton radioRating1, radioRating2, radioRating3, radioRating4;
 
     private Button buttonClearPriceFilter, buttonClearRatingFilter;
-    private String categoryId, categoryName;
+    private String categoryId, categoryName, userId;
     private int selectedRating = 0;
 
     @SuppressLint("ClickableViewAccessibility")
@@ -72,6 +74,14 @@ public class CategoryProductsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_category_products);
+
+        // Get the JWT token from SharedPreferences and Decode the token to get the user ID
+        String token = JwtUtils.getTokenFromSharedPreferences(this);
+        userId = JwtUtils.getUserIdFromToken(token);
+        Log.d("userId", userId);
+
+        // Fetch the product count for the user's cart
+        fetchProductCount(userId);
 
         // Retrieve the category name passed from the adapter
         categoryId = getIntent().getStringExtra("categoryId");
@@ -417,6 +427,31 @@ public class CategoryProductsActivity extends AppCompatActivity {
             Log.d("TAG", "Else Debug message");
             finish(); // Close activity if no fragments are in the stack
         }
+    }
+
+    private void fetchProductCount(String userId) {
+
+        ApiService apiService = RetrofitClient.getRetrofitInstance().create(ApiService.class);
+        Call<Integer> call = apiService.getCartProductCount(userId);
+
+        call.enqueue(new Callback<Integer>() {
+            @Override
+            public void onResponse(Call<Integer> call, Response<Integer> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    int productCount = response.body();
+                    // Display the product count
+                    TextView cart_count = findViewById(R.id.cart_count);
+                    cart_count.setText(String.valueOf(productCount));
+                } else {
+                    Snackbar.make(findViewById(android.R.id.content), "Failed to fetch product count", Snackbar.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Integer> call, Throwable t) {
+                Snackbar.make(findViewById(android.R.id.content), "Error: " + t.getMessage(), Snackbar.LENGTH_LONG).show();
+            }
+        });
     }
 
 

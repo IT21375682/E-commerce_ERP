@@ -81,6 +81,9 @@ public class ProfileActivity extends AppCompatActivity {
         userId = JwtUtils.getUserIdFromToken(token);
         Log.d("userId", userId);
 
+        // Fetch the product count for the user's cart
+        fetchProductCount(userId);
+
         buttonBack = findViewById(R.id.buttonBack);
         clickcartHome = findViewById(R.id.clickcartHome);
         buttonCart = findViewById(R.id.buttonCart);
@@ -340,6 +343,31 @@ public class ProfileActivity extends AppCompatActivity {
             Log.d("TAG", "Else Debug message");
             finish(); // Close activity if no fragments are in the stack
         }
+    }
+
+    private void fetchProductCount(String userId) {
+
+        ApiService apiService = RetrofitClient.getRetrofitInstance().create(ApiService.class);
+        Call<Integer> call = apiService.getCartProductCount(userId);
+
+        call.enqueue(new Callback<Integer>() {
+            @Override
+            public void onResponse(Call<Integer> call, Response<Integer> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    int productCount = response.body();
+                    // Display the product count
+                    TextView cart_count = findViewById(R.id.cart_count);
+                    cart_count.setText(String.valueOf(productCount));
+                } else {
+                    Snackbar.make(findViewById(android.R.id.content), "Failed to fetch product count", Snackbar.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Integer> call, Throwable t) {
+                Snackbar.make(findViewById(android.R.id.content), "Error: " + t.getMessage(), Snackbar.LENGTH_LONG).show();
+            }
+        });
     }
 
 }

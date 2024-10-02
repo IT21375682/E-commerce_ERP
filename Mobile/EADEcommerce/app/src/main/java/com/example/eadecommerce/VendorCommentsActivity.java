@@ -1,5 +1,6 @@
 package com.example.eadecommerce;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -16,8 +17,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import com.example.eadecommerce.adapter.CommentAdapter;
-import com.example.eadecommerce.adapter.ProductCommentAdapter;
+import com.example.eadecommerce.adapter.VendorCommentAdapter;
 import com.example.eadecommerce.model.Comment;
 import com.example.eadecommerce.model.ProductCommentData;
 import com.example.eadecommerce.network.ApiService;
@@ -33,24 +33,32 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class CommentsActivity extends AppCompatActivity {
+public class VendorCommentsActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
-    private CommentAdapter commentAdapter;
+    private VendorCommentAdapter vendorCommentAdapter;
     private List<ProductCommentData> comments = new ArrayList<>();
     private SwipeRefreshLayout swipeRefreshLayout;
     private ImageButton buttonBack;
-    private String userId;
-    private TextView noCommentsTextView;
+    private String userId, vendorId, vendorName;
+    private TextView noCommentsTextView, cartTitleTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_comments);
+        setContentView(R.layout.activity_vendor_comments);
 
         // Get the JWT token from SharedPreferences and Decode the token to get the user ID
         String token = JwtUtils.getTokenFromSharedPreferences(this);
         userId = JwtUtils.getUserIdFromToken(token);
         Log.d("userId", userId);
+
+        // Retrieve the productId passed from the Intent
+        Intent intent = getIntent();
+        vendorId = intent.getStringExtra("vendorId");
+        vendorName = intent.getStringExtra("vendorName");
+
+        cartTitleTextView = findViewById(R.id.cartTitleTextView);
+        cartTitleTextView.setText(vendorName);
 
         buttonBack = findViewById(R.id.buttonBack);
         // Set click listener for the back button
@@ -62,8 +70,8 @@ public class CommentsActivity extends AppCompatActivity {
         noCommentsTextView = findViewById(R.id.noCommentsTextView);
 
         // Initialize adapter with an empty list and set it to RecyclerView
-        commentAdapter = new CommentAdapter(this,comments);
-        recyclerView.setAdapter(commentAdapter);
+        vendorCommentAdapter = new VendorCommentAdapter(this,comments);
+        recyclerView.setAdapter(vendorCommentAdapter);
 
         // Setup Spinner
         Spinner spinner = findViewById(R.id.spinnerDateFilter);
@@ -83,7 +91,7 @@ public class CommentsActivity extends AppCompatActivity {
                         // Sort by Oldest
                         Collections.sort(comments, Comparator.comparing(ProductCommentData::getDate));
                     }
-                    commentAdapter.updateComments(comments);  // Notify adapter of the change
+                    vendorCommentAdapter.updateComments(comments);  // Notify adapter of the change
                 }
             }
 
@@ -97,18 +105,18 @@ public class CommentsActivity extends AppCompatActivity {
         swipeRefreshLayout = findViewById(R.id.swipeRefreshLayout);
         swipeRefreshLayout.setOnRefreshListener(() -> {
             // Reload the list
-            fetchComments(userId);
+            fetchComments(vendorId);
             swipeRefreshLayout.setRefreshing(false);
         });
 
         // Fetch comments when the activity is created
-        fetchComments(userId);
+        fetchComments(vendorId);
     }
 
     // Fetch comments from the API
-    private void fetchComments(String userId) {
+    private void fetchComments(String vendorId) {
         ApiService apiService = RetrofitClient.getRetrofitInstance().create(ApiService.class);
-        Call<List<ProductCommentData>> call = apiService.getCommentsByUserId(userId);
+        Call<List<ProductCommentData>> call = apiService.getCommentsByVendorId(vendorId);
 
         call.enqueue(new Callback<List<ProductCommentData>>() {
             @Override
@@ -125,7 +133,7 @@ public class CommentsActivity extends AppCompatActivity {
                         // Show the RecyclerView and hide the "No comments yet" message
                         noCommentsTextView.setVisibility(View.GONE);
                         recyclerView.setVisibility(View.VISIBLE);
-                        commentAdapter.updateComments(comments);  // Update the adapter with new data
+                        vendorCommentAdapter.updateComments(comments);  // Update the adapter with new data
                     }
 
                 } else {

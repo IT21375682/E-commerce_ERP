@@ -88,4 +88,10 @@ public interface ApiService {
 
     @GET("api/Comment/user/{userId}") // Replace with your actual endpoint
     Call<List<ProductCommentData>> getCommentsByUserId(@Path("userId") String userId );
+
+    @GET("api/Comment/vendor/{vendorId}") // Replace with your actual endpoint
+    Call<List<ProductCommentData>> getCommentsByVendorId(@Path("vendorId") String vendorId );
+
+    @GET("api/Cart/{userId}/product-count")
+    Call<Integer> getCartProductCount(@Path("userId") String userId);
 }

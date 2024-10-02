@@ -27,31 +27,6 @@
                 android:textSize="16sp"
                 android:textStyle="bold" />
 
-            <ImageView
-                android:id="@+id/profileEditImage"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:background="@drawable/cus_button_update"
-                android:padding="10dp"
-                android:src="@drawable/edit_profile" />
-            <ImageView
-                android:id="@+id/profileupdateCancelImage"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:background="@drawable/hint_profile_cancel"
-                android:padding="10dp"
-                android:visibility="gone"
-                android:layout_marginRight="10dp"
-                android:src="@drawable/clear" />
-            <ImageView
-                android:id="@+id/profileupdateImage"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:background="@drawable/cus_button_update"
-                android:padding="10dp"
-                android:visibility="gone"
-                android:src="@drawable/update_check" />
-
         </LinearLayout>
 
         <!-- Product Name -->

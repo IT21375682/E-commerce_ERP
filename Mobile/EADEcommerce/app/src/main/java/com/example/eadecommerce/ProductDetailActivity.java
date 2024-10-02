@@ -72,6 +72,9 @@ public class ProductDetailActivity extends AppCompatActivity {
         userId = JwtUtils.getUserIdFromToken(token);
         Log.d("userId",userId);
 
+        // Fetch the product count for the user's cart
+        fetchProductCount(userId);
+
         // Get data from Intent
         Intent intent = getIntent();
         productId = intent.getStringExtra("productId");
@@ -475,6 +478,7 @@ public class ProductDetailActivity extends AppCompatActivity {
                 if (response.isSuccessful()) {
                     Log.d("ProductDetailActivity", "Cart updated successfully for cart ID: " + cartId);
                     Snackbar.make(findViewById(android.R.id.content), "Product Added to Cart!", Snackbar.LENGTH_SHORT).show();
+                    fetchProductCount(userId);
                 } else {
                     Log.e("ProductDetailActivity", "Failed to update cart: " + response.code());
                 }
@@ -507,6 +511,7 @@ public class ProductDetailActivity extends AppCompatActivity {
                 if (response.isSuccessful()) {
                     Log.d("ProductDetailActivity", "Cart created successfully for user: " + userId);
                     Snackbar.make(findViewById(android.R.id.content), "Product Added to Cart!", Snackbar.LENGTH_SHORT).show();
+                    fetchProductCount(userId);
                 } else {
                     Log.e("ProductDetailActivity", "Failed to create cart: " + response.code());
                 }
@@ -515,6 +520,31 @@ public class ProductDetailActivity extends AppCompatActivity {
             @Override
             public void onFailure(Call<Void> call, Throwable t) {
                 Log.e("ProductDetailActivity", "Failed to create cart", t);
+            }
+        });
+    }
+
+    private void fetchProductCount(String userId) {
+
+        ApiService apiService = RetrofitClient.getRetrofitInstance().create(ApiService.class);
+        Call<Integer> call = apiService.getCartProductCount(userId);
+
+        call.enqueue(new Callback<Integer>() {
+            @Override
+            public void onResponse(Call<Integer> call, Response<Integer> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    int productCount = response.body();
+                    // Display the product count
+                    TextView cart_count = findViewById(R.id.cart_count);
+                    cart_count.setText(String.valueOf(productCount));
+                } else {
+                    Snackbar.make(findViewById(android.R.id.content), "Failed to fetch product count", Snackbar.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Integer> call, Throwable t) {
+                Snackbar.make(findViewById(android.R.id.content), "Error: " + t.getMessage(), Snackbar.LENGTH_LONG).show();
             }
         });
     }

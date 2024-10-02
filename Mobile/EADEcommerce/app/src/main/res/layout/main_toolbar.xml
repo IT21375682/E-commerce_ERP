@@ -36,14 +36,34 @@
                 android:scaleType="fitCenter"
                 android:src="@drawable/logo" />
 
-            <ImageButton
-                android:id="@+id/buttonCart"
+            <!-- Container for Cart Icon and Count Badge -->
+            <FrameLayout
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@android:color/transparent"
-                android:padding="5dp"
-                android:src="@drawable/cart" />
+                android:layout_height="wrap_content">
 
+                <!-- Cart Button -->
+                <ImageButton
+                    android:id="@+id/buttonCart"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@android:color/transparent"
+                    android:padding="5dp"
+                    android:src="@drawable/cart" />
+
+                <!-- Cart Count TextView -->
+                <TextView
+                    android:id="@+id/cart_count"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_gravity="end|top"
+                    android:background="@drawable/white_background"
+                    android:gravity="center"
+                    android:padding="2dp"
+                    android:text="0"
+                    android:textColor="@color/primary"
+                    android:textSize="12sp" />
+
+            </FrameLayout>
         </LinearLayout>
     </Toolbar>
 </LinearLayout>

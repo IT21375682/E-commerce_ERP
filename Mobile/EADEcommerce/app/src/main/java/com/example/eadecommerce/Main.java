@@ -2,7 +2,9 @@ package com.example.eadecommerce;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
@@ -17,7 +19,18 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.example.eadecommerce.fragments.HomeFragment;  // Import HomeFragment
+import com.example.eadecommerce.model.ProductCommentData;
+import com.example.eadecommerce.network.ApiService;
+import com.example.eadecommerce.network.JwtUtils;
+import com.example.eadecommerce.network.RetrofitClient;
 import com.google.android.material.navigation.NavigationView;
+import com.google.android.material.snackbar.Snackbar;
+
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class Main extends AppCompatActivity {
 
@@ -26,11 +39,25 @@ public class Main extends AppCompatActivity {
     ImageButton buttonDrawerMenuRight;
     NavigationView navigationView;
     ImageView clickcart_logo;
+    String userId, userName, userEmail;
+    TextView textUsername, textUserEmail;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
+
+        // Get the JWT token from SharedPreferences and Decode the token to get the user ID
+        String token = JwtUtils.getTokenFromSharedPreferences(this);
+        userId = JwtUtils.getUserIdFromToken(token);
+        userName = JwtUtils.getNameFromToken(token);
+        userEmail = JwtUtils.getEmailFromToken(token);
+        Log.d("userId", userId);
+        Log.d("userId", userName);
+        Log.d("userId", userEmail);
+
+        // Fetch the product count for the user's cart
+        fetchProductCount(userId);
 
         drawerLayout = findViewById(R.id.navigatorDrawer);
         buttonDrawerToggle = findViewById(R.id.buttonDrawerToggle);
@@ -40,6 +67,7 @@ public class Main extends AppCompatActivity {
 
         // Load HomeFragment by default when activity is created
         if (savedInstanceState == null) {
+            fetchProductCount(userId);
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
             transaction.replace(R.id.mainContent, new HomeFragment());  // Default to HomeFragment
             transaction.commit();
@@ -57,6 +85,7 @@ public class Main extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // Load HomeFragment when clickcart_logo is clicked
+                fetchProductCount(userId);
                 FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
                 transaction.replace(R.id.mainContent, new HomeFragment());  // Switch to HomeFragment
                 transaction.commit();
@@ -64,15 +93,11 @@ public class Main extends AppCompatActivity {
         });
 
         View headerView = navigationView.getHeaderView(0);
-        ImageView useImage = headerView.findViewById(R.id.userImage);
-        TextView textUsername = headerView.findViewById(R.id.textUserName);
 
-        useImage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(Main.this, textUsername.getText(), Toast.LENGTH_SHORT).show();
-            }
-        });
+        textUsername = headerView.findViewById(R.id.textUserName);
+        textUserEmail = headerView.findViewById(R.id.textUserEmail);
+        textUsername.setText(userName);
+        textUserEmail.setText(userEmail);
 
         // Set OnClickListener for buttonDrawerMenuRight to load CartActivity
         buttonDrawerMenuRight.setOnClickListener(new View.OnClickListener() {
@@ -134,6 +159,11 @@ public class Main extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 // Handle logout
+                SharedPreferences preferences = getSharedPreferences("myPrefs", MODE_PRIVATE);
+                SharedPreferences.Editor editor = preferences.edit();
+                editor.remove("jwt_token");
+                editor.apply();
+
                 Intent intent = new Intent(Main.this, Login.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(intent);
@@ -150,6 +180,31 @@ public class Main extends AppCompatActivity {
         // Create and show the dialog
         AlertDialog dialog = builder.create();
         dialog.show();
+    }
+
+    private void fetchProductCount(String userId) {
+
+        ApiService apiService = RetrofitClient.getRetrofitInstance().create(ApiService.class);
+        Call<Integer> call = apiService.getCartProductCount(userId);
+
+        call.enqueue(new Callback<Integer>() {
+            @Override
+            public void onResponse(Call<Integer> call, Response<Integer> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    int productCount = response.body();
+                    // Display the product count
+                    TextView cart_count = findViewById(R.id.cart_count);
+                    cart_count.setText(String.valueOf(productCount));
+                } else {
+                    Snackbar.make(findViewById(android.R.id.content), "Failed to fetch product count", Snackbar.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Integer> call, Throwable t) {
+                Snackbar.make(findViewById(android.R.id.content), "Error: " + t.getMessage(), Snackbar.LENGTH_LONG).show();
+            }
+        });
     }
 }
 
