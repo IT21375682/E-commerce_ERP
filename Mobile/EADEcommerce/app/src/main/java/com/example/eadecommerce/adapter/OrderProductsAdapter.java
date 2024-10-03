@@ -39,7 +39,7 @@ public class OrderProductsAdapter extends RecyclerView.Adapter<OrderProductsAdap
     public void onBindViewHolder(CartViewHolder holder, int position) {
         SingleOrderProductItem item = cartItems.get(position);
         holder.itemNameTextView.setText(item.getProductName());
-        holder.itemPriceTextView.setText(String.format("Price: $%.2f", item.getProductPrice()));
+        holder.itemPriceTextView.setText(String.format("Price: LKR %.2f", item.getProductPrice()));
         holder.itemCountTextView.setText("Count: " + item.getCount());
 
         // Decode the base64 image string and set it to the ImageView

@@ -1,6 +1,7 @@
 package com.example.eadecommerce;
 
 import android.content.Intent;
+import android.media.Rating;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -41,6 +42,7 @@ public class VendorCommentsActivity extends AppCompatActivity {
     private ImageButton buttonBack;
     private String userId, vendorId, vendorName;
     private TextView noCommentsTextView, cartTitleTextView;
+    private RatingBar vendorRatingBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,6 +70,7 @@ public class VendorCommentsActivity extends AppCompatActivity {
         recyclerView = findViewById(R.id.recyclerViewComments);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         noCommentsTextView = findViewById(R.id.noCommentsTextView);
+        vendorRatingBar = findViewById(R.id.vendorRatingBar);
 
         // Initialize adapter with an empty list and set it to RecyclerView
         vendorCommentAdapter = new VendorCommentAdapter(this,comments);
@@ -134,6 +137,16 @@ public class VendorCommentsActivity extends AppCompatActivity {
                         noCommentsTextView.setVisibility(View.GONE);
                         recyclerView.setVisibility(View.VISIBLE);
                         vendorCommentAdapter.updateComments(comments);  // Update the adapter with new data
+
+                        // Calculate average rating
+                        double totalRating = 0.0;
+                        for (ProductCommentData comment : comments) {
+                            totalRating += (double) comment.getRating();
+                        }
+
+                        // Calculate the average rating
+                        double averageRating = totalRating / comments.size();
+                        vendorRatingBar.setRating((float) averageRating);
                     }
 
                 } else {
