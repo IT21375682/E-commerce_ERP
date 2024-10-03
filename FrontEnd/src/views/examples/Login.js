@@ -27,7 +27,7 @@ const Login = () => {
   
     try {
       // Make API call to login
-      const response = await axios.post("https://localhost:7179/api/User/login", {
+      const response = await axios.post("https://localhost:5004/api/User/login", {
         email: email,
         password: password,
       });

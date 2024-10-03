@@ -58,7 +58,7 @@ const AddVendor = () => {
 
     try {
       // Send form data to backend API (assuming there's an endpoint to add users)
-      const response = await axios.post('https://localhost:7179/api/User', formData);
+      const response = await axios.post('https://localhost:5004/api/User', formData);
       alert('Vendor added successfully:', response.data);
       // Handle success (e.g., show notification or redirect)
     } catch (error) {

@@ -22,7 +22,7 @@ const CustomerTable = () => {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const response = await axios.get('https://localhost:7179/api/User'); // Fetch the users using Axios
+        const response = await axios.get('https://localhost:5004/api/User'); // Fetch the users using Axios
         setUsers(response.data); // Store the user data in the state
         setLoading(false); // Set loading to false once data is fetched
       } catch (error) {
@@ -52,7 +52,7 @@ const CustomerTable = () => {
       try {
         // Call the API to update the customer's active status
         const response = await axios.put(
-          `https://localhost:7179/api/User/${customerId}/status`, 
+          `https://localhost:5004/api/User/${customerId}/status`, 
           { isActive: false }, 
           { headers: { 'Content-Type': 'application/json' } }
         );
