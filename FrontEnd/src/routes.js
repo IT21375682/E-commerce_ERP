@@ -6,6 +6,12 @@ import Tables from "views/examples/VendorTable.js";
 import Icons from "views/examples/Icons.js";
 import AddProduct from "views/examples/AddProduct";
 import ViewProduct from "views/examples/ViewProducts";
+import CustomerTable from "views/examples/CustomerTable.js"
+import CustomerReqTable from "views/examples/CustomerReqTable.js"
+import ViewVendor from "views/examples/ViewVendor";
+import ViewCustomer from "views/examples/ViewCustomer";
+import InactiveCusTable from "views/examples/InactiveCusTable";
+
 
 var routes = [
   {
@@ -48,6 +54,41 @@ var routes = [
     name: "View Product ",
     icon: "ni ni-bullet-list-67 text-red",
     component: < ViewProduct/>,
+    layout: "/admin",
+  },
+{
+    path: "/Customer-table",
+    name: "customer ",
+    icon: "ni ni-bullet-list-67 text-red",
+    component: <CustomerTable />,
+    layout: "/admin",
+  },
+  {
+    path: "/InactiveCus-table",
+    name: "customer ",
+    icon: "ni ni-bullet-list-67 text-red",
+    component: <InactiveCusTable />,
+    layout: "/admin",
+  },
+  {
+    path: "/Customer-Requests",
+    name: "customer ",
+    icon: "ni ni-bullet-list-67 text-red",
+    component: <CustomerReqTable />,
+    layout: "/admin",
+  },
+  {
+    path: "/vendor/:vendorId",
+    name: "customer ",
+    icon: "ni ni-bullet-list-67 text-red",
+    component: <ViewVendor />,
+    layout: "/admin",
+  },
+  {
+    path: "/customer/:customerId",
+    name: "customer ",
+    icon: "ni ni-bullet-list-67 text-red",
+    component: <ViewCustomer />,
     layout: "/admin",
   },
   {

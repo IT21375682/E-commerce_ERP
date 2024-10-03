@@ -1,22 +1,4 @@
-/*!
-
-=========================================================
-* Argon Dashboard React - v1.2.4
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/argon-dashboard-react
-* Copyright 2024 Creative Tim (https://www.creative-tim.com)
-* Licensed under MIT (https://github.com/creativetimofficial/argon-dashboard-react/blob/master/LICENSE.md)
-
-* Coded by Creative Tim
-
-=========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-*/
-
-// reactstrap components
+import React, { useState } from "react";
 import {
   Button,
   Card,
@@ -31,58 +13,58 @@ import {
   Row,
   Col,
 } from "reactstrap";
+import axios from "axios"; // Import axios
 
 const Login = () => {
+  // State to hold email and password
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState(""); // For displaying error messages
+
+  // Handle form submission
+  const handleSubmit = async (e) => {
+    e.preventDefault(); // Prevent page refresh
+  
+    try {
+      // Make API call to login
+      const response = await axios.post("https://localhost:7179/api/User/login", {
+        email: email,
+        password: password,
+      });
+  
+      // Assuming the response contains a token
+      const token = response.data.Token;
+      localStorage.setItem("token", token); // Store token in local storage
+  
+      // Redirect to dashboard or another page after successful login
+      window.location.href = "/dashboard";
+    } catch (error) {
+      // Handle error, for example, invalid credentials
+      if (error.response) {
+        // The request was made, but the server responded with a status code
+        // that falls out of the range of 2xx (e.g., 400, 401, etc.)
+        const message =
+          error.response.data.Message || error.response.data.error || "Invalid credentials. Please try again.";
+        setError(message);
+      } else if (error.request) {
+        // The request was made but no response was received
+        setError("No response from server. Please check your network.");
+      } else {
+        // Something happened in setting up the request that triggered an Error
+        setError("An error occurred. Please try again.");
+      }
+    }
+  };
+
   return (
     <>
       <Col lg="5" md="7">
         <Card className="bg-secondary shadow border-0">
-          <CardHeader className="bg-transparent pb-5">
-            <div className="text-muted text-center mt-2 mb-3">
-              <small>Sign in with</small>
-            </div>
-            <div className="btn-wrapper text-center">
-              <Button
-                className="btn-neutral btn-icon"
-                color="default"
-                href="#pablo"
-                onClick={(e) => e.preventDefault()}
-              >
-                <span className="btn-inner--icon">
-                  <img
-                    alt="..."
-                    src={
-                      require("../../assets/img/icons/common/github.svg")
-                        .default
-                    }
-                  />
-                </span>
-                <span className="btn-inner--text">Github</span>
-              </Button>
-              <Button
-                className="btn-neutral btn-icon"
-                color="default"
-                href="#pablo"
-                onClick={(e) => e.preventDefault()}
-              >
-                <span className="btn-inner--icon">
-                  <img
-                    alt="..."
-                    src={
-                      require("../../assets/img/icons/common/google.svg")
-                        .default
-                    }
-                  />
-                </span>
-                <span className="btn-inner--text">Google</span>
-              </Button>
-            </div>
-          </CardHeader>
           <CardBody className="px-lg-5 py-lg-5">
             <div className="text-center text-muted mb-4">
-              <small>Or sign in with credentials</small>
+              <small>Login</small>
             </div>
-            <Form role="form">
+            <Form role="form" onSubmit={handleSubmit}>
               <FormGroup className="mb-3">
                 <InputGroup className="input-group-alternative">
                   <InputGroupAddon addonType="prepend">
@@ -94,6 +76,9 @@ const Login = () => {
                     placeholder="Email"
                     type="email"
                     autoComplete="new-email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)} // Update email state
+                    required
                   />
                 </InputGroup>
               </FormGroup>
@@ -108,6 +93,9 @@ const Login = () => {
                     placeholder="Password"
                     type="password"
                     autoComplete="new-password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)} // Update password state
+                    required
                   />
                 </InputGroup>
               </FormGroup>
@@ -124,8 +112,9 @@ const Login = () => {
                   <span className="text-muted">Remember me</span>
                 </label>
               </div>
+              {error && <div style={{ color: "red", marginBottom: "10px" }}>{error}</div>} {/* Display error message */}
               <div className="text-center">
-                <Button className="my-4" color="primary" type="button">
+                <Button className="my-4" color="primary" type="submit">
                   Sign in
                 </Button>
               </div>
@@ -142,15 +131,7 @@ const Login = () => {
               <small>Forgot password?</small>
             </a>
           </Col>
-          <Col className="text-right" xs="6">
-            <a
-              className="text-light"
-              href="#pablo"
-              onClick={(e) => e.preventDefault()}
-            >
-              <small>Create new account</small>
-            </a>
-          </Col>
+          <Col className="text-right" xs="6"></Col>
         </Row>
       </Col>
     </>

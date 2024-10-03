@@ -17,7 +17,7 @@ namespace E_commerce.Models
         public string Role { get; set; }  // Administrator, Vendor, CSR, Customer
         public bool IsActive { get; set; }  // To track if the user is active or deactivated
         public DateTime CreatedAt { get; set; }  // Date of account creation
-
+        public bool ?IsNew { get; set; } //
     }
 
     public class Address
@@ -26,5 +26,10 @@ namespace E_commerce.Models
         public string ?City { get; set; }
         public string ?PostalCode { get; set; }
         public string ?Country { get; set; }
+    }
+
+    public class ToggleStatusRequest
+    {
+        public bool IsActive { get; set; }
     }
 }

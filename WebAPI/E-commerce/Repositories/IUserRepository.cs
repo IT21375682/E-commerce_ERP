@@ -91,5 +91,14 @@ namespace E_commerce.Repositories
                              Name = user.Name
                          }).FirstOrDefault();
         }
+        
+        //Update user active status
+        public void UpdateUser(User user)
+        {
+            _users.ReplaceOne(u => u.Id == user.Id, user);
+        }
+
+
+
     }
 }

@@ -91,13 +91,21 @@ namespace E_commerce.Services
 
 
 
-        //Get All Deactive Users
+        //Get All Deactived Users
         public IEnumerable<User> GetDeactiveUsers()
         {
             return _userRepository.GetDeactiveUsers(); // Fetch active users
         }
 
-
+        public void ToggleUserStatus(string id, bool isActive)
+        {
+            var user = _userRepository.GetUserById(id);
+            if (user != null)
+            {
+                user.IsActive = isActive; // Update the isActive status
+                _userRepository.UpdateUser(user); // Save the changes
+            }
+        }
 
     }
 }
