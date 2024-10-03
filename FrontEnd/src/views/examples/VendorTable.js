@@ -80,7 +80,7 @@ const VendorTable = () => {
   
   return (
     <>
-      <Container className="mt--7" fluid>
+      <Container className="mt-10" fluid>
         {/* Table */}
         <Row>
           <div className="col mt-7">
