@@ -8,7 +8,6 @@
     android:fitsSystemWindows="true"
     tools:context=".OrdersActivity">
 
-    <!-- Top Bar with Back Button and Cart Title -->
     <LinearLayout
         android:id="@+id/toolbar"
         layout="@layout/activity_toolbar"
@@ -42,8 +41,8 @@
 
     </LinearLayout>
 
-    <FrameLayout
-        android:id="@+id/cusTransactionMethodFragmentContainer"
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swipeRefreshLayout"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginTop="10dp"
@@ -51,8 +50,14 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/toolbar"
-        app:layout_constraintVertical_bias="0.857"
-        tools:ignore="MissingConstraints" />
+        app:layout_constraintVertical_bias="0.857">
+
+        <FrameLayout
+            android:id="@+id/cusTransactionMethodFragmentContainer"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:ignore="MissingConstraints" />
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
     <LinearLayout
         android:id="@+id/commonHomeBottomFragmentsLayout"

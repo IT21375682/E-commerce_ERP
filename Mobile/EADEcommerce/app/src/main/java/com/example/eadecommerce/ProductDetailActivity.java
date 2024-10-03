@@ -28,6 +28,7 @@ import com.example.eadecommerce.model.CartProduct;
 import com.example.eadecommerce.model.Comment;
 import com.example.eadecommerce.model.Product;
 import com.example.eadecommerce.model.ProductCommentData;
+import com.example.eadecommerce.model.ProductImageSingleton;
 import com.example.eadecommerce.network.ApiService;
 import com.example.eadecommerce.network.JwtUtils;
 import com.example.eadecommerce.network.RetrofitClient;
@@ -59,7 +60,7 @@ public class ProductDetailActivity extends AppCompatActivity {
     private ImageView productImageView;
     private SwipeRefreshLayout swipeRefreshLayout;
     private int MAX_QUANTITY = 10;
-    private String productId, userId, vendorId ;
+    private String productId, userId, vendorId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,7 +70,14 @@ public class ProductDetailActivity extends AppCompatActivity {
         // Get the JWT token from SharedPreferences and Decode the token and get the user ID
         String token = JwtUtils.getTokenFromSharedPreferences(this);
         userId = JwtUtils.getUserIdFromToken(token);
-        Log.d("userId",userId);
+        Log.d("userId", userId);
+
+        // Fetch the product count for the user's cart
+        fetchProductCount(userId);
+
+        // Get data from Intent
+        Intent intent = getIntent();
+        productId = intent.getStringExtra("productId");
 
         buttonBack = findViewById(R.id.buttonBack);
         clickcartHome = findViewById(R.id.clickcartHome);
@@ -121,7 +129,6 @@ public class ProductDetailActivity extends AppCompatActivity {
         });
 
 
-
         // Handle Home click to load HomeFragment
         clickcartHome.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -134,16 +141,13 @@ public class ProductDetailActivity extends AppCompatActivity {
         });
 
         // Handle Cart click to load Cart
-//        buttonCart.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Intent intent = new Intent(ProductDetailActivity.this, CartActivity.class);
-//                startActivity(intent);
-//
-////                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK); // Clear previous activities
-////                finish();
-//            }
-//        });
+        buttonCart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(ProductDetailActivity.this, CartActivity.class);
+                startActivity(intent);
+            }
+        });
 
         // Set click listener for the back button
         buttonBack.setOnClickListener(v -> onBackPressed());
@@ -160,10 +164,6 @@ public class ProductDetailActivity extends AppCompatActivity {
         ratingBar = findViewById(R.id.ratingBar);
         productImageView = findViewById(R.id.productImageView);
         quantityTextView = findViewById(R.id.quantityTextView);
-
-        // Get data from Intent
-        Intent intent = getIntent();
-        productId = intent.getStringExtra("productId");
 
         // Fetch product details
         fetchProductDetails(productId);
@@ -201,35 +201,15 @@ public class ProductDetailActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                    if (quantity < MAX_QUANTITY) { // Ensure quantity does not exceed max balance
-                        quantity++;
-                        quantityTextView.setText(String.valueOf(quantity));
-                        updateTotalPrice();
-                    }
+                if (quantity < MAX_QUANTITY) { // Ensure quantity does not exceed max balance
+                    quantity++;
+                    quantityTextView.setText(String.valueOf(quantity));
+                    updateTotalPrice();
+                }
             }
         });
 
 
-    }
-
-    private void loadProductImage(String productImage, ImageView productImageView) {
-        Log.d("ProductDetailActivity", "Loading image: " + productImage);
-
-        Picasso.get()
-                .load(productImage)
-                .placeholder(R.drawable.person) // Placeholder image
-                .error(R.drawable.logo_dark) // Error image
-                .into(productImageView, new com.squareup.picasso.Callback() {
-                    @Override
-                    public void onSuccess() {
-                        Log.d("ProductDetailActivity", "Image loaded successfully: " + productImage);
-                    }
-
-                    @Override
-                    public void onError(Exception e) {
-                        Log.e("ProductDetailActivity", "Error loading image: " + productImage, e);
-                    }
-                });
     }
 
 
@@ -298,13 +278,10 @@ public class ProductDetailActivity extends AppCompatActivity {
                     Bitmap decodedImage = decodeBase64ToBitmap(base64Image);
                     productImageView.setImageBitmap(decodedImage);
 
-                    // Load product image using Picasso
-//                    loadProductImage(product.getProductImage(), productImageView);
-
                     // Set click listener to open full screen image
                     productImageView.setOnClickListener(v -> {
+                        ProductImageSingleton.getInstance().setProductImage(product.getProductImage());
                         Intent fullScreenIntent = new Intent(ProductDetailActivity.this, FullScreenImageActivity.class);
-                        fullScreenIntent.putExtra("productImage", product.getProductImage());
                         startActivity(fullScreenIntent);
                     });
 
@@ -472,7 +449,8 @@ public class ProductDetailActivity extends AppCompatActivity {
             public void onResponse(Call<Void> call, Response<Void> response) {
                 if (response.isSuccessful()) {
                     Log.d("ProductDetailActivity", "Cart updated successfully for cart ID: " + cartId);
-                    Toast.makeText(getApplicationContext(), "Product added to cart successfully!", Toast.LENGTH_SHORT).show();
+                    Snackbar.make(findViewById(android.R.id.content), "Product Added to Cart!", Snackbar.LENGTH_SHORT).show();
+                    fetchProductCount(userId);
                 } else {
                     Log.e("ProductDetailActivity", "Failed to update cart: " + response.code());
                 }
@@ -504,7 +482,8 @@ public class ProductDetailActivity extends AppCompatActivity {
             public void onResponse(Call<Void> call, Response<Void> response) {
                 if (response.isSuccessful()) {
                     Log.d("ProductDetailActivity", "Cart created successfully for user: " + userId);
-                    Toast.makeText(getApplicationContext(), "Product added to cart successfully!", Toast.LENGTH_SHORT).show();
+                    Snackbar.make(findViewById(android.R.id.content), "Product Added to Cart!", Snackbar.LENGTH_SHORT).show();
+                    fetchProductCount(userId);
                 } else {
                     Log.e("ProductDetailActivity", "Failed to create cart: " + response.code());
                 }
@@ -517,10 +496,29 @@ public class ProductDetailActivity extends AppCompatActivity {
         });
     }
 
+    private void fetchProductCount(String userId) {
 
-//    Intent intent = new Intent(ProductDetailActivity.this, Main.class);
-//    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK); // Clear previous activities
-//    startActivity(intent);
-//    finish();
+        ApiService apiService = RetrofitClient.getRetrofitInstance().create(ApiService.class);
+        Call<Integer> call = apiService.getCartProductCount(userId);
+
+        call.enqueue(new Callback<Integer>() {
+            @Override
+            public void onResponse(Call<Integer> call, Response<Integer> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    int productCount = response.body();
+                    // Display the product count
+                    TextView cart_count = findViewById(R.id.cart_count);
+                    cart_count.setText(String.valueOf(productCount));
+                } else {
+                    Snackbar.make(findViewById(android.R.id.content), "Failed to fetch product count", Snackbar.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Integer> call, Throwable t) {
+                Snackbar.make(findViewById(android.R.id.content), "Error: " + t.getMessage(), Snackbar.LENGTH_LONG).show();
+            }
+        });
+    }
 }
 

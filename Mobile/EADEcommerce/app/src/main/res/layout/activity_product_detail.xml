@@ -208,30 +208,6 @@
                             android:layout_marginTop="8dp"
                             android:text="Sample Description of Product. Directly imported from China at tyour door step."
                             android:textSize="14sp" />
-                        <!--                    <TextView-->
-                        <!--                        android:layout_width="wrap_content"-->
-                        <!--                        android:layout_height="wrap_content"-->
-                        <!--                        android:text="Sample Description of Product. Directly imported from China at tyour door step."-->
-                        <!--                        android:layout_marginTop="8dp"-->
-                        <!--                        android:textSize="16sp" />-->
-                        <!--                    <TextView-->
-                        <!--                        android:layout_width="wrap_content"-->
-                        <!--                        android:layout_height="wrap_content"-->
-                        <!--                        android:text="Sample Description of Product. Directly imported from China at tyour door step."-->
-                        <!--                        android:layout_marginTop="8dp"-->
-                        <!--                        android:textSize="16sp" />-->
-                        <!--                    <TextView-->
-                        <!--                        android:layout_width="wrap_content"-->
-                        <!--                        android:layout_height="wrap_content"-->
-                        <!--                        android:text="Sample Description of Product. Directly imported from China at tyour door step."-->
-                        <!--                        android:layout_marginTop="8dp"-->
-                        <!--                        android:textSize="16sp" />-->
-                        <!--                    <TextView-->
-                        <!--                        android:layout_width="wrap_content"-->
-                        <!--                        android:layout_height="wrap_content"-->
-                        <!--                        android:text="Sample Description of Product. Directly imported from China at tyour door step."-->
-                        <!--                        android:layout_marginTop="8dp"-->
-                        <!--                        android:textSize="16sp" />-->
                     </LinearLayout>
 
                     <androidx.cardview.widget.CardView
@@ -263,7 +239,7 @@
                                     android:gravity="center_vertical"
                                     android:text="Ratings : "
                                     android:textSize="14sp" />
-                                <!-- RatingBar for user rating input -->
+
                                 <RatingBar
                                     android:id="@+id/ratingBarInput"
                                     android:layout_width="wrap_content"
@@ -276,7 +252,7 @@
                                     android:stepSize="1" />
 
                             </LinearLayout>
-                            <!-- EditText for user comments -->
+
                             <EditText
                                 android:id="@+id/commentEditTextInput"
                                 android:layout_width="match_parent"
@@ -314,8 +290,8 @@
                             android:layout_height="40dp"
                             android:gravity="center"
                             android:text="No comments yet"
-                            android:textStyle="bold"
                             android:textSize="16sp"
+                            android:textStyle="bold"
                             android:visibility="gone" />
 
                         <TextView
@@ -345,7 +321,6 @@
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
     </LinearLayout>
 
-    <!-- Buttons Layout at the Bottom -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

@@ -39,6 +39,7 @@ import com.example.eadecommerce.model.Product;
 import com.example.eadecommerce.network.ApiService;
 import com.example.eadecommerce.network.RetrofitClient;
 import com.example.eadecommerce.responses.LoginResponse;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -51,6 +52,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+// HomeFragment class handles the home screen functionality, including product filtering and sorting.
 public class HomeFragment extends Fragment {
 
     private ProductAdapter productAdapter;
@@ -79,6 +81,7 @@ public class HomeFragment extends Fragment {
     private Button buttonClearRatingFilter;
     private Button buttonClearCategoryFilter;
     private LinearLayout categoryContainer, searchOutLayout;
+    private SwipeRefreshLayout swipeRefreshLayout;
 
     private int selectedRating = 0;
 
@@ -102,7 +105,7 @@ public class HomeFragment extends Fragment {
         });
 
         // Initialize views
-        SwipeRefreshLayout swipeRefreshLayout = view.findViewById(R.id.swipeRefreshLayout);
+        swipeRefreshLayout = view.findViewById(R.id.swipeRefreshLayout);
         recyclerViewProducts = view.findViewById(R.id.recyclerViewProducts);
         recyclerViewProducts.setLayoutManager(new GridLayoutManager(getContext(), 2)); // 2 columns
         textViewNoProducts = view.findViewById(R.id.textViewNoProducts);
@@ -112,10 +115,6 @@ public class HomeFragment extends Fragment {
         editTextMinPrice = view.findViewById(R.id.editTextMinPrice);
         editTextMaxPrice = view.findViewById(R.id.editTextMaxPrice);
         radioGroupRatings = view.findViewById(R.id.radioGroupRatings);
-//        checkBoxCategory1 = view.findViewById(R.id.checkBoxCategory1);
-//        checkBoxCategory2 = view.findViewById(R.id.checkBoxCategory2);
-//        checkBoxCategory3 = view.findViewById(R.id.checkBoxCategory3);
-//        checkBoxCategory4 = view.findViewById(R.id.checkBoxCategory4);
 
         radioRating1 = view.findViewById(R.id.radioRating1);
         radioRating2 = view.findViewById(R.id.radioRating2);
@@ -142,13 +141,6 @@ public class HomeFragment extends Fragment {
 
         categoryContainer = view.findViewById(R.id.categoryContainer);
 
-        // Add OnCheckedChangeListeners to category checkboxes
-//        checkBoxCategory1.setOnCheckedChangeListener((buttonView, isChecked) -> applyFilters());
-//        checkBoxCategory2.setOnCheckedChangeListener((buttonView, isChecked) -> applyFilters());
-//        checkBoxCategory3.setOnCheckedChangeListener((buttonView, isChecked) -> applyFilters());
-//        checkBoxCategory4.setOnCheckedChangeListener((buttonView, isChecked) -> applyFilters());
-
-
         // Initialize the buttons
         buttonClearPriceFilter = view.findViewById(R.id.buttonClearPriceFilter);
         buttonClearRatingFilter = view.findViewById(R.id.buttonClearRatingFilter);
@@ -164,13 +156,13 @@ public class HomeFragment extends Fragment {
         // Clear Rating Filter Button
         buttonClearRatingFilter.setOnClickListener(v -> {
             radioGroupRatings.clearCheck();
-            selectedRating = 0; // Reset selected rating
+            selectedRating = 0;
             applyFilters(); // Trigger apply filters
         });
 
         // Clear Category Filter Button
         buttonClearCategoryFilter.setOnClickListener(v -> {
-            clearCategoryFilters(); // Uncheck all category checkboxes
+            clearCategoryFilters();
             applyFilters(); // Trigger apply filters
         });
 
@@ -181,16 +173,14 @@ public class HomeFragment extends Fragment {
         swipeRefreshLayout.setOnRefreshListener(() -> {
             // Remove search and filters
             searchViewProducts.setQuery("", false);
-            spinnerSort.setSelection(0); // Assuming first item is "Default"
+            spinnerSort.setSelection(0);
             selectedRating = 0;
             editTextMinPrice.setText("");
             editTextMaxPrice.setText("");
             radioGroupRatings.clearCheck();
             clearCategoryFilters();
-            // Reload the products
-            loadProducts();
 
-            // Stop the refresh animation
+            loadProducts();
             swipeRefreshLayout.setRefreshing(false);
         });
 
@@ -386,23 +376,6 @@ public class HomeFragment extends Fragment {
         return -1; // Indicate no maximum price filter
     }
 
-
-    //    private List<String> getSelectedCategories() {
-//        List<String> selectedCategories = new ArrayList<>();
-//        if (checkBoxCategory1.isChecked()) selectedCategories.add("Category 1");
-//        if (checkBoxCategory2.isChecked()) selectedCategories.add("Category 2");
-//        if (checkBoxCategory3.isChecked()) selectedCategories.add("Category 3");
-//        if (checkBoxCategory4.isChecked()) selectedCategories.add("Category 4");
-//        return selectedCategories;
-//    }
-//
-//    private void clearCategoryFilters() {
-//        checkBoxCategory1.setChecked(false);
-//        checkBoxCategory2.setChecked(false);
-//        checkBoxCategory3.setChecked(false);
-//        checkBoxCategory4.setChecked(false);
-//    }
-
     private List<String> getSelectedCategories() {
         List<String> selectedCategories = new ArrayList<>();
 
@@ -435,7 +408,6 @@ public class HomeFragment extends Fragment {
     // Method to load products
     private void loadProducts() {
         Log.d("ProductLoading", "Called Api");
-
         // Clear previous filtered product list
         if (filteredProductList != null) {
             filteredProductList.clear();
@@ -455,24 +427,6 @@ public class HomeFragment extends Fragment {
                     // Get products from the API response
                     productList = new ArrayList<>(response.body());
 
-                    // Log product IDs
-//                    for (Product product : productList) {
-//                        Log.d("ProductDetailActivity", "Product ID: " + product.getId());
-//                        Log.d("ProductDetailActivity", "Product Name: " + product.getName());
-//                        Log.d("ProductDetailActivity", "Product Image: " + product.getProductImage());
-//                        Log.d("ProductDetailActivity", "Category ID: " + product.getCategoryId());
-//                        Log.d("ProductDetailActivity", "Description: " + product.getDescription());
-//                        Log.d("ProductDetailActivity", "Price: $" + product.getPrice());
-//                        Log.d("ProductDetailActivity", "Available Stock: " + product.getAvailableStock());
-//                        Log.d("ProductDetailActivity", "Is Active: " + product.getIsActive());
-//                        Log.d("ProductDetailActivity", "Vendor ID: " + product.getVendor());
-//                        Log.d("ProductDetailActivity", "Created At: " + product.getCreatedAt());
-//                        Log.d("ProductDetailActivity", "Stock Last Updated: " + product.getStockLastUpdated());
-//                        Log.d("ProductDetailActivity", "Product Category Name: " + product.getProductCategoryName());
-//                        Log.d("ProductDetailActivity", "Vendor Name: " + product.getVendorName());
-//                        Log.d("ProductDetailActivity", "Average Rating: " + product.getRating());
-//                    }
-
                     // Initially, all products are displayed
                     filteredProductList = new ArrayList<>(productList);
                     productAdapter = new ProductAdapter(getContext(), filteredProductList);
@@ -491,8 +445,7 @@ public class HomeFragment extends Fragment {
                     Log.e("ProductLoading", "Failed to load products. Response code: " + response.code());
 
                     // Handle the error response (e.g., show a message)
-                    Toast.makeText(getContext(), "Failed to load products", Toast.LENGTH_SHORT).show();
-
+                    Snackbar.make(requireView(), "Failed to load products", Snackbar.LENGTH_SHORT).show();
                 }
             }
 
@@ -501,8 +454,7 @@ public class HomeFragment extends Fragment {
                 // Log the error
                 Log.e("ProductLoading", "API call failed: " + t.getMessage());
                 // Handle the failure (e.g., show a message)
-                Toast.makeText(getContext(), "Failed to load products: " + t.getMessage(), Toast.LENGTH_SHORT).show();
-
+                Snackbar.make(requireView(), "Failed to load products: " + t.getMessage(), Snackbar.LENGTH_SHORT).show();
             }
         });
     }

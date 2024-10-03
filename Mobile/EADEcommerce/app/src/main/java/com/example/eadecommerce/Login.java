@@ -18,6 +18,7 @@ import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
@@ -60,6 +61,16 @@ public class Login extends AppCompatActivity {
         cusLoginNoUsernamePassword = findViewById(R.id.cus_login_no_username_password);
         layoutPassword = findViewById(R.id.layout_password);
 
+        // Check for an existing session
+        SharedPreferences preferences = getSharedPreferences("myPrefs", MODE_PRIVATE);
+        String token = preferences.getString("jwt_token", null);
+        if (token != null) {
+            // Token exists, navigate to Main activity
+            Intent intent = new Intent(Login.this, Main.class);
+            startActivity(intent);
+            finish();
+        }
+
         // Underline "Register" text
         String registerString = "Register";
         SpannableString mSpannableString = new SpannableString(registerString);
@@ -71,9 +82,9 @@ public class Login extends AppCompatActivity {
 
         // Handle sign-up text click
         txtSignup.setOnClickListener(v -> {
-        Intent intent = new Intent(Login.this, SignUp.class);
-        startActivity(intent);
-    });
+            Intent intent = new Intent(Login.this, SignUp.class);
+            startActivity(intent);
+        });
 
         // Handle login button click
         btnLogin.setOnClickListener(v -> {
@@ -128,14 +139,13 @@ public class Login extends AppCompatActivity {
                             SharedPreferences.Editor editor = preferences.edit();
                             editor.putString("jwt_token", token);
                             editor.apply();
-                            Log.d("My jwt_token",token);
+                            Log.d("My jwt_token", token);
 
                             // Navigate to the main activity
                             Intent intent = new Intent(Login.this, Main.class);
                             startActivity(intent);
                             finish();
                         } else {
-                            // Handle different error cases
                             // Handle different error cases
                             try {
                                 JSONObject errorBody = new JSONObject(response.errorBody().string());
@@ -170,21 +180,7 @@ public class Login extends AppCompatActivity {
                 });
             }
         });
-//        btnLogin.setOnClickListener(v -> {
-//        String email = edtEmail.getText().toString().trim();
-//        String password = edtPassword.getText().toString().trim();
-//
-//        if (validateInputs(email, password)) {
-//            cusLoginNoUsernamePassword.setVisibility(View.GONE);
-//            showLoading();
-//            // Navigate to Main activity after 2 seconds
-//            new Handler().postDelayed(() -> {
-//                Intent intent = new Intent(Login.this, Main.class);
-//                finish();
-//                startActivity(intent);
-//            }, 2000);
-//        }
-//    });
+
     }
 
     // Function to toggle password visibility
@@ -239,12 +235,12 @@ public class Login extends AppCompatActivity {
     // Create the horizontal rotation animation for the world image
     private RotateAnimation createHorizontalRotationAnimation() {
         RotateAnimation rotateAnimation = new RotateAnimation(
-            0.0f,
-            360.0f,
-            RotateAnimation.RELATIVE_TO_SELF,
-            0.5f,
-            RotateAnimation.RELATIVE_TO_SELF,
-            0.5f
+                0.0f,
+                360.0f,
+                RotateAnimation.RELATIVE_TO_SELF,
+                0.5f,
+                RotateAnimation.RELATIVE_TO_SELF,
+                0.5f
         );
         rotateAnimation.setDuration(1000); // Animation duration in milliseconds
         return rotateAnimation;

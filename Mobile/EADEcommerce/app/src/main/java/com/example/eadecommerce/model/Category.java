@@ -1,25 +1,39 @@
 package com.example.eadecommerce.model;
 
+/**
+ * The Category class represents a product category in the e-commerce system.
+ * It contains the category ID and the category name.
+ */
 public class Category {
-    private String name;
-    private int productCount;
-    private String imageRes;
+    // Fields representing the components of a category
+    private String id;
+    private String categoryName;
 
-    public Category(String name, int productCount, String imageRes) {
-        this.name = name;
-        this.productCount = productCount;
-        this.imageRes = imageRes;
+    /**
+     * Constructor to initialize the Category fields.
+     * @param id The unique identifier for the category.
+     * @param name The name of the category.
+     */
+    public Category(String id, String name) {
+        this.id = id;
+        this.categoryName = name;
     }
 
+    // Getter methods for category fields
+
+    /**
+     * Gets the category name.
+     * @return The name of the category.
+     */
     public String getName() {
-        return name;
+        return categoryName;
     }
 
-    public int getProductCount() {
-        return productCount;
-    }
-
-    public String getImageResId() {
-        return imageRes;
+    /**
+     * Gets the category ID.
+     * @return The unique identifier for the category.
+     */
+    public String getId() {
+        return id;
     }
 }
