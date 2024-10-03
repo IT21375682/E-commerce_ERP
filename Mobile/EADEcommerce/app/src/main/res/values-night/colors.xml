@@ -13,4 +13,5 @@
     <color name="divider_color">#BDBDBD</color>
     <color name="ordersTextColor">@color/lightWhite</color>
     <color name="ordersOnTextColor">@color/white</color>
+    <color name="statusColor">@color/primary</color>
 </resources>

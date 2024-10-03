@@ -116,4 +116,8 @@ public interface ApiService {
     // Retrieves the count of products in a user's cart
     @GET("api/Cart/{userId}/product-count")
     Call<Integer> getCartProductCount(@Path("userId") String userId);
+
+    // Deactivate customer account
+    @PUT("/api/User/{userId}/my-account-deactivate")
+    Call<Void> deactivateAccount(@Path("userId") String userId);
 }
