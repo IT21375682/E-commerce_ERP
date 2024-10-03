@@ -85,5 +85,25 @@ namespace E_commerce.Controllers
             }
             return Ok(cart);
         }
+
+        // PUT: api/Cart/{cartId}
+        [HttpPut("update-remove/{cartId}")]
+        public async Task<IActionResult> UpdateCartWithRemove(string cartId, [FromBody] Cart cart)
+        {
+            // Remove products with count of 0
+            cart.Products.RemoveAll(product => product.Count == 0);
+
+            await _cartService.UpdateCart(cartId, cart);
+            return NoContent();
+        }
+
+        // GET: api/Cart/{userId}/product-count
+        [HttpGet("{userId}/product-count")]
+        public async Task<IActionResult> GetProductCountByUserId(string userId)
+        {
+            int productCount = await _cartService.GetProductCountByUserId(userId);
+            return Ok(productCount);
+        }
+
     }
 }

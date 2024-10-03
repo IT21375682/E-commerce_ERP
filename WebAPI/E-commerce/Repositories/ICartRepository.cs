@@ -113,6 +113,7 @@ namespace E_commerce.Repositories
                     {
                         ProductId = product.Id,
                         ProductName = product.Name,
+                        ProductImage = product.ProductImage,
                         Price = product.Price,
                         Count = cartProduct.Count
                     });
@@ -121,5 +122,22 @@ namespace E_commerce.Repositories
 
             return cartWithProductDetails;
         }
+
+        // Get the number of products in a cart by user ID
+        public async Task<int> GetProductCountByUserId(string userId)
+        {
+            var cart = await _carts.Find(c => c.UserId == userId).FirstOrDefaultAsync();
+
+            if (cart == null)
+            {
+                return 0;
+            }
+
+            // Sum the counts of all products in the cart
+            int totalProductCount = cart.Products.Sum(p => p.Count);
+
+            return totalProductCount;
+        }
+
     }
 }
