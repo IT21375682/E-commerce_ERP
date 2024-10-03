@@ -146,6 +146,14 @@ namespace E_commerce.Controllers
             return Ok(products);
         }
 
+        // GET: api/product/deactivated
+        [HttpGet("deactivated")]
+        public ActionResult<IEnumerable<Product>> GetAllDeActivatedProducts()
+        {
+            var products = _productService.GetAllDeActivatedProducts();
+            return Ok(products);
+        }
+
         // GET: api/product/active/category/{categoryId}
         [HttpGet("active/category/{categoryId}")]
         public ActionResult<IEnumerable<Product>> GetAllActiveCategoryProducts(string categoryId)
@@ -179,6 +187,13 @@ namespace E_commerce.Controllers
             }
 
             return Ok(product);
+        }
+
+        [HttpPatch("{id}/toggle-active")]
+        public async Task<IActionResult> ToggleIsActive(string id)
+        {
+            await _productService.ToggleIsActiveAsync(id);
+            return NoContent(); // 204 No Content response after successful update
         }
 
     }

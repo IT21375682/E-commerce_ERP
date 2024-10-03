@@ -73,6 +73,11 @@ namespace E_commerce.Services
             return _productRepository.GetAllActiveProducts();
         }
 
+        public IEnumerable<Product> GetAllDeActivatedProducts()
+        {
+            return _productRepository.GetAllDeActivatedProducts();
+        }
+
         public IEnumerable<Product> GetAllActiveCategoryProducts(string categoryId)
         {
             return _productRepository.GetAllActiveCategoryProducts(categoryId);
@@ -90,6 +95,11 @@ namespace E_commerce.Services
         public ProductDetailsDto GetActiveProductWithDetailsById(string productId)
         {
             return _productRepository.GetActiveProductWithDetailsById(productId);
+        }
+
+        public async Task ToggleIsActiveAsync(string productId)
+        {
+            await _productRepository.ToggleIsActiveAsync(productId);
         }
 
     }

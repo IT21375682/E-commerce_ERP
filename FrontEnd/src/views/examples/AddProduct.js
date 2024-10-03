@@ -1,4 +1,3 @@
-import React, { useState } from 'react';
 import {
   Button,
   Card,
@@ -10,178 +9,305 @@ import {
   Container,
   Row,
   Col,
-} from 'reactstrap';
+} from "reactstrap";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import { toast, ToastContainer } from 'react-toastify'; // Import toast components
+import 'react-toastify/dist/ReactToastify.css'; // Import toastify CSS
 
 const AddProduct = () => {
-  const [menuImage, setMenuImage] = useState(null);
+  const [product, setProduct] = useState({
+    name: "",
+    productImage: "",
+    categoryId: "",
+    description: "",
+    price: 0,
+    availableStock: 0,
+    isActive: false,
+    vendorId: "",
+  });
 
-  const handleImageUpload = (event) => {
-    const file = event.target.files[0];
-    if (file) {
+  const [activeCategories, setActiveCategories] = useState([]);
+  const [activeVendors, setActiveVendors] = useState([]);
+
+  useEffect(() => {
+    const fetchActiveCategories = async () => {
+      try {
+        const response = await axios.get("http://192.168.8.102:5004/api/Category/active");
+        setActiveCategories(response.data); // Assuming the API returns an array of categories
+        toast.success('Product Added successfully!', {
+          position: "top-right",
+          autoClose: 3000, // Auto close after 3 seconds
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+      });
+      } catch (error) {
+        console.error("Error fetching active categories:", error);
+        toast.error('Error updating product. Please try again.', {
+          position: "top-right",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+      });
+      }
+    };
+    const fetchActiveVendors = async () => {
+      try {
+        const response = await axios.get("http://192.168.8.102:5004/api/User/active");
+        // console.log(response.data); // Log the API response to see what data is returned
+
+        const vendors = response.data.filter(user => user.role === "VENDOR");
+        setActiveVendors(vendors); // Set only the vendors
+      } catch (error) {
+        console.error("Error fetching active vendors:", error);
+      }
+    };
+
+    fetchActiveCategories();
+    fetchActiveVendors();
+  }, []);
+
+  // Log activeVendors whenever it changes
+  useEffect(() => {
+    console.log(activeVendors); // Log the updated state
+  }, [activeVendors]);
+
+  const handleChange = (e) => {
+    const { name, value, type, checked } = e.target;
+    if (type === "file") {
+      const file = e.target.files[0];
       const reader = new FileReader();
+
       reader.onloadend = () => {
-        setMenuImage(reader.result);
+        const base64String = reader.result
+          .replace(/^data:image\/(png|jpeg|jpg);base64,/, ""); // Remove the prefix
+
+        setProduct((prevProduct) => ({
+          ...prevProduct,
+          productImage: base64String, // Store Base64 string
+        }));
       };
-      reader.readAsDataURL(file);
+
+      if (file) {
+        reader.readAsDataURL(file); // Convert file to Base64 string
+      }
+    } else {
+      setProduct((prevProduct) => ({
+        ...prevProduct,
+        [name]: type === "checkbox" ? checked : value,
+      }));
+    }
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault(); // Prevent the default form submission behavior
+    try {
+      const response = await axios.post('http://192.168.8.102:5004/api/Product', product, {
+        headers: {
+          'Content-Type': 'application/json', // Set the content type to JSON
+        },
+      });
+      console.log(response.data); // Handle successful response
+      // Optionally reset the form or redirect the user
+    } catch (error) {
+      console.error("Error creating product:", error); // Handle error
     }
   };
 
   return (
-    <Container fluid className="mt-7">
-      <Row>
-        <Col lg="1" />
-        <Col lg="10">
-          <Card className="shadow mb-4">
-            <CardHeader className="py-3">
-              <h1 className="m-0 font-weight-bold text-primary text-center">
-                <b>Add Menu Item</b>
-              </h1>
-            </CardHeader>
-            <CardBody>
-              <Form>
-                <Row>
-                  <Col xl="6" lg="6" md="12">
-                    <FormGroup>
-                      <label htmlFor="txtProductName">Product Name</label>
-                      <Input
-                        type="text"
-                        id="txtProductName"
-                        className="form-control-user"
-                        required
-                        style={{ borderRadius: '10px' }}
-                      />
-                    </FormGroup>
 
+      <Container className="mt-10" fluid>
+         {/* Toast container */}
+         <ToastContainer />
+        <Row>
+          <Col className="order-xl-1" xl="12">
+            <Card className="bg-secondary shadow mt-7">
+              <CardHeader className="bg-white border-0">
+                <Row className="align-items-center">
+                  <Col xs="8">
+                    <h3 className="mb-0">Add New Product</h3>
+                  </Col>
+                </Row>
+              </CardHeader>
+              <CardBody>
+                <Form onSubmit={handleSubmit}>
+                  <h6 className="heading-small text-muted mb-4">
+                    Product Information
+                  </h6>
+                  <div className="pl-lg-4">
                     <Row>
-                      <Col xs="12" sm="6">
+                      <Col lg="6">
                         <FormGroup>
-                          <label htmlFor="ddlSelectCategory">Category</label>
-                          <Input type="select" id="ddlSelectCategory">
-                            <option value="">Select category</option>
-                            <option value="COMBO">COMBO</option>
-                            <option value="POPCORN">POPCORN</option>
-                            <option value="SOFT DRINKS">SOFT DRINKS</option>
-                            <option value="COFFEE">COFFEE</option>
-                            <option value="CHOCOLATES">CHOCOLATES</option>
+                          <label
+                            className="form-control-label"
+                            htmlFor="input-name"
+                          >
+                            Product Name
+                          </label>
+                          <Input
+                            className="form-control-alternative"
+                            id="input-name"
+                            name="name" // Set the name to correspond with state
+                            placeholder="Product Name"
+                            type="text"
+                            value={product.name} // Bind input value to state
+                            onChange={handleChange} // Handle input change
+                          />
+                        </FormGroup>
+                      </Col>
+                      <Col lg="6">
+                        <FormGroup>
+                          <label className="form-control-label" htmlFor="input-category-id">
+                            Category
+                          </label>
+                          <Input
+                            className="form-control-alternative"
+                            id="input-category-id"
+                            name="categoryId"
+                            type="select"
+                            value={product.categoryId}
+                            onChange={handleChange}
+                          >
+                            <option value="">Select Category</option>
+                            {activeCategories.map((category) => (
+                              <option key={category.id} value={category.id}>
+                                {category.categoryName}
+                              </option>
+                            ))}
                           </Input>
                         </FormGroup>
                       </Col>
-
-                      <Col xs="12" sm="6">
+                    </Row>
+                    <Row>
+                      <Col lg="6">
                         <FormGroup>
-                          <label htmlFor="txtSize">Size</label>
+                          <label
+                            className="form-control-label"
+                            htmlFor="input-description"
+                          >
+                            Description
+                          </label>
                           <Input
-                            type="text"
-                            id="txtSize"
-                            className="form-control-user"
-                            required
-                            style={{ borderRadius: '10px' }}
+                            className="form-control-alternative"
+                            id="input-description"
+                            name="description" // Set the name to correspond with state
+                            placeholder="Product Description"
+                            type="textarea"
+                            value={product.description} // Bind input value to state
+                            onChange={handleChange} // Handle input change
+                          />
+                        </FormGroup>
+                      </Col>
+                      <Col lg="6">
+                        <FormGroup>
+                          <label
+                            className="form-control-label"
+                            htmlFor="input-price"
+                          >
+                            Price
+                          </label>
+                          <Input
+                            className="form-control-alternative"
+                            id="input-price"
+                            name="price" // Set the name to correspond with state
+                            placeholder="Price"
+                            type="number"
+                            value={product.price} // Bind input value to state
+                            onChange={handleChange} // Handle input change
                           />
                         </FormGroup>
                       </Col>
                     </Row>
+                    <Row>
+                      <Col lg="6">
+                        <FormGroup>
+                          <label
+                            className="form-control-label"
+                            htmlFor="input-available-stock"
+                          >
+                            Available Stock
+                          </label>
+                          <Input
+                            className="form-control-alternative"
+                            id="input-available-stock"
+                            name="availableStock" // Set the name to correspond with state
+                            placeholder="Available Stock"
+                            type="number"
+                            value={product.availableStock} // Bind input value to state
+                            onChange={handleChange} // Handle input change
+                          />
+                        </FormGroup>
+                      </Col>
+                      <Col lg="6">
+                        <FormGroup>
+                          <label
+                            className="form-control-label"
+                            htmlFor="input-image"
+                          >
+                            Product Image
+                          </label>
+                          <Input
+                            className="form-control-alternative"
+                            id="input-image"
+                            name="productImage" // Set the name to correspond with state
+                            type="file"
+                            onChange={handleChange} // Handle input change
+                          />
+                        </FormGroup>
+                      </Col>
+                    </Row>
+                    <Row>
+                      <Col lg="6">
 
-                    <FormGroup>
-                      <label htmlFor="AdditionalInf">Additional Description</label>
-                      <Input
-                        type="textarea"
-                        id="AdditionalInf"
-                        rows="2"
-                        className="form-control-user"
-                        required
-                        style={{ borderRadius: '10px' }}
-                      />
-                    </FormGroup>
-
-                    <FormGroup>
-                      <label htmlFor="txtUnitPrice">Unit Price</label>
-                      <div style={{ position: 'relative' }}>
-                        <Input
-                          type="number"
-                          id="txtUnitPrice"
-                          className="form-control-user"
-                          placeholder="00.00"
-                          step="0.01"
-                          required
-                          style={{ paddingLeft: '50px' }}
-                        />
-                        <span
-                          style={{
-                            position: 'absolute',
-                            top: '50%',
-                            left: '10px',
-                            transform: 'translateY(-50%)',
-                            color: '#aaa',
-                            pointerEvents: 'none',
-                            fontSize: '0.85rem',
-                          }}
-                        >
-                          Rs.
-                        </span>
-                      </div>
-                    </FormGroup>
-                  </Col>
-
-                  <Col xl="4" lg="4" md="10" className="mx-auto mb-4">
-                    <div
-                      style={{
-                        maxWidth: '100%',
-                        height: '240px',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        color: '#fff',
-                        background: '#aaa',
-                      }}
-                    >
-                      {menuImage ? (
-                        <img src={menuImage} alt="Menu" className="img-fluid" />
-                      ) : (
-                        'No image selected'
-                      )}
-                    </div>
-                    <Input
-                      type="file"
-                      id="imageInput"
-                      accept="image/*"
-                      onChange={handleImageUpload}
-                      className="mt-3"
-                    />
-                    <Button color="primary" className="btn-block mt-3">
-                      UPLOAD PRODUCT IMAGE
-                    </Button>
-                  </Col>
-                </Row>
-
-                <Row className="mt-4">
-                  <Col lg="4" />
-                  <Col lg="2">
-                    <Button color="success" className="btn-block">
-                      <i className="fas fa-check"></i> Create
-                    </Button>
-                  </Col>
-                  <Col lg="2">
-                    <Button color="danger" className="btn-block">
-                      <i className="fas fa-trash"></i> Cancel
-                    </Button>
-                  </Col>
-                  <Col lg="4" />
-                </Row>
-
-                <Row className="mt-3">
-                  <Col lg="3" />
-                  <Col lg="6">
-                    <div id="divValidationError" />
-                  </Col>
-                  <Col lg="3" />
-                </Row>
-              </Form>
-            </CardBody>
-          </Card>
-        </Col>
-        <Col lg="1" />
-      </Row>
-    </Container>
+                        <FormGroup>
+                          <label className="form-control-label" htmlFor="input-vendor-id">
+                            Vendor
+                          </label>
+                          <Input
+                            className="form-control-alternative"
+                            id="input-vendor-id"
+                            name="vendorId"
+                            type="select"
+                            value={product.vendorId}
+                            onChange={handleChange} // Make sure this updates the state correctly
+                          >
+                            <option value="">Select Vendor</option>
+                            {activeVendors.map((vendor) => (
+                              <option key={vendor.id} value={vendor.id}>
+                                {vendor.vendorName || vendor.name} {/* Check correct property */}
+                              </option>
+                            ))}
+                          </Input>
+                        </FormGroup>
+                      </Col>
+                      <Col lg="6">
+                      </Col>
+                    </Row>
+                  </div>
+                  <hr className="my-4" />
+                  <Row>
+                    <Col className="text-center">
+                      <Button color="primary" type="submit" size="md">
+                        Save
+                      </Button>
+                      <Button color="danger" onClick={() => {/* Handle cancel logic here */ }} size="md">
+                        Cancel
+                      </Button>
+                    </Col>
+                  </Row>
+                </Form>
+              </CardBody>
+            </Card>
+          </Col>
+        </Row>
+      </Container>
+  
   );
 };
 

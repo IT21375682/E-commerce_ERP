@@ -6,6 +6,8 @@ import Tables from "views/examples/VendorTable.js";
 import Icons from "views/examples/Icons.js";
 import AddProduct from "views/examples/AddProduct";
 import ViewProduct from "views/examples/ViewProducts";
+import EditProduct from "views/examples/EditProduct";
+import ViewCategory from "views/examples/ViewCategory";
 
 var routes = [
   {
@@ -63,6 +65,20 @@ var routes = [
     icon: "ni ni-circle-08 text-pink",
     component: <Register />,
     layout: "/auth",
+  },
+  {
+    path: "/edit-product/:id",
+    name: "Edit Product",
+    icon: "ni ni-circle-08 text-pink",
+    component: <EditProduct/>,
+    layout: "/admin",
+  },
+  {
+    path: "/view-category/:id",
+    name: "view Category",
+    icon: "ni ni-circle-08 text-pink",
+    component: <ViewCategory/>,
+    layout: "/admin",
   },
 ];
 export default routes;

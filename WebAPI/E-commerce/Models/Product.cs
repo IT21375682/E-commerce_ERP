@@ -28,7 +28,7 @@ namespace E_commerce.Models
         public int AvailableStock { get; set; }  // Stock level of the product
 
         [BsonElement("isActive")]
-        public bool IsActive { get; set; }  // Whether the product is active or deactivated
+        public bool IsActive { get; set; } = false;// Whether the product is active or deactivated
 
         [BsonElement("vendorId")]
         public string VendorId { get; set; }  // The vendor who owns the product
