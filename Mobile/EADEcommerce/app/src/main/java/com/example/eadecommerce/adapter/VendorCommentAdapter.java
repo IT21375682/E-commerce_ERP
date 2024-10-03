@@ -12,6 +12,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
+
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -31,9 +32,12 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+/**
+ * Adapter class for displaying vendor comments in a RecyclerView.
+ */
 public class VendorCommentAdapter extends RecyclerView.Adapter<VendorCommentAdapter.CommentViewHolder> {
     private List<ProductCommentData> comments;
-    private Context context;  // Add a context variable
+    private Context context;
 
     public VendorCommentAdapter(Context context, List<ProductCommentData> comments) {
         this.context = context;
@@ -43,6 +47,7 @@ public class VendorCommentAdapter extends RecyclerView.Adapter<VendorCommentAdap
     @NonNull
     @Override
     public CommentViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        // Inflate the layout for each comment item
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.vendor_comment_item, parent, false);
         return new CommentViewHolder(view);
@@ -50,6 +55,7 @@ public class VendorCommentAdapter extends RecyclerView.Adapter<VendorCommentAdap
 
     @Override
     public void onBindViewHolder(@NonNull CommentViewHolder holder, @SuppressLint("RecyclerView") int position) {
+        // Bind the data for the current comment
         ProductCommentData comment = comments.get(position);
         holder.productNameTextView.setText(comment.getProductName());
         holder.vendorNameTextView.setText(comment.getUsername());
@@ -76,12 +82,11 @@ public class VendorCommentAdapter extends RecyclerView.Adapter<VendorCommentAdap
                 v.getContext().startActivity(intent);
             }
         });
-
     }
 
     @Override
     public int getItemCount() {
-        return comments.size();
+        return comments.size(); // Return the total number of comments
     }
 
     static class CommentViewHolder extends RecyclerView.ViewHolder {
@@ -94,6 +99,7 @@ public class VendorCommentAdapter extends RecyclerView.Adapter<VendorCommentAdap
 
         public CommentViewHolder(@NonNull View itemView) {
             super(itemView);
+            // Initialize views for the comment item
             vendorNameTextView = itemView.findViewById(R.id.vendorNameTextView);
             productNameTextView = itemView.findViewById(R.id.productNameTextView);
             commentTextView = itemView.findViewById(R.id.commentTextView);
@@ -107,31 +113,6 @@ public class VendorCommentAdapter extends RecyclerView.Adapter<VendorCommentAdap
     public void updateComments(List<ProductCommentData> newComments) {
         comments = newComments;
         notifyDataSetChanged();
-    }
-
-    private void postComment(Comment comment) {
-        ApiService apiService = RetrofitClient.getRetrofitInstance().create(ApiService.class);
-        Call<Comment> call = apiService.addOrUpdateComment(comment);
-
-        call.enqueue(new Callback<Comment>() {
-            @Override
-            public void onResponse(Call<Comment> call, Response<Comment> response) {
-                if (response.isSuccessful()) {
-                    Log.d("CommentAdapter", "Comment posted successfully");
-
-                    // Show success message using Snackbar
-                    View rootView = ((Activity) context).findViewById(android.R.id.content);
-                    Snackbar.make(rootView, "Comment updated successfully!", Snackbar.LENGTH_SHORT).show();
-                } else {
-                    Log.e("CommentAdapter", "Failed to post comment: " + response.code());
-                }
-            }
-
-            @Override
-            public void onFailure(Call<Comment> call, Throwable t) {
-                Log.e("CommentAdapter", "Error posting comment", t);
-            }
-        });
     }
 
 }

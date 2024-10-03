@@ -8,25 +8,29 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.eadecommerce.CheckoutActivity;
 import com.example.eadecommerce.ProductDetailActivity;
 import com.example.eadecommerce.R;
-import com.example.eadecommerce.model.CartItem;
 import com.example.eadecommerce.model.CartProductResponse;
-import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
+/**
+ * The CheckoutAdapter class is a RecyclerView adapter for displaying cart items during checkout.
+ * It binds cart item data to the views and handles item click events to navigate to product details.
+ */
 public class CheckoutAdapter extends RecyclerView.Adapter<CheckoutAdapter.CartViewHolder> {
     private List<CartProductResponse> cartItems;
 
+    /**
+     * Constructor to initialize the adapter with a list of cart items.
+     * @param cartItems The list of cart items.
+     */
     public CheckoutAdapter(List<CartProductResponse> cartItems) {
         this.cartItems = cartItems;
     }
@@ -50,21 +54,13 @@ public class CheckoutAdapter extends RecyclerView.Adapter<CheckoutAdapter.CartVi
             Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
             holder.itemImageView.setImageBitmap(decodedByte);
         } else {
-            // Set a placeholder image or clear the ImageView if no image is available
-            holder.itemImageView.setImageResource(R.drawable.placeholder); // Replace with your placeholder image
+            holder.itemImageView.setImageResource(R.drawable.placeholder);
         }
 
-        // Handle item click to open ProductDetailActivity
         holder.itemLayout.setOnClickListener(v -> {
             Log.d("Checkout Adapter", "Item clicked");
-
-            // Create an Intent to start ProductDetailActivity
             Intent intent = new Intent(holder.itemLayout.getContext(), ProductDetailActivity.class);
-
-            // Pass product details to ProductDetailActivity
             intent.putExtra("productId", item.getProductId());
-
-            // Start the ProductDetailActivity
             holder.itemLayout.getContext().startActivity(intent);
         });
     }

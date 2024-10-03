@@ -20,6 +20,7 @@ import android.widget.ImageButton;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -149,9 +150,9 @@ public class CheckoutActivity extends AppCompatActivity {
             subTotal += product.getPrice() * product.getCount();
         }
         total = subTotal + deliveryFee;
-        subtotalAmountTextView.setText(String.format("Total: LKR %.2f", subTotal));
-        deliveryFeeAmountTextView.setText(String.format("Total: LKR %.2f", deliveryFee));
-        totalAmountTextView.setText(String.format("Total: LKR %.2f", total));
+        subtotalAmountTextView.setText(String.format("%.2f", subTotal));
+        deliveryFeeAmountTextView.setText(String.format("%.2f", deliveryFee));
+        totalAmountTextView.setText(String.format("LKR %.2f", total));
     }
 
     private void getUserDetails(String userId) {
@@ -296,7 +297,7 @@ public class CheckoutActivity extends AppCompatActivity {
             @Override
             public void onFailure(Call<Void> call, Throwable t) {
                 // Handle request failure
-                Snackbar.make(findViewById(android.R.id.content),  "Error: " + t.getMessage(), Snackbar.LENGTH_SHORT).show();
+                Snackbar.make(findViewById(android.R.id.content), "Error: " + t.getMessage(), Snackbar.LENGTH_SHORT).show();
             }
         });
     }
@@ -348,7 +349,7 @@ public class CheckoutActivity extends AppCompatActivity {
         super.onBackPressed();
         if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
             Log.d("TAG", "If Debug message");
-            getSupportFragmentManager().popBackStack(); // Go back to previous fragment
+            getSupportFragmentManager().popBackStack();
         } else {
             Log.d("TAG", "Else Debug message");
             finish(); // Close activity if no fragments are in the stack

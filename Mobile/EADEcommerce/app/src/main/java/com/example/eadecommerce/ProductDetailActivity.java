@@ -60,7 +60,7 @@ public class ProductDetailActivity extends AppCompatActivity {
     private ImageView productImageView;
     private SwipeRefreshLayout swipeRefreshLayout;
     private int MAX_QUANTITY = 10;
-    private String productId, userId, vendorId ;
+    private String productId, userId, vendorId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,7 +70,7 @@ public class ProductDetailActivity extends AppCompatActivity {
         // Get the JWT token from SharedPreferences and Decode the token and get the user ID
         String token = JwtUtils.getTokenFromSharedPreferences(this);
         userId = JwtUtils.getUserIdFromToken(token);
-        Log.d("userId",userId);
+        Log.d("userId", userId);
 
         // Fetch the product count for the user's cart
         fetchProductCount(userId);
@@ -129,7 +129,6 @@ public class ProductDetailActivity extends AppCompatActivity {
         });
 
 
-
         // Handle Home click to load HomeFragment
         clickcartHome.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -147,9 +146,6 @@ public class ProductDetailActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(ProductDetailActivity.this, CartActivity.class);
                 startActivity(intent);
-
-//                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK); // Clear previous activities
-//                finish();
             }
         });
 
@@ -205,36 +201,16 @@ public class ProductDetailActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                    if (quantity < MAX_QUANTITY) { // Ensure quantity does not exceed max balance
-                        quantity++;
-                        quantityTextView.setText(String.valueOf(quantity));
-                        updateTotalPrice();
-                    }
+                if (quantity < MAX_QUANTITY) { // Ensure quantity does not exceed max balance
+                    quantity++;
+                    quantityTextView.setText(String.valueOf(quantity));
+                    updateTotalPrice();
+                }
             }
         });
 
 
     }
-
-//    private void loadProductImage(String productImage, ImageView productImageView) {
-//        Log.d("ProductDetailActivity", "Loading image: " + productImage);
-//
-//        Picasso.get()
-//                .load(productImage)
-//                .placeholder(R.drawable.person) // Placeholder image
-//                .error(R.drawable.logo_dark) // Error image
-//                .into(productImageView, new com.squareup.picasso.Callback() {
-//                    @Override
-//                    public void onSuccess() {
-//                        Log.d("ProductDetailActivity", "Image loaded successfully: " + productImage);
-//                    }
-//
-//                    @Override
-//                    public void onError(Exception e) {
-//                        Log.e("ProductDetailActivity", "Error loading image: " + productImage, e);
-//                    }
-//                });
-//    }
 
 
     private void refreshProductDetails() {
@@ -302,14 +278,10 @@ public class ProductDetailActivity extends AppCompatActivity {
                     Bitmap decodedImage = decodeBase64ToBitmap(base64Image);
                     productImageView.setImageBitmap(decodedImage);
 
-                    // Load product image using Picasso
-//                    loadProductImage(product.getProductImage(), productImageView);
-
                     // Set click listener to open full screen image
                     productImageView.setOnClickListener(v -> {
                         ProductImageSingleton.getInstance().setProductImage(product.getProductImage());
                         Intent fullScreenIntent = new Intent(ProductDetailActivity.this, FullScreenImageActivity.class);
-//                        fullScreenIntent.putExtra("productImage", product.getProductImage());
                         startActivity(fullScreenIntent);
                     });
 
@@ -548,11 +520,5 @@ public class ProductDetailActivity extends AppCompatActivity {
             }
         });
     }
-
-
-//    Intent intent = new Intent(ProductDetailActivity.this, Main.class);
-//    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK); // Clear previous activities
-//    startActivity(intent);
-//    finish();
 }
 

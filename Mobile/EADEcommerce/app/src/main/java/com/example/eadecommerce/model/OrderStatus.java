@@ -4,7 +4,12 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import com.google.gson.annotations.SerializedName;
 
+/**
+ * The OrderStatus class represents the various statuses of an order,
+ * including their respective dates and whether the stock has been reduced.
+ */
 public class OrderStatus implements Parcelable {
+    // Fields representing the components of an order status
     @SerializedName("pending")
     private boolean pending;
 
@@ -45,6 +50,23 @@ public class OrderStatus implements Parcelable {
     private boolean stockReduced;
 
     // Constructor
+    /**
+     * Constructs an OrderStatus object with the specified parameters.
+     *
+     * @param pending Indicates if the order is pending
+     * @param pendingDate Date when the order was marked as pending
+     * @param processing Indicates if the order is being processed
+     * @param processingDate Date when the order was marked as processing
+     * @param dispatched Indicates if the order has been dispatched
+     * @param dispatchedDate Date when the order was dispatched
+     * @param partiallyDelivered Indicates if the order has been partially delivered
+     * @param partiallyDeliveredDate Date when the order was partially delivered
+     * @param delivered Indicates if the order has been delivered
+     * @param deliveredDate Date when the order was delivered
+     * @param canceled Indicates if the order has been canceled
+     * @param canceledDate Date when the order was canceled
+     * @param stockReduced Indicates if the stock has been reduced for this order
+     */
     public OrderStatus(boolean pending, String pendingDate, boolean processing, String processingDate,
                        boolean dispatched, String dispatchedDate, boolean partiallyDelivered,
                        String partiallyDeliveredDate, boolean delivered, String deliveredDate,
@@ -65,11 +87,29 @@ public class OrderStatus implements Parcelable {
     }
 
     // Getter methods
+    /**
+     * Checks if the order is pending.
+     * @return True if the order is pending, otherwise false.
+     */
     public boolean isPending() {
         return pending;
     }
 
-    // Include other status fields and their respective getters here...
+    /**
+     * Checks if the order has been delivered.
+     * @return True if the order is delivered, otherwise false.
+     */
+    public boolean isDelivered() {
+        return delivered;
+    }
+
+    /**
+     * Checks if the order has been canceled.
+     * @return True if the order is canceled, otherwise false.
+     */
+    public boolean isCanceled() {
+        return canceled;
+    }
 
     // Parcelable implementation
     protected OrderStatus(Parcel in) {
@@ -122,14 +162,6 @@ public class OrderStatus implements Parcelable {
         dest.writeByte((byte) (stockReduced ? 1 : 0));
     }
 
-    public boolean isDelivered() {
-        return delivered;
-    }
-
-    public boolean isCanceled() {
-        return canceled;
-    }
-
     @Override
     public String toString() {
         return "OrderStatus{" +
@@ -148,6 +180,4 @@ public class OrderStatus implements Parcelable {
                 ", stockReduced=" + stockReduced +
                 '}';
     }
-
-
 }

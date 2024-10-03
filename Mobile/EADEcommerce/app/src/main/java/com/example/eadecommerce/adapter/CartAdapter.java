@@ -18,15 +18,21 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.eadecommerce.CartActivity;
 import com.example.eadecommerce.ProductDetailActivity;
 import com.example.eadecommerce.R;
-import com.example.eadecommerce.model.CartItem;
 import com.example.eadecommerce.model.CartProductResponse;
-import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
+/**
+ * The CartAdapter class is a RecyclerView adapter for displaying cart items.
+ * It binds cart data to the views and handles item click events to navigate to product details.
+ */
 public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder> {
     private List<CartProductResponse> cartItems;
 
+    /**
+     * Constructor to initialize the adapter with a list of cart items.
+     * @param cartItems The list of cart products.
+     */
     public CartAdapter(List<CartProductResponse> cartItems) {
         this.cartItems = cartItems;
     }
@@ -45,21 +51,17 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
         holder.itemCountTextView.setText(String.valueOf(item.getCount()));
         holder.itemCountChangeTextView.setText(String.valueOf(item.getCount()));
 
-        // Decode the base64 image string and set it to the ImageView
         if (item.getProductImage() != null && !item.getProductImage().isEmpty()) {
             byte[] decodedString = Base64.decode(item.getProductImage(), Base64.DEFAULT);
             Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
             holder.itemImageView.setImageBitmap(decodedByte);
         } else {
-            // Set a placeholder image or clear the ImageView if no image is available
-            holder.itemImageView.setImageResource(R.drawable.placeholder); // Replace with your placeholder image
+            holder.itemImageView.setImageResource(R.drawable.placeholder);
         }
 
-        // Set click listeners for the + and - buttons
         holder.plusButton.setOnClickListener(v -> {
             item.setCount(item.getCount() + 1);
             holder.itemCountChangeTextView.setText(String.valueOf(item.getCount()));
-            // Notify activity to show the update button
             ((CartActivity) holder.itemView.getContext()).showUpdateButton();
         });
 
@@ -67,21 +69,14 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
             if (item.getCount() > 0) {
                 item.setCount(item.getCount() - 1);
                 holder.itemCountChangeTextView.setText(String.valueOf(item.getCount()));
-                // Notify activity to show the update button
                 ((CartActivity) holder.itemView.getContext()).showUpdateButton();
             }
         });
 
-        // Handle item click to open ProductDetailActivity
         holder.itemLayout.setOnClickListener(v -> {
             Log.d("Cart Adapter", "Item clicked");
-            // Create an Intent to start ProductDetailActivity
             Intent intent = new Intent(holder.itemLayout.getContext(), ProductDetailActivity.class);
-
-            // Pass product details to ProductDetailActivity
             intent.putExtra("productId", item.getProductId());
-
-            // Start the ProductDetailActivity
             holder.itemLayout.getContext().startActivity(intent);
         });
     }
@@ -101,7 +96,6 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
         cartItems.get(position).setCount(count);
         notifyItemChanged(position);
     }
-
 
     public static class CartViewHolder extends RecyclerView.ViewHolder {
         public TextView itemNameTextView;

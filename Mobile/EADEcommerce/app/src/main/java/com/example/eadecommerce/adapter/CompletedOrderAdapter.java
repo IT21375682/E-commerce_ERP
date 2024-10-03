@@ -9,8 +9,6 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.eadecommerce.OrderDetailActivity;
@@ -19,11 +17,13 @@ import com.example.eadecommerce.model.Order;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+/**
+ * Adapter class for displaying completed orders in a RecyclerView.
+ */
 public class CompletedOrderAdapter extends RecyclerView.Adapter<CompletedOrderAdapter.OrderViewHolder> {
     private List<Order> orderList;
     private Context context;
@@ -36,23 +36,24 @@ public class CompletedOrderAdapter extends RecyclerView.Adapter<CompletedOrderAd
     @NonNull
     @Override
     public OrderViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        // Inflate the layout for each order item
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.order_item, parent, false);
         return new OrderViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull OrderViewHolder holder, int position) {
+        // Bind the data to the views for each order item
         Order order = orderList.get(position);
         holder.orderIdTextView.setText(order.getOrderId());
         String formattedDate = formatOrderDate(order.getDate());
         holder.dateTextView.setText(formattedDate);
-        holder.totalTextView.setText(String.valueOf(order.getTotal()));
+        holder.totalTextView.setText(String.format("%.2f", order.getTotal()));
 
         // Set an onClickListener for the orderLayout
         holder.orderLayout.setOnClickListener(v -> {
             // Create an Intent to navigate to OrderDetailActivity
             Intent intent = new Intent(context, OrderDetailActivity.class);
-            // Pass the order details to the OrderDetailActivity
             intent.putExtra("ORDER_ID", order.getOrderId());
             context.startActivity(intent);
         });
@@ -71,6 +72,7 @@ public class CompletedOrderAdapter extends RecyclerView.Adapter<CompletedOrderAd
 
         public OrderViewHolder(@NonNull View itemView) {
             super(itemView);
+            // Initialize views for the order item
             orderIdTextView = itemView.findViewById(R.id.orderIdTextView);
             dateTextView = itemView.findViewById(R.id.dateTextView);
             totalTextView = itemView.findViewById(R.id.totalTextView);
@@ -78,22 +80,18 @@ public class CompletedOrderAdapter extends RecyclerView.Adapter<CompletedOrderAd
         }
     }
 
-    // Method to format the date
+    // Method to format the date from ISO 8601 format to a user-friendly format
     private String formatOrderDate(String dateStr) {
-        // Define the input format from the API (ISO 8601 format)
         SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault());
-        // Define the output format you want
         SimpleDateFormat outputFormat = new SimpleDateFormat("yyyy-MM-dd | HH:mm", Locale.getDefault());
 
         Date date = null;
         try {
-            // Parse the input date string
             date = inputFormat.parse(dateStr);
         } catch (ParseException e) {
             e.printStackTrace();
         }
 
-        // Return the formatted date or the original string if parsing fails
         return (date != null) ? outputFormat.format(date) : dateStr;
     }
 }

@@ -16,12 +16,13 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.eadecommerce.ProductDetailActivity;
 import com.example.eadecommerce.R;
-import com.example.eadecommerce.model.CartItem;
 import com.example.eadecommerce.model.SingleOrderProductItem;
-import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
+/**
+ * Adapter class for displaying ordered products in a RecyclerView.
+ */
 public class OrderProductsAdapter extends RecyclerView.Adapter<OrderProductsAdapter.CartViewHolder> {
     private List<SingleOrderProductItem> cartItems;
 
@@ -31,12 +32,14 @@ public class OrderProductsAdapter extends RecyclerView.Adapter<OrderProductsAdap
 
     @Override
     public CartViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        // Inflate the layout for each item in the RecyclerView
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.checkout_item, parent, false);
         return new CartViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(CartViewHolder holder, int position) {
+        // Bind the data to the views for each item
         SingleOrderProductItem item = cartItems.get(position);
         holder.itemNameTextView.setText(item.getProductName());
         holder.itemPriceTextView.setText(String.format("Price: LKR %.2f", item.getProductPrice()));
@@ -48,21 +51,14 @@ public class OrderProductsAdapter extends RecyclerView.Adapter<OrderProductsAdap
             Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
             holder.itemImageView.setImageBitmap(decodedByte);
         } else {
-            // Set a placeholder image or clear the ImageView if no image is available
             holder.itemImageView.setImageResource(R.drawable.placeholder);
         }
 
-        // Handle item click to open ProductDetailActivity
         holder.itemLayout.setOnClickListener(v -> {
             Log.d("Checkout Adapter", "Item clicked");
 
-            // Create an Intent to start ProductDetailActivity
             Intent intent = new Intent(holder.itemLayout.getContext(), ProductDetailActivity.class);
-
-            // Pass product details to ProductDetailActivity
             intent.putExtra("productId", item.getProductId());
-
-            // Start the ProductDetailActivity
             holder.itemLayout.getContext().startActivity(intent);
         });
     }
@@ -81,6 +77,7 @@ public class OrderProductsAdapter extends RecyclerView.Adapter<OrderProductsAdap
 
         public CartViewHolder(View itemView) {
             super(itemView);
+            // Initialize views for the RecyclerView item
             itemNameTextView = itemView.findViewById(R.id.itemNameTextView);
             itemPriceTextView = itemView.findViewById(R.id.itemPriceTextView);
             itemCountTextView = itemView.findViewById(R.id.itemCountTextView);

@@ -32,18 +32,22 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+/**
+ * Adapter class for displaying comments in a RecyclerView.
+ */
 public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentViewHolder> {
     private List<ProductCommentData> comments;
-    private Context context;  // Add a context variable
+    private Context context;
 
     public CommentAdapter(Context context, List<ProductCommentData> comments) {
-        this.context = context;  // Initialize context
+        this.context = context;
         this.comments = comments;
     }
 
     @NonNull
     @Override
     public CommentViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        // Inflate the comment item layout
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.comment_item, parent, false);
         return new CommentViewHolder(view);
@@ -51,67 +55,58 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
 
     @Override
     public void onBindViewHolder(@NonNull CommentViewHolder holder, @SuppressLint("RecyclerView") int position) {
+        // Bind the comment data to the view holder
         ProductCommentData comment = comments.get(position);
         holder.productNameTextView.setText(comment.getProductName());
         holder.vendorNameTextView.setText(comment.getVendorName());
         holder.commentTextView.setText(comment.getCommentText());
         holder.commentEditTextInput.setText(comment.getCommentText());
 
-        // Format the date before setting it to the TextView
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
         String formattedDate = dateFormat.format(comment.getDate());
         holder.dateTextView.setText(formattedDate);
         holder.ratingBar.setRating(comment.getRating());
 
-        // Log for debugging
         Log.d("Adapter", comment.getUsername());
         Log.d("Adapter", comment.getCommentText());
 
-        // Store the original comment to restore on cancel
         final String originalComment = comment.getCommentText();
 
-        // Handle profileEditImage click to toggle visibility
         holder.profileEditImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Hide the TextView and profileEditImage, show EditText and profileupdateImage
+                // Toggle visibility of comment editing views
                 holder.commentTextView.setVisibility(View.GONE);
                 holder.profileEditImage.setVisibility(View.GONE);
                 holder.commentEditTextInput.setVisibility(View.VISIBLE);
                 holder.profileupdateImage.setVisibility(View.VISIBLE);
-                holder.profileupdateCancelImage.setVisibility(View.VISIBLE); // Make cancel button visible
+                holder.profileupdateCancelImage.setVisibility(View.VISIBLE);
             }
         });
 
-        // Handle profileupdateImage click to save the comment and toggle views back
         holder.profileupdateImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Update the TextView with new comment from EditText
+                // Save the updated comment
                 String updatedComment = holder.commentEditTextInput.getText().toString();
                 holder.commentTextView.setText(updatedComment);
-
-                // Hide the EditText and profileupdateImage, show TextView and profileEditImage again
                 holder.commentTextView.setVisibility(View.VISIBLE);
                 holder.profileEditImage.setVisibility(View.VISIBLE);
                 holder.commentEditTextInput.setVisibility(View.GONE);
                 holder.profileupdateImage.setVisibility(View.GONE);
-                holder.profileupdateCancelImage.setVisibility(View.GONE); // Hide cancel button
+                holder.profileupdateCancelImage.setVisibility(View.GONE);
 
-                // Update the comment in the data model or send the update to the server
                 comments.get(position).setCommentText(updatedComment);
-                notifyItemChanged(position);  // Notify adapter about the change
+                notifyItemChanged(position);
 
-                // Create a Comment object and post it to the server
                 Comment updatedCommentObj = getComment(updatedComment);
-
-                // Call method to post or update the comment via API
                 postComment(updatedCommentObj);
             }
 
             private @NonNull Comment getComment(String updatedComment) {
+                // Create a Comment object for the updated comment
                 Comment updatedCommentObj = new Comment();
-                updatedCommentObj.setId(comment.getId());  // Assuming your comment object has an id
+                updatedCommentObj.setId(comment.getId());
                 updatedCommentObj.setUserId(comment.getUserId());
                 updatedCommentObj.setVendorId(comment.getVendorId());
                 updatedCommentObj.setProductId(comment.getProductId());
@@ -121,46 +116,40 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
             }
         });
 
-        // Handle profileupdateCancelImage click to restore the original comment and toggle views back
         holder.profileupdateCancelImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // Restore the original comment
                 holder.commentTextView.setText(originalComment);
-                holder.commentEditTextInput.setText(originalComment); // Reset the EditText to original comment
-
-                // Hide the EditText and profileupdateImage, show TextView and profileEditImage again
+                holder.commentEditTextInput.setText(originalComment);
                 holder.commentTextView.setVisibility(View.VISIBLE);
                 holder.profileEditImage.setVisibility(View.VISIBLE);
                 holder.commentEditTextInput.setVisibility(View.GONE);
                 holder.profileupdateImage.setVisibility(View.GONE);
-                holder.profileupdateCancelImage.setVisibility(View.GONE); // Hide cancel button
+                holder.profileupdateCancelImage.setVisibility(View.GONE);
             }
         });
 
-        // Handle product name click to start ProductDetailActivity with productId
         holder.productNameTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Create an Intent to start ProductDetailActivity
+                // Start ProductDetailActivity for the selected product
                 Intent intent = new Intent(v.getContext(), ProductDetailActivity.class);
                 intent.putExtra("productId", comment.getProductId());
                 v.getContext().startActivity(intent);
             }
         });
 
-        // Handle vendor name click to start ProductDetailActivity with productId
         holder.vendorNameTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Create an Intent to start ProductDetailActivity
+                // Start VendorCommentsActivity for the selected vendor
                 Intent intent = new Intent(v.getContext(), VendorCommentsActivity.class);
                 intent.putExtra("vendorId", comment.getVendorId());
                 intent.putExtra("vendorName", comment.getVendorName());
                 v.getContext().startActivity(intent);
             }
         });
-
     }
 
     @Override
@@ -200,6 +189,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
     }
 
     private void postComment(Comment comment) {
+        // Post or update the comment via API
         ApiService apiService = RetrofitClient.getRetrofitInstance().create(ApiService.class);
         Call<Comment> call = apiService.addOrUpdateComment(comment);
 
@@ -208,8 +198,6 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
             public void onResponse(Call<Comment> call, Response<Comment> response) {
                 if (response.isSuccessful()) {
                     Log.d("CommentAdapter", "Comment posted successfully");
-
-                    // Show success message using Snackbar
                     View rootView = ((Activity) context).findViewById(android.R.id.content);
                     Snackbar.make(rootView, "Comment updated successfully!", Snackbar.LENGTH_SHORT).show();
                 } else {
@@ -223,5 +211,4 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
             }
         });
     }
-
 }

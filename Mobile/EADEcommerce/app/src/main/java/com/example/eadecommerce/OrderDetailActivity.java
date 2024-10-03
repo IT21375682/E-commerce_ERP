@@ -184,9 +184,9 @@ public class OrderDetailActivity extends AppCompatActivity {
                     double subTotal = order.getTotal() - 20;
                     String formattedSubTotal = String.format("%.2f", subTotal);
                     subtotalAmountTextView.setText(formattedSubTotal);
-                    deliveryFeeAmountTextView.setText("20");
+                    deliveryFeeAmountTextView.setText("20.00");
                     double total = order.getTotal();
-                    String formattedTotal = String.format("%.2f", total);
+                    String formattedTotal = String.format("LKR %.2f", total);
                     totalAmountTextView.setText(formattedTotal);
 
                     updateDefaultOrderStatusUI(order);
@@ -292,27 +292,23 @@ public class OrderDetailActivity extends AppCompatActivity {
             canceledLayout.setVisibility(View.VISIBLE);
             if(status.getCanceledDate()!=null) {
                 Log.d("Order Detail Activity Cancellation", order.getCancellationNote());
-                paymentImageButton.setText(order.getCancellationNote());
+                canceledTextView.setText(order.getCancellationNote());
             }
         }
     }
 
     // Method to format the date
     private String formatOrderDate(String dateStr) {
-        // Define the input format from the API (ISO 8601 format)
         SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault());
-        // Define the output format you want
         SimpleDateFormat outputFormat = new SimpleDateFormat("yyyy-MM-dd | HH:mm", Locale.getDefault());
 
         Date date = null;
         try {
-            // Parse the input date string
             date = inputFormat.parse(dateStr);
         } catch (ParseException e) {
             e.printStackTrace();
         }
 
-        // Return the formatted date or the original string if parsing fails
         return (date != null) ? outputFormat.format(date) : dateStr;
     }
 }

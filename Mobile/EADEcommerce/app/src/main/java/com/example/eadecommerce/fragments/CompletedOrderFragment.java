@@ -19,10 +19,12 @@ import com.example.eadecommerce.R;
 import com.example.eadecommerce.adapter.CompletedOrderAdapter;
 import com.example.eadecommerce.model.Order;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * Fragment class for displaying completed orders with filtering options.
+ */
 public class CompletedOrderFragment extends Fragment {
 
     private RecyclerView ordersRecyclerView;
@@ -33,6 +35,7 @@ public class CompletedOrderFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        // Inflate the layout for this fragment and initialize views
         View view = inflater.inflate(R.layout.fragment_completed_order, container, false);
         ordersRecyclerView = view.findViewById(R.id.ordersRecyclerView);
         filterSpinner = view.findViewById(R.id.filterSpinner);
@@ -67,10 +70,11 @@ public class CompletedOrderFragment extends Fragment {
             }
         });
 
-        return view;
+        return view; // Return the inflated view
     }
 
     private void sortOrderList(String sortOption) {
+        // Sort the order list based on the selected option
         if (sortOption.equals("Sort by Newest")) {
             // Sort by newest (descending order)
             Collections.sort(orderList, (o1, o2) -> o2.getDate().compareTo(o1.getDate()));
@@ -78,7 +82,6 @@ public class CompletedOrderFragment extends Fragment {
             // Sort by oldest (ascending order)
             Collections.sort(orderList, (o1, o2) -> o1.getDate().compareTo(o2.getDate()));
         }
-        orderAdapter.notifyDataSetChanged();
+        orderAdapter.notifyDataSetChanged(); // Notify the adapter of data changes
     }
-
 }

@@ -18,10 +18,12 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.eadecommerce.ProductDetailActivity;
 import com.example.eadecommerce.R;
 import com.example.eadecommerce.model.Product;
-import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
+/**
+ * Adapter class for displaying products in a RecyclerView.
+ */
 public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductViewHolder> {
 
     private Context context;
@@ -35,18 +37,18 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
     @NonNull
     @Override
     public ProductViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        // Inflate the layout for each product item
         View view = LayoutInflater.from(context).inflate(R.layout.adapter_product_item, parent, false);
         return new ProductViewHolder(view);
     }
 
-
     @Override
     public void onBindViewHolder(@NonNull ProductViewHolder holder, int position) {
+        // Bind the data to the views for each product item
         Product product = productList.get(position);
 
         holder.textViewName.setText(product.getName());
         holder.textViewPrice.setText(String.format("$%.2f", product.getPrice()));
-        holder.textViewPrice.setText(String.valueOf(product.getPrice()));
 
         // Decode the base64 image string and set it to the ImageView
         if (product.getProductImage() != null && !product.getProductImage().isEmpty()) {
@@ -54,10 +56,8 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
             Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
             holder.imageViewProduct.setImageBitmap(decodedByte);
         } else {
-            // Set a placeholder image or clear the ImageView if no image is available
-            holder.imageViewProduct.setImageResource(R.drawable.placeholder); // Replace with your placeholder image
+            holder.imageViewProduct.setImageResource(R.drawable.placeholder);
         }
-//        Picasso.get().load(product.getImageUrl()).into(holder.imageViewProduct);
 
         // Handle item click to open ProductDetailActivity
         holder.itemView.setOnClickListener(v -> {
@@ -65,11 +65,9 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
             intent.putExtra("productId", product.getId());
             intent.putExtra("productName", product.getName());
             intent.putExtra("productPrice", product.getPrice());
-//            intent.putExtra("productImageUrl", product.getImageUrl());
             intent.putExtra("productCategory", product.getProductCategoryName());
             Log.d("productId", product.getId());
 
-            // Start new activity
             context.startActivity(intent);
         });
     }
@@ -86,6 +84,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
 
         public ProductViewHolder(@NonNull View itemView) {
             super(itemView);
+            // Initialize views for the product item
             textViewName = itemView.findViewById(R.id.textViewProductName);
             textViewPrice = itemView.findViewById(R.id.textViewProductPrice);
             imageViewProduct = itemView.findViewById(R.id.imageViewProduct);

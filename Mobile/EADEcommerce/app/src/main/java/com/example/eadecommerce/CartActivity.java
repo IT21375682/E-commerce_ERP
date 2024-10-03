@@ -80,12 +80,6 @@ public class CartActivity extends AppCompatActivity {
 
         // Set click listener for clearCart to remove all items from cart
         clearCart.setOnClickListener(v -> {
-//            if (cartItems != null) {
-//                cartItems.clear();  // Clear all items from the cart
-//                cartAdapter.notifyDataSetChanged();  // Notify adapter about the change
-//                updateTotalAmount();  // Update the total to reflect the empty cart
-//                updateButton.setVisibility(View.GONE);  // Hide update button as no items exist
-//            }
             clearCartItems();
         });
 

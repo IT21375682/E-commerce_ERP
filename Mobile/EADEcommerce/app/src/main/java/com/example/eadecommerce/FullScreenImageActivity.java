@@ -28,14 +28,7 @@ public class FullScreenImageActivity extends AppCompatActivity {
         ImageView fullScreenImageView = findViewById(R.id.fullScreenImageView);
         ImageView closeButton = findViewById(R.id.closeButton);
 
-        // Get image URL from intent
-//        Intent intent = getIntent();
-//        String productImage = intent.getStringExtra("productImage");
         String productImage = ProductImageSingleton.getInstance().getProductImage();
-        // Load image using Picasso
-//        Picasso.get()
-//                .load(productImage)
-//                .into(fullScreenImageView);
 
         Bitmap decodedImage = decodeBase64ToBitmap(productImage);
         fullScreenImageView.setImageBitmap(decodedImage);

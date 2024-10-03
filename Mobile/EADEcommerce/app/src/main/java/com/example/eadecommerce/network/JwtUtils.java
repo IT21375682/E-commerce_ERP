@@ -14,7 +14,7 @@ public class JwtUtils {
     // Method to retrieve JWT token from SharedPreferences
     public static String getTokenFromSharedPreferences(Context context) {
         SharedPreferences preferences = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
-        return preferences.getString(TOKEN_KEY, null); // Return the token or null if not found
+        return preferences.getString(TOKEN_KEY, null);
     }
 
     // Method to decode JWT and retrieve user ID
@@ -22,15 +22,15 @@ public class JwtUtils {
         if (token != null) {
             try {
                 JWT jwt = new JWT(token);
-                return jwt.getClaim("id").asString(); // Extract the user ID from JWT
+                return jwt.getClaim("id").asString();
             } catch (Exception e) {
                 Log.e("JWT Error", "Failed to decode token", e);
             }
         }
-        return null; // Return null if token is not valid or not found
+        return null;
     }
 
-    // Method to decode JWT and retrieve other claims (optional)
+    // Method to decode JWT and retrieve other claims
     public static String getEmailFromToken(String token) {
         if (token != null) {
             try {

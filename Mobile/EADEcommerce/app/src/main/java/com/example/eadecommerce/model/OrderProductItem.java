@@ -4,7 +4,13 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import com.google.gson.annotations.SerializedName;
 
+/**
+ * The OrderProductItem class represents an individual product item in an order.
+ * It contains details such as the product ID, quantity, and delivery status.
+ * It implements Parcelable for easy passing between activities.
+ */
 public class OrderProductItem implements Parcelable {
+    // Fields representing the components of an order product item
     @SerializedName("productId")
     private String productId;
 
@@ -14,27 +20,45 @@ public class OrderProductItem implements Parcelable {
     @SerializedName("delivered")
     private boolean delivered;
 
-    // Constructor
+    // Constructor to initialize all fields
     public OrderProductItem(String productId, int count, boolean delivered) {
         this.productId = productId;
         this.count = count;
         this.delivered = delivered;
     }
 
-    // Getter methods
+    // Getter methods for each field
+
+    /**
+     * Gets the product ID.
+     * @return The unique identifier for the product.
+     */
     public String getProductId() {
         return productId;
     }
 
+    /**
+     * Gets the count of the product in the order.
+     * @return The quantity of the product ordered.
+     */
     public int getCount() {
         return count;
     }
 
+    /**
+     * Checks if the product has been delivered.
+     * @return True if the product has been delivered, false otherwise.
+     */
     public boolean isDelivered() {
         return delivered;
     }
 
     // Parcelable implementation
+
+    /**
+     * Constructor to create an OrderProductItem from a Parcel.
+     * @param in The Parcel containing the product item data.
+     */
     protected OrderProductItem(Parcel in) {
         productId = in.readString();
         count = in.readInt();
@@ -73,5 +97,4 @@ public class OrderProductItem implements Parcelable {
                 ", delivered=" + delivered +
                 '}';
     }
-
 }

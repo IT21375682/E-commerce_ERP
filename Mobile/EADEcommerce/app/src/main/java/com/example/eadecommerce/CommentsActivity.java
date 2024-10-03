@@ -62,7 +62,7 @@ public class CommentsActivity extends AppCompatActivity {
         noCommentsTextView = findViewById(R.id.noCommentsTextView);
 
         // Initialize adapter with an empty list and set it to RecyclerView
-        commentAdapter = new CommentAdapter(this,comments);
+        commentAdapter = new CommentAdapter(this, comments);
         recyclerView.setAdapter(commentAdapter);
 
         // Setup Spinner
