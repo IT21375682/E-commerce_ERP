@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.swiperefreshlayout.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/swipeRefreshLayout"
@@ -9,9 +8,9 @@
     tools:context=".Main">
 
     <ScrollView
+        android:id="@+id/scrollViewCommonAccount"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/scrollViewCommonAccount">
+        android:layout_height="match_parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/commonHomeConstraint1"
@@ -23,27 +22,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
-<!--                <include layout="@layout/custom_toolbar"-->
-<!--                    android:id="@+id/toolbar"-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    app:layout_constraintTop_toTopOf="parent"-->
-<!--                    app:layout_constraintStart_toStartOf="parent"-->
-<!--                    app:layout_constraintEnd_toEndOf="parent" />-->
                 <RelativeLayout
-                    app:layout_constraintTop_toTopOf="parent"                    android:id="@+id/cusAccManagementHeading"
+                    android:id="@+id/cusAccManagementHeading"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:paddingHorizontal="20dp"
                     android:paddingVertical="20dp"
-                    android:paddingHorizontal="20dp">
-
-<!--                    <ImageView-->
-<!--                        android:id="@+id/cusAccManagementBack"-->
-<!--                        android:layout_height="30dp"-->
-<!--                        android:layout_width="30dp"-->
-<!--                        android:scaleType="fitXY"-->
-<!--                        tools:ignore="ContentDescription"-->
-<!--                        android:src="@drawable/logo_dark" />-->
+                    app:layout_constraintTop_toTopOf="parent">
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -56,18 +41,19 @@
                 </RelativeLayout>
 
                 <androidx.cardview.widget.CardView
+                    android:id="@+id/editableProfile"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:id="@+id/editableProfile"
-                    app:cardElevation="20dp"
                     android:layout_below="@+id/cusAccManagementHeading"
                     android:layout_marginHorizontal="20dp"
-                    android:layout_marginBottom="20dp">
+                    android:layout_marginBottom="20dp"
+                    app:cardElevation="20dp">
+
                     <LinearLayout
                         android:id="@+id/cusMyBookingArrowLayout"
-                        android:orientation="vertical"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
 
 
                         <LinearLayout
@@ -81,11 +67,11 @@
                                 android:id="@+id/cusAccountProfileImageFrame"
                                 android:layout_width="200dp"
                                 android:layout_height="200dp"
-                                app:cardElevation="20dp"
-                                android:layout_gravity="center_horizontal"
                                 android:layout_centerHorizontal="true"
+                                android:layout_gravity="center_horizontal"
                                 android:layout_marginTop="20dp"
-                                android:layout_marginBottom="20dp">
+                                android:layout_marginBottom="20dp"
+                                app:cardElevation="20dp">
 
                                 <ImageView
                                     android:id="@+id/cusAccountProfileImage"
@@ -100,6 +86,7 @@
                                     android:layout_height="match_parent"
                                     android:background="#4DCCCCCC"
                                     android:visibility="gone">
+
                                     <Button
                                         android:id="@+id/cusAccManageButton1"
                                         android:layout_width="wrap_content"
@@ -107,59 +94,62 @@
                                         android:layout_gravity="center_horizontal"
                                         android:layout_marginTop="50dp"
                                         android:text="Change Image" />
+
                                     <Button
                                         android:id="@+id/cusAccManageButton2"
                                         android:layout_width="wrap_content"
-                                        android:layout_gravity="center_horizontal"
                                         android:layout_height="50dp"
+                                        android:layout_gravity="center_horizontal"
                                         android:layout_marginTop="100dp"
                                         android:text="Remove Image" />
                                 </FrameLayout>
                             </androidx.cardview.widget.CardView>
 
 
-
                             <LinearLayout
                                 android:id="@+id/cusAccountFirstName"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_marginTop="5dp"
                                 android:layout_marginStart="20dp"
+                                android:layout_marginTop="5dp"
                                 android:layout_marginEnd="20dp">
+
                                 <TextView
                                     android:layout_width="0dp"
                                     android:layout_height="40dp"
                                     android:layout_weight="0.3"
                                     android:ellipsize="end"
+                                    android:gravity="center_vertical"
                                     android:singleLine="true"
                                     android:text="First Name"
-                                    android:textSize="16sp"
-                                    android:gravity="center_vertical"/>
+                                    android:textSize="16sp" />
+
                                 <EditText
-                                    android:visibility="gone"
-                                    android:background="@drawable/cus_profile_inputbox_border"
                                     android:id="@+id/editTextFirstName"
-                                    android:layout_height="40dp"
                                     android:layout_width="0dp"
+                                    android:layout_height="40dp"
+                                    android:layout_gravity="center_vertical"
                                     android:layout_weight="0.7"
+                                    android:background="@drawable/cus_profile_inputbox_border"
                                     android:hint="Your First Name"
-                                    android:textSize="16sp"
+                                    android:inputType="text"
                                     android:paddingStart="15dp"
                                     android:paddingEnd="15dp"
-                                    android:inputType="text"
-                                    android:layout_gravity="center_vertical"/>
+                                    android:textSize="16sp"
+                                    android:visibility="gone" />
+
                                 <TextView
                                     android:id="@+id/editTextFirstName2"
-                                    android:layout_height="40dp"
                                     android:layout_width="0dp"
+                                    android:layout_height="40dp"
+                                    android:layout_gravity="center_vertical"
                                     android:layout_weight="0.7"
-                                    android:textSize="16sp"
-                                    android:hint="-"
                                     android:gravity="center_vertical"
+                                    android:hint="-"
+                                    android:inputType="text"
                                     android:paddingStart="15dp"
                                     android:paddingEnd="15dp"
-                                    android:inputType="text"
-                                    android:layout_gravity="center_vertical"/>
+                                    android:textSize="16sp" />
                             </LinearLayout>
 
                             <LinearLayout
@@ -169,40 +159,43 @@
                                 android:layout_marginStart="20dp"
                                 android:layout_marginTop="5dp"
                                 android:layout_marginEnd="20dp">
+
                                 <TextView
                                     android:layout_width="0dp"
                                     android:layout_height="40dp"
                                     android:layout_weight="0.3"
                                     android:ellipsize="end"
+                                    android:gravity="center_vertical"
                                     android:singleLine="true"
                                     android:text="Last Name"
-                                    android:textSize="16sp"
-                                    android:gravity="center_vertical"/>
+                                    android:textSize="16sp" />
+
                                 <EditText
-                                    android:background="@drawable/cus_profile_inputbox_border"
                                     android:id="@+id/viewInputLastName"
-                                    android:layout_height="40dp"
                                     android:layout_width="0dp"
+                                    android:layout_height="40dp"
+                                    android:layout_gravity="center_vertical"
                                     android:layout_weight="0.7"
+                                    android:background="@drawable/cus_profile_inputbox_border"
                                     android:hint="Your Last Name"
-                                    android:visibility="gone"
-                                    android:textSize="16sp"
+                                    android:inputType="text"
                                     android:paddingStart="15dp"
                                     android:paddingEnd="15dp"
-                                    android:inputType="text"
-                                    android:layout_gravity="center_vertical"/>
+                                    android:textSize="16sp"
+                                    android:visibility="gone" />
+
                                 <TextView
                                     android:id="@+id/viewInputLastName2"
-                                    android:layout_height="40dp"
                                     android:layout_width="0dp"
+                                    android:layout_height="40dp"
+                                    android:layout_gravity="center_vertical"
                                     android:layout_weight="0.7"
-                                    android:textSize="16sp"
+                                    android:gravity="center_vertical"
                                     android:hint="-"
+                                    android:inputType="text"
                                     android:paddingStart="15dp"
                                     android:paddingEnd="15dp"
-                                    android:gravity="center_vertical"
-                                    android:inputType="text"
-                                    android:layout_gravity="center_vertical"/>
+                                    android:textSize="16sp" />
                             </LinearLayout>
 
                             <LinearLayout
@@ -213,42 +206,46 @@
                                 android:layout_marginStart="20dp"
                                 android:layout_marginTop="5dp"
                                 android:layout_marginEnd="20dp">
+
                                 <TextView
                                     android:layout_width="0dp"
                                     android:layout_height="40dp"
                                     android:layout_weight="0.3"
                                     android:ellipsize="end"
+                                    android:gravity="center_vertical"
                                     android:singleLine="true"
                                     android:text="NIC"
-                                    android:textSize="16sp"
-                                    android:gravity="center_vertical"/>
+                                    android:textSize="16sp" />
+
                                 <EditText
-                                    android:background="@drawable/cus_profile_inputbox_border"
                                     android:id="@+id/viewInputNIC"
-                                    android:layout_height="40dp"
                                     android:layout_width="0dp"
+                                    android:layout_height="40dp"
+                                    android:layout_gravity="center_vertical"
                                     android:layout_weight="0.7"
+                                    android:background="@drawable/cus_profile_inputbox_border"
+                                    android:gravity="center_vertical"
                                     android:hint="Your Nic"
-                                    android:textSize="16sp"
+                                    android:inputType="text"
                                     android:paddingStart="15dp"
                                     android:paddingEnd="15dp"
-                                    android:inputType="text"
-                                    android:visibility="gone"
-                                    android:gravity="center_vertical"
-                                    android:layout_gravity="center_vertical"/>
+                                    android:textSize="16sp"
+                                    android:visibility="gone" />
+
                                 <TextView
                                     android:id="@+id/viewInputNIC2"
-                                    android:layout_height="40dp"
                                     android:layout_width="0dp"
+                                    android:layout_height="40dp"
+                                    android:layout_gravity="center_vertical"
                                     android:layout_weight="0.7"
-                                    android:textSize="16sp"
+                                    android:gravity="center_vertical"
                                     android:hint="-"
+                                    android:inputType="text"
                                     android:paddingStart="15dp"
                                     android:paddingEnd="15dp"
-                                    android:gravity="center_vertical"
-                                    android:inputType="text"
-                                    android:layout_gravity="center_vertical"/>
+                                    android:textSize="16sp" />
                             </LinearLayout>
+
                             <LinearLayout
                                 android:id="@+id/cusAccountPhoneNumber"
                                 android:layout_width="match_parent"
@@ -256,15 +253,17 @@
                                 android:layout_marginStart="20dp"
                                 android:layout_marginTop="5dp"
                                 android:layout_marginEnd="20dp">
+
                                 <TextView
                                     android:layout_width="0dp"
                                     android:layout_height="40dp"
                                     android:layout_weight="0.3"
                                     android:ellipsize="end"
+                                    android:gravity="center_vertical"
                                     android:singleLine="true"
                                     android:text="Phone No"
-                                    android:textSize="16sp"
-                                    android:gravity="center_vertical"/>
+                                    android:textSize="16sp" />
+
                                 <TextView
                                     android:id="@+id/viewInputPhoneNo2"
                                     android:layout_width="0dp"
@@ -277,22 +276,24 @@
                                     android:paddingStart="15dp"
                                     android:paddingEnd="15dp"
                                     android:textSize="16sp" />
+
                                 <EditText
-                                    android:background="@drawable/cus_profile_inputbox_border"
                                     android:id="@+id/viewInputPhoneNo"
-                                    android:layout_height="40dp"
                                     android:layout_width="0dp"
+                                    android:layout_height="40dp"
+                                    android:layout_gravity="center_vertical"
                                     android:layout_weight="0.7"
+                                    android:background="@drawable/cus_profile_inputbox_border"
+                                    android:gravity="center_vertical"
                                     android:hint="Your Phone No"
-                                    android:textSize="16sp"
+                                    android:inputType="text"
                                     android:paddingStart="15dp"
                                     android:paddingEnd="15dp"
-                                    android:inputType="text"
-                                    android:visibility="gone"
-                                    android:gravity="center_vertical"
-                                    android:layout_gravity="center_vertical"/>
+                                    android:textSize="16sp"
+                                    android:visibility="gone" />
 
                             </LinearLayout>
+
                             <LinearLayout
                                 android:id="@+id/cusAccountAddressLine1Layout"
                                 android:layout_width="match_parent"
@@ -300,103 +301,112 @@
                                 android:layout_marginStart="20dp"
                                 android:layout_marginTop="5dp"
                                 android:layout_marginEnd="20dp">
+
                                 <TextView
                                     android:layout_width="0dp"
                                     android:layout_height="40dp"
-                                    android:layout_weight="0.3"
                                     android:layout_marginTop="5dp"
+                                    android:layout_weight="0.3"
                                     android:ellipsize="end"
+                                    android:gravity="center_vertical"
                                     android:singleLine="true"
                                     android:text="Address"
-                                    android:textSize="16sp"
-                                    android:gravity="center_vertical"/>
+                                    android:textSize="16sp" />
+
                                 <LinearLayout
                                     android:layout_width="0dp"
                                     android:layout_height="wrap_content"
                                     android:layout_weight="0.7"
                                     android:orientation="vertical">
+
                                     <EditText
-                                        android:background="@drawable/cus_profile_inputbox_border"
                                         android:id="@+id/cusAccountAddressLine1"
-                                        android:layout_height="40dp"
                                         android:layout_width="match_parent"
-                                        android:hint="Address Line 1"
+                                        android:layout_height="40dp"
+                                        android:layout_gravity="center_vertical"
                                         android:layout_marginTop="5dp"
-                                        android:textSize="16sp"
+                                        android:background="@drawable/cus_profile_inputbox_border"
+                                        android:gravity="center_vertical"
+                                        android:hint="Address Line 1"
+                                        android:inputType="text"
                                         android:paddingStart="15dp"
                                         android:paddingEnd="15dp"
-                                        android:inputType="text"
-                                        android:visibility="gone"
-                                        android:gravity="center_vertical"
-                                        android:layout_gravity="center_vertical"/>
+                                        android:textSize="16sp"
+                                        android:visibility="gone" />
+
                                     <TextView
                                         android:id="@+id/cusAccountAddressLine11"
-                                        android:layout_height="40dp"
                                         android:layout_width="match_parent"
+                                        android:layout_height="40dp"
+                                        android:layout_gravity="center_vertical"
                                         android:layout_marginTop="5dp"
-                                        android:textSize="16sp"
-                                        android:paddingStart="15dp"
+                                        android:gravity="center_vertical"
                                         android:hint="-"
-                                        android:paddingEnd="15dp"
                                         android:inputType="text"
-                                        android:gravity="center_vertical"
-                                        android:layout_gravity="center_vertical"/>
-                                    <EditText
-                                        android:background="@drawable/cus_profile_inputbox_border"
-                                        android:id="@+id/cusAccountAddressLine2"
-                                        android:layout_height="40dp"
-                                        android:layout_width="match_parent"
-                                        android:hint="Address Line 2"
-                                        android:layout_marginTop="5dp"
-                                        android:textSize="16sp"
                                         android:paddingStart="15dp"
                                         android:paddingEnd="15dp"
-                                        android:inputType="text"
-                                        android:visibility="gone"
+                                        android:textSize="16sp" />
+
+                                    <EditText
+                                        android:id="@+id/cusAccountAddressLine2"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="40dp"
+                                        android:layout_gravity="center_vertical"
+                                        android:layout_marginTop="5dp"
+                                        android:background="@drawable/cus_profile_inputbox_border"
                                         android:gravity="center_vertical"
-                                        android:layout_gravity="center_vertical"/>
+                                        android:hint="Address Line 2"
+                                        android:inputType="text"
+                                        android:paddingStart="15dp"
+                                        android:paddingEnd="15dp"
+                                        android:textSize="16sp"
+                                        android:visibility="gone" />
+
                                     <TextView
                                         android:id="@+id/cusAccountAddressLine22"
-                                        android:layout_height="40dp"
                                         android:layout_width="match_parent"
+                                        android:layout_height="40dp"
+                                        android:layout_gravity="center_vertical"
                                         android:layout_marginTop="5dp"
-                                        android:textSize="16sp"
+                                        android:gravity="center_vertical"
                                         android:hint="-"
+                                        android:inputType="text"
                                         android:paddingStart="15dp"
                                         android:paddingEnd="15dp"
-                                        android:inputType="text"
-                                        android:gravity="center_vertical"
-                                        android:layout_gravity="center_vertical"/>
+                                        android:textSize="16sp" />
+
                                     <EditText
-                                        android:background="@drawable/cus_profile_inputbox_border"
                                         android:id="@+id/cusAccountAddressLine3"
-                                        android:layout_height="40dp"
                                         android:layout_width="match_parent"
-                                        android:hint="Address Line 3"
+                                        android:layout_height="40dp"
+                                        android:layout_gravity="center_vertical"
                                         android:layout_marginTop="5dp"
-                                        android:textSize="16sp"
+                                        android:background="@drawable/cus_profile_inputbox_border"
+                                        android:gravity="center_vertical"
+                                        android:hint="Address Line 3"
+                                        android:inputType="text"
                                         android:paddingStart="15dp"
                                         android:paddingEnd="15dp"
-                                        android:inputType="text"
-                                        android:visibility="gone"
-                                        android:gravity="center_vertical"
-                                        android:layout_gravity="center_vertical"/>
+                                        android:textSize="16sp"
+                                        android:visibility="gone" />
+
                                     <TextView
                                         android:id="@+id/cusAccountAddressLine33"
-                                        android:layout_height="40dp"
                                         android:layout_width="match_parent"
+                                        android:layout_height="40dp"
+                                        android:layout_gravity="center_vertical"
                                         android:layout_marginTop="5dp"
-                                        android:textSize="16sp"
+                                        android:gravity="center_vertical"
                                         android:hint="-"
+                                        android:inputType="text"
                                         android:paddingStart="15dp"
                                         android:paddingEnd="15dp"
-                                        android:inputType="text"
-                                        android:gravity="center_vertical"
-                                        android:layout_gravity="center_vertical"/>
+                                        android:textSize="16sp" />
 
 
                                 </LinearLayout>
                             </LinearLayout>
+
                             <LinearLayout
                                 android:id="@+id/cusAccountCityLayout"
                                 android:layout_width="match_parent"
@@ -404,42 +414,46 @@
                                 android:layout_marginStart="20dp"
                                 android:layout_marginTop="5dp"
                                 android:layout_marginEnd="20dp">
+
                                 <TextView
                                     android:layout_width="0dp"
                                     android:layout_height="40dp"
                                     android:layout_weight="0.3"
                                     android:ellipsize="end"
+                                    android:gravity="center_vertical"
                                     android:singleLine="true"
                                     android:text="City"
-                                    android:textSize="16sp"
-                                    android:gravity="center_vertical"/>
+                                    android:textSize="16sp" />
+
                                 <EditText
-                                    android:background="@drawable/cus_profile_inputbox_border"
                                     android:id="@+id/cusAccountCity1"
-                                    android:layout_height="40dp"
                                     android:layout_width="0dp"
+                                    android:layout_height="40dp"
+                                    android:layout_gravity="center_vertical"
                                     android:layout_weight="0.7"
+                                    android:background="@drawable/cus_profile_inputbox_border"
+                                    android:gravity="center_vertical"
                                     android:hint="City"
-                                    android:textSize="16sp"
+                                    android:inputType="text"
                                     android:paddingStart="15dp"
                                     android:paddingEnd="15dp"
-                                    android:inputType="text"
-                                    android:visibility="gone"
-                                    android:gravity="center_vertical"
-                                    android:layout_gravity="center_vertical"/>
+                                    android:textSize="16sp"
+                                    android:visibility="gone" />
+
                                 <TextView
                                     android:id="@+id/cusAccountCity2"
-                                    android:layout_height="40dp"
                                     android:layout_width="0dp"
+                                    android:layout_height="40dp"
+                                    android:layout_gravity="center_vertical"
                                     android:layout_weight="0.7"
-                                    android:textSize="16sp"
+                                    android:gravity="center_vertical"
                                     android:hint="-"
+                                    android:inputType="text"
                                     android:paddingStart="15dp"
                                     android:paddingEnd="15dp"
-                                    android:inputType="text"
-                                    android:gravity="center_vertical"
-                                    android:layout_gravity="center_vertical"/>
+                                    android:textSize="16sp" />
                             </LinearLayout>
+
                             <LinearLayout
                                 android:id="@+id/cusAccountPostalCodeLayout"
                                 android:layout_width="match_parent"
@@ -447,86 +461,94 @@
                                 android:layout_marginStart="20dp"
                                 android:layout_marginTop="5dp"
                                 android:layout_marginEnd="20dp">
+
                                 <TextView
                                     android:layout_width="0dp"
                                     android:layout_height="40dp"
                                     android:layout_weight="0.3"
                                     android:ellipsize="end"
+                                    android:gravity="center_vertical"
                                     android:singleLine="true"
                                     android:text="Postal Code"
-                                    android:textSize="16sp"
-                                    android:gravity="center_vertical"/>
+                                    android:textSize="16sp" />
+
                                 <EditText
-                                    android:background="@drawable/cus_profile_inputbox_border"
                                     android:id="@+id/cusAccountPostalCode1"
-                                    android:layout_height="40dp"
                                     android:layout_width="0dp"
+                                    android:layout_height="40dp"
+                                    android:layout_gravity="center_vertical"
                                     android:layout_weight="0.7"
+                                    android:background="@drawable/cus_profile_inputbox_border"
+                                    android:gravity="center_vertical"
                                     android:hint="Postal Code"
-                                    android:textSize="16sp"
+                                    android:inputType="text"
                                     android:paddingStart="15dp"
                                     android:paddingEnd="15dp"
-                                    android:inputType="text"
-                                    android:visibility="gone"
-                                    android:gravity="center_vertical"
-                                    android:layout_gravity="center_vertical"/>
+                                    android:textSize="16sp"
+                                    android:visibility="gone" />
+
                                 <TextView
                                     android:id="@+id/cusAccountPostalCode2"
-                                    android:layout_height="40dp"
                                     android:layout_width="0dp"
+                                    android:layout_height="40dp"
+                                    android:layout_gravity="center_vertical"
                                     android:layout_weight="0.7"
-                                    android:textSize="16sp"
-                                    android:paddingStart="15dp"
-                                    android:paddingEnd="15dp"
+                                    android:gravity="center_vertical"
                                     android:hint="-"
                                     android:inputType="text"
-                                    android:gravity="center_vertical"
-                                    android:layout_gravity="center_vertical"/>
+                                    android:paddingStart="15dp"
+                                    android:paddingEnd="15dp"
+                                    android:textSize="16sp" />
                             </LinearLayout>
+
                             <LinearLayout
                                 android:id="@+id/cusAccountCountryLayout"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="20dp"
                                 android:layout_marginTop="5dp"
-                                android:layout_marginBottom="20dp"
-                                android:layout_marginEnd="20dp">
+                                android:layout_marginEnd="20dp"
+                                android:layout_marginBottom="20dp">
+
                                 <TextView
                                     android:layout_width="0dp"
                                     android:layout_height="40dp"
                                     android:layout_weight="0.3"
                                     android:ellipsize="end"
+                                    android:gravity="center_vertical"
                                     android:singleLine="true"
                                     android:text="Country"
-                                    android:textSize="16sp"
-                                    android:gravity="center_vertical"/>
+                                    android:textSize="16sp" />
+
                                 <EditText
-                                    android:background="@drawable/cus_profile_inputbox_border"
                                     android:id="@+id/cusAccountCountry1"
-                                    android:layout_height="40dp"
                                     android:layout_width="0dp"
+                                    android:layout_height="40dp"
+                                    android:layout_gravity="center_vertical"
                                     android:layout_weight="0.7"
+                                    android:background="@drawable/cus_profile_inputbox_border"
+                                    android:gravity="center_vertical"
                                     android:hint="Country"
-                                    android:textSize="16sp"
+                                    android:inputType="text"
                                     android:paddingStart="15dp"
                                     android:paddingEnd="15dp"
-                                    android:inputType="text"
-                                    android:visibility="gone"
-                                    android:gravity="center_vertical"
-                                    android:layout_gravity="center_vertical"/>
+                                    android:textSize="16sp"
+                                    android:visibility="gone" />
+
                                 <TextView
                                     android:id="@+id/cusAccountCountry2"
-                                    android:layout_height="40dp"
                                     android:layout_width="0dp"
+                                    android:layout_height="40dp"
+                                    android:layout_gravity="center_vertical"
                                     android:layout_weight="0.7"
-                                    android:textSize="16sp"
-                                    android:paddingStart="15dp"
-                                    android:hint="-"
-                                    android:paddingEnd="15dp"
-                                    android:inputType="text"
                                     android:gravity="center_vertical"
-                                    android:layout_gravity="center_vertical"/>
+                                    android:hint="-"
+                                    android:inputType="text"
+                                    android:paddingStart="15dp"
+                                    android:paddingEnd="15dp"
+                                    android:textSize="16sp" />
                             </LinearLayout>
+
                             <RelativeLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content">
@@ -541,62 +563,67 @@
                                     android:layout_marginStart="10dp"
                                     android:layout_marginTop="10dp"
                                     android:layout_marginEnd="10dp"
-                                    android:padding="10dp"
                                     android:layout_marginBottom="10dp"
                                     android:background="@drawable/cus_button_update"
+                                    android:padding="10dp"
                                     android:src="@drawable/edit_profile" />
 
                                 <LinearLayout
                                     android:id="@+id/cusAccountButtons"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
+                                    android:layout_centerHorizontal="true"
                                     android:layout_gravity="center"
                                     android:paddingBottom="10dp"
-                                    android:visibility="gone"
-                                    android:layout_centerHorizontal="true">
+                                    android:visibility="gone">
+
                                     <androidx.appcompat.widget.AppCompatButton
-                                        android:ellipsize="end" android:gravity="center"
                                         android:id="@+id/btnCusUpdate"
-                                        android:layout_height="wrap_content"
+                                        style="@style/CustomNavItemStyle"
                                         android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginEnd="10dp"
                                         android:layout_weight="5"
+                                        android:background="@drawable/hint_profile_update"
+                                        android:ellipsize="end"
+                                        android:gravity="center"
                                         android:singleLine="true"
                                         android:text="Update"
-                                        android:layout_marginEnd="10dp"
-                                        android:textAllCaps="false"
-                                        android:background="@drawable/hint_profile_update"
-                                        style="@style/CustomNavItemStyle"/>
+                                        android:textAllCaps="false" />
+
                                     <androidx.appcompat.widget.AppCompatButton
-                                        android:ellipsize="end" android:gravity="center"
                                         android:id="@+id/btnCusCancel"
-                                        android:layout_height="wrap_content"
+                                        style="@style/CustomNavItemStyle"
                                         android:layout_width="0dp"
-                                        android:layout_weight="5"                                    android:singleLine="true"
-                                        android:text="Cancel"
+                                        android:layout_height="wrap_content"
                                         android:layout_marginStart="10dp"
-                                        android:textAllCaps="false"
+                                        android:layout_weight="5"
                                         android:background="@drawable/hint_profile_cancel"
-                                        style="@style/CustomNavItemStyle"/>
+                                        android:ellipsize="end"
+                                        android:gravity="center"
+                                        android:singleLine="true"
+                                        android:text="Cancel"
+                                        android:textAllCaps="false" />
                                 </LinearLayout>
                             </RelativeLayout>
                         </LinearLayout>
                     </LinearLayout>
                 </androidx.cardview.widget.CardView>
 
-                <!-- Add a ProgressBar for the loading screen -->
                 <FrameLayout
+                    android:id="@+id/loadingAccManProgressBarLayout"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:gravity="center"
-                    android:visibility="gone"
                     android:background="#80000000"
-                    android:id="@+id/loadingAccManProgressBarLayout">
+                    android:gravity="center"
+                    android:visibility="gone">
+
                     <ProgressBar
                         android:id="@+id/loadingAccManProgressBar"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_centerInParent="true" />
+                        android:layout_centerInParent="true"
+                        android:layout_gravity="center" />
                 </FrameLayout>
             </RelativeLayout>
 

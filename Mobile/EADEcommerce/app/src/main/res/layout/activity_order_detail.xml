@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
     android:fillViewport="true"
+    android:fitsSystemWindows="true"
     tools:context=".OrderDetailActivity">
 
     <LinearLayout
@@ -13,7 +13,6 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <!-- Top Bar with Back Button and Cart Title -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -79,7 +78,7 @@
                                 android:layout_height="wrap_content"
                                 android:orientation="horizontal"
                                 android:paddingVertical="10dp">
-                                <!--                                android:visibility="gone"-->
+
                                 <TextView
                                     android:id="@+id/viewTxtUrgent1"
                                     android:layout_width="wrap_content"
@@ -123,8 +122,8 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:orientation="horizontal"
-                                android:visibility="gone"
-                                android:paddingVertical="10dp">
+                                android:paddingVertical="10dp"
+                                android:visibility="gone">
 
                                 <TextView
                                     android:id="@+id/orderId2"
@@ -134,6 +133,7 @@
                                     android:layout_gravity="center_horizontal"
                                     android:text="Order No"
                                     android:textSize="18sp" />
+
                                 <ImageView
                                     android:id="@+id/cusMyBookingArrowDown"
                                     android:layout_width="wrap_content"
@@ -142,20 +142,20 @@
                                     android:layout_centerVertical="true"
                                     android:layout_marginEnd="5dp"
                                     android:paddingHorizontal="20dp"
-                                    android:src="@drawable/expand_more"
                                     android:rotation="180"
+                                    android:src="@drawable/expand_more"
                                     android:textSize="16dp"
                                     android:textStyle="bold" />
 
                             </RelativeLayout>
 
                             <androidx.recyclerview.widget.RecyclerView
-                                android:visibility="gone"
                                 android:id="@+id/recyclerParcelDetails"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_marginHorizontal="10dp"
-                                android:orientation="vertical" />
+                                android:orientation="vertical"
+                                android:visibility="gone" />
 
                         </LinearLayout>
                     </androidx.cardview.widget.CardView>
@@ -173,7 +173,6 @@
                             android:orientation="vertical"
                             android:padding="20dp">
 
-                            <!-- Title "Summary" -->
                             <TextView
                                 android:id="@+id/summaryTitleTextView"
                                 android:layout_width="wrap_content"
@@ -183,7 +182,6 @@
                                 android:textSize="18sp"
                                 android:textStyle="bold" />
 
-                            <!-- Subtotal Row -->
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
@@ -206,7 +204,6 @@
                                     android:textSize="16sp" />
                             </LinearLayout>
 
-                            <!-- Delivery Fee Row -->
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
@@ -229,7 +226,6 @@
                                     android:textSize="16sp" />
                             </LinearLayout>
 
-                            <!-- Total Row -->
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
@@ -254,314 +250,316 @@
                                     android:textStyle="bold" />
                             </LinearLayout>
 
-                    <androidx.cardview.widget.CardView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginVertical="40dp">
-
-                            <androidx.constraintlayout.widget.ConstraintLayout
+                            <androidx.cardview.widget.CardView
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:paddingVertical="20dp">
+                                android:layout_marginVertical="40dp">
 
-
-                                <LinearLayout
-                                    android:id="@+id/paymentLayout"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="40dp"
-                                    android:orientation="horizontal"
-                                    android:paddingHorizontal="20dp"
-                                    app:layout_constraintEnd_toEndOf="parent"
-                                    app:layout_constraintStart_toStartOf="parent"
-                                    app:layout_constraintTop_toTopOf="parent">
-
-                                    <RelativeLayout
-                                        android:layout_width="0dp"
-                                        android:layout_height="40dp"
-                                        android:layout_weight="3">
-
-                                        <ImageView
-                                            android:id="@+id/paymentImage"
-                                            android:layout_width="40dp"
-                                            android:layout_height="40dp"
-                                            android:layout_centerInParent="true"
-                                            android:background="@drawable/circle_border_background"
-                                            android:padding="10dp"
-                                            android:src="@drawable/payment" />
-                                    </RelativeLayout>
-
-                                    <TextView
-                                        android:layout_width="0dp"
-                                        android:layout_height="match_parent"
-                                        android:layout_weight="4"
-                                        android:gravity="center_vertical"
-                                        android:text="Payment" />
-
-                                    <TextView
-                                        android:id="@+id/paymentImageButton"
-                                        android:layout_width="0dp"
-                                        android:layout_height="match_parent"
-                                        android:layout_weight="3"
-                                        android:text=""
-                                        android:gravity="center" />
-
-                                </LinearLayout>
-
-                                <LinearLayout
-                                    android:id="@+id/paymentLineLayout"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="40dp"
-                                    android:orientation="horizontal"
-                                    android:paddingHorizontal="20dp"
-                                    app:layout_constraintEnd_toEndOf="parent"
-                                    app:layout_constraintStart_toStartOf="parent"
-                                    app:layout_constraintTop_toBottomOf="@+id/paymentLayout">
-
-                                    <RelativeLayout
-                                        android:layout_width="0dp"
-                                        android:layout_height="40dp"
-                                        android:layout_weight="3">
-
-                                        <View
-                                            android:id="@+id/paymentImageLine"
-                                            android:layout_width="1dp"
-                                            android:layout_height="match_parent"
-                                            android:layout_centerInParent="true"
-                                            android:layout_marginHorizontal="10dp"
-                                            android:background="@color/ordersTextColor" />
-                                    </RelativeLayout>
-
-                                    <TextView
-                                        android:layout_width="0dp"
-                                        android:layout_height="match_parent"
-                                        android:layout_weight="4"
-                                        android:gravity="center_vertical" />
-
-                                    <TextView
-                                        android:layout_width="0dp"
-                                        android:layout_height="match_parent"
-                                        android:layout_weight="3"
-                                        android:gravity="center" />
-                                </LinearLayout>
-
-                                <LinearLayout
-                                    android:id="@+id/processLayout"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="40dp"
-                                    android:orientation="horizontal"
-                                    android:paddingHorizontal="20dp"
-                                    app:layout_constraintEnd_toEndOf="parent"
-                                    app:layout_constraintStart_toStartOf="parent"
-                                    app:layout_constraintTop_toBottomOf="@+id/paymentLineLayout">
-
-                                    <RelativeLayout
-                                        android:layout_width="0dp"
-                                        android:layout_height="40dp"
-                                        android:layout_weight="3">
-
-                                        <ImageView
-                                            android:id="@+id/receivedImage"
-                                            android:layout_width="40dp"
-                                            android:layout_height="40dp"
-                                            android:layout_centerInParent="true"
-                                            android:background="@drawable/circle_border_background"
-                                            android:padding="10dp"
-                                            android:src="@drawable/pending" />
-                                    </RelativeLayout>
-
-                                    <TextView
-                                        android:layout_width="0dp"
-                                        android:layout_height="match_parent"
-                                        android:layout_weight="4"
-                                        android:gravity="center_vertical"
-                                        android:text="Processed" />
-
-                                    <TextView
-                                        android:id="@+id/receivedImageText"
-                                        android:layout_width="0dp"
-                                        android:layout_height="match_parent"
-                                        android:layout_weight="3"
-                                        android:text=""
-                                        android:gravity="center" />
-                                </LinearLayout>
-                                <LinearLayout
-                                    android:id="@+id/partiallyDeliveredLineLayout"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="40dp"
-                                    android:orientation="horizontal"
-                                    android:paddingHorizontal="20dp"
-                                    app:layout_constraintEnd_toEndOf="parent"
-                                    app:layout_constraintStart_toStartOf="parent"
-                                    app:layout_constraintTop_toBottomOf="@+id/processLayout">
-
-                                    <RelativeLayout
-                                        android:layout_width="0dp"
-                                        android:layout_height="40dp"
-                                        android:layout_weight="3">
-
-                                        <View
-                                            android:id="@+id/partiallyDeliveredImageLine"
-                                            android:layout_width="1dp"
-                                            android:layout_height="match_parent"
-                                            android:layout_centerInParent="true"
-                                            android:layout_marginHorizontal="10dp"
-                                            android:background="@color/ordersTextColor" />
-                                    </RelativeLayout>
-
-                                    <TextView
-                                        android:layout_width="0dp"
-                                        android:layout_height="match_parent"
-                                        android:layout_weight="4"
-                                        android:gravity="center_vertical" />
-
-                                    <TextView
-                                        android:layout_width="0dp"
-                                        android:layout_height="match_parent"
-                                        android:layout_weight="3"
-                                        android:gravity="center" />
-                                </LinearLayout>
-
-                                <LinearLayout
-                                    android:id="@+id/partiallyDeliveredLayout"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="40dp"
-                                    android:orientation="horizontal"
-                                    android:paddingHorizontal="20dp"
-                                    app:layout_constraintEnd_toEndOf="parent"
-                                    app:layout_constraintStart_toStartOf="parent"
-                                    app:layout_constraintTop_toBottomOf="@+id/partiallyDeliveredLineLayout">
-
-                                    <RelativeLayout
-                                        android:layout_width="0dp"
-                                        android:layout_height="40dp"
-                                        android:layout_weight="3">
-
-                                        <ImageView
-                                            android:id="@+id/partiallyDeliveredImage"
-                                            android:layout_width="40dp"
-                                            android:layout_height="40dp"
-                                            android:layout_centerInParent="true"
-                                            android:background="@drawable/circle_border_background"
-                                            android:padding="10dp"
-                                            android:src="@drawable/partial" />
-                                    </RelativeLayout>
-
-                                    <TextView
-                                        android:layout_width="0dp"
-                                        android:layout_height="match_parent"
-                                        android:layout_weight="4"
-                                        android:gravity="center_vertical"
-                                        android:text="Partially Delivered" />
-
-                                    <TextView
-                                        android:id="@+id/partiallyDeliveredImageText"
-                                        android:layout_width="0dp"
-                                        android:layout_height="match_parent"
-                                        android:layout_weight="3"
-                                        android:text=""
-                                        android:gravity="center" />
-                                </LinearLayout>
-<!--                                asdasd-->
-                                <LinearLayout
-                                    android:id="@+id/processLineLayout"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="40dp"
-                                    android:orientation="horizontal"
-                                    android:paddingHorizontal="20dp"
-                                    app:layout_constraintEnd_toEndOf="parent"
-                                    app:layout_constraintStart_toStartOf="parent"
-                                    app:layout_constraintTop_toBottomOf="@+id/partiallyDeliveredLayout">
-
-                                    <RelativeLayout
-                                        android:layout_width="0dp"
-                                        android:layout_height="40dp"
-                                        android:layout_weight="3">
-
-                                        <View
-                                            android:id="@+id/receivedImageLine"
-                                            android:layout_width="1dp"
-                                            android:layout_height="match_parent"
-                                            android:layout_centerInParent="true"
-                                            android:layout_marginHorizontal="10dp"
-                                            android:background="@color/ordersTextColor" />
-                                    </RelativeLayout>
-
-                                    <TextView
-                                        android:layout_width="0dp"
-                                        android:layout_height="match_parent"
-                                        android:layout_weight="4"
-                                        android:gravity="center_vertical" />
-
-                                    <TextView
-                                        android:layout_width="0dp"
-                                        android:layout_height="match_parent"
-                                        android:layout_weight="3"
-                                        android:gravity="center" />
-                                </LinearLayout>
-
-                                <LinearLayout
-                                    android:id="@+id/deliveredLayout"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="40dp"
-                                    android:orientation="horizontal"
-                                    android:paddingHorizontal="20dp"
-                                    app:layout_constraintEnd_toEndOf="parent"
-                                    app:layout_constraintStart_toStartOf="parent"
-                                    app:layout_constraintTop_toBottomOf="@+id/processLineLayout">
-
-                                    <RelativeLayout
-                                        android:layout_width="0dp"
-                                        android:layout_height="40dp"
-                                        android:layout_weight="3">
-
-                                        <ImageView
-                                            android:id="@+id/departedImage"
-                                            android:layout_width="40dp"
-                                            android:layout_height="40dp"
-                                            android:layout_centerInParent="true"
-                                            android:background="@drawable/circle_border_background"
-                                            android:padding="10dp"
-                                            android:src="@drawable/completed" />
-                                    </RelativeLayout>
-
-                                    <TextView
-                                        android:layout_width="0dp"
-                                        android:layout_height="match_parent"
-                                        android:layout_weight="4"
-                                        android:gravity="center_vertical"
-                                        android:text="Delivered" />
-
-                                    <TextView
-                                        android:id="@+id/departedImageText"
-                                        android:layout_width="0dp"
-                                        android:layout_height="match_parent"
-                                        android:layout_weight="3"
-                                        android:text=""
-                                        android:gravity="center" />
-                                </LinearLayout>
-                                <LinearLayout
-                                    android:id="@+id/canceledLayout"
+                                <androidx.constraintlayout.widget.ConstraintLayout
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:orientation="horizontal"
-                                    android:visibility="gone"
-                                    android:paddingHorizontal="20dp"
-                                    android:paddingVertical="20dp"
-                                    app:layout_constraintEnd_toEndOf="parent"
-                                    app:layout_constraintStart_toStartOf="parent"
-                                    app:layout_constraintTop_toBottomOf="@+id/deliveredLayout">
+                                    android:paddingVertical="20dp">
 
-                                    <TextView
-                                        android:id="@+id/canceledTextView"
-                                        android:layout_width="wrap_content"
+
+                                    <LinearLayout
+                                        android:id="@+id/paymentLayout"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="40dp"
+                                        android:orientation="horizontal"
+                                        android:paddingHorizontal="20dp"
+                                        app:layout_constraintEnd_toEndOf="parent"
+                                        app:layout_constraintStart_toStartOf="parent"
+                                        app:layout_constraintTop_toTopOf="parent">
+
+                                        <RelativeLayout
+                                            android:layout_width="0dp"
+                                            android:layout_height="40dp"
+                                            android:layout_weight="3">
+
+                                            <ImageView
+                                                android:id="@+id/paymentImage"
+                                                android:layout_width="40dp"
+                                                android:layout_height="40dp"
+                                                android:layout_centerInParent="true"
+                                                android:background="@drawable/circle_border_background"
+                                                android:padding="10dp"
+                                                android:src="@drawable/payment" />
+                                        </RelativeLayout>
+
+                                        <TextView
+                                            android:layout_width="0dp"
+                                            android:layout_height="match_parent"
+                                            android:layout_weight="4"
+                                            android:gravity="center_vertical"
+                                            android:text="Payment" />
+
+                                        <TextView
+                                            android:id="@+id/paymentImageButton"
+                                            android:layout_width="0dp"
+                                            android:layout_height="match_parent"
+                                            android:layout_weight="3"
+                                            android:gravity="center"
+                                            android:text="" />
+
+                                    </LinearLayout>
+
+                                    <LinearLayout
+                                        android:id="@+id/paymentLineLayout"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="40dp"
+                                        android:orientation="horizontal"
+                                        android:paddingHorizontal="20dp"
+                                        app:layout_constraintEnd_toEndOf="parent"
+                                        app:layout_constraintStart_toStartOf="parent"
+                                        app:layout_constraintTop_toBottomOf="@+id/paymentLayout">
+
+                                        <RelativeLayout
+                                            android:layout_width="0dp"
+                                            android:layout_height="40dp"
+                                            android:layout_weight="3">
+
+                                            <View
+                                                android:id="@+id/paymentImageLine"
+                                                android:layout_width="1dp"
+                                                android:layout_height="match_parent"
+                                                android:layout_centerInParent="true"
+                                                android:layout_marginHorizontal="10dp"
+                                                android:background="@color/ordersTextColor" />
+                                        </RelativeLayout>
+
+                                        <TextView
+                                            android:layout_width="0dp"
+                                            android:layout_height="match_parent"
+                                            android:layout_weight="4"
+                                            android:gravity="center_vertical" />
+
+                                        <TextView
+                                            android:layout_width="0dp"
+                                            android:layout_height="match_parent"
+                                            android:layout_weight="3"
+                                            android:gravity="center" />
+                                    </LinearLayout>
+
+                                    <LinearLayout
+                                        android:id="@+id/processLayout"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="40dp"
+                                        android:orientation="horizontal"
+                                        android:paddingHorizontal="20dp"
+                                        app:layout_constraintEnd_toEndOf="parent"
+                                        app:layout_constraintStart_toStartOf="parent"
+                                        app:layout_constraintTop_toBottomOf="@+id/paymentLineLayout">
+
+                                        <RelativeLayout
+                                            android:layout_width="0dp"
+                                            android:layout_height="40dp"
+                                            android:layout_weight="3">
+
+                                            <ImageView
+                                                android:id="@+id/receivedImage"
+                                                android:layout_width="40dp"
+                                                android:layout_height="40dp"
+                                                android:layout_centerInParent="true"
+                                                android:background="@drawable/circle_border_background"
+                                                android:padding="10dp"
+                                                android:src="@drawable/pending" />
+                                        </RelativeLayout>
+
+                                        <TextView
+                                            android:layout_width="0dp"
+                                            android:layout_height="match_parent"
+                                            android:layout_weight="4"
+                                            android:gravity="center_vertical"
+                                            android:text="Processed" />
+
+                                        <TextView
+                                            android:id="@+id/receivedImageText"
+                                            android:layout_width="0dp"
+                                            android:layout_height="match_parent"
+                                            android:layout_weight="3"
+                                            android:gravity="center"
+                                            android:text="" />
+                                    </LinearLayout>
+
+                                    <LinearLayout
+                                        android:id="@+id/partiallyDeliveredLineLayout"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="40dp"
+                                        android:orientation="horizontal"
+                                        android:paddingHorizontal="20dp"
+                                        app:layout_constraintEnd_toEndOf="parent"
+                                        app:layout_constraintStart_toStartOf="parent"
+                                        app:layout_constraintTop_toBottomOf="@+id/processLayout">
+
+                                        <RelativeLayout
+                                            android:layout_width="0dp"
+                                            android:layout_height="40dp"
+                                            android:layout_weight="3">
+
+                                            <View
+                                                android:id="@+id/partiallyDeliveredImageLine"
+                                                android:layout_width="1dp"
+                                                android:layout_height="match_parent"
+                                                android:layout_centerInParent="true"
+                                                android:layout_marginHorizontal="10dp"
+                                                android:background="@color/ordersTextColor" />
+                                        </RelativeLayout>
+
+                                        <TextView
+                                            android:layout_width="0dp"
+                                            android:layout_height="match_parent"
+                                            android:layout_weight="4"
+                                            android:gravity="center_vertical" />
+
+                                        <TextView
+                                            android:layout_width="0dp"
+                                            android:layout_height="match_parent"
+                                            android:layout_weight="3"
+                                            android:gravity="center" />
+                                    </LinearLayout>
+
+                                    <LinearLayout
+                                        android:id="@+id/partiallyDeliveredLayout"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="40dp"
+                                        android:orientation="horizontal"
+                                        android:paddingHorizontal="20dp"
+                                        app:layout_constraintEnd_toEndOf="parent"
+                                        app:layout_constraintStart_toStartOf="parent"
+                                        app:layout_constraintTop_toBottomOf="@+id/partiallyDeliveredLineLayout">
+
+                                        <RelativeLayout
+                                            android:layout_width="0dp"
+                                            android:layout_height="40dp"
+                                            android:layout_weight="3">
+
+                                            <ImageView
+                                                android:id="@+id/partiallyDeliveredImage"
+                                                android:layout_width="40dp"
+                                                android:layout_height="40dp"
+                                                android:layout_centerInParent="true"
+                                                android:background="@drawable/circle_border_background"
+                                                android:padding="10dp"
+                                                android:src="@drawable/partial" />
+                                        </RelativeLayout>
+
+                                        <TextView
+                                            android:layout_width="0dp"
+                                            android:layout_height="match_parent"
+                                            android:layout_weight="4"
+                                            android:gravity="center_vertical"
+                                            android:text="Partially Delivered" />
+
+                                        <TextView
+                                            android:id="@+id/partiallyDeliveredImageText"
+                                            android:layout_width="0dp"
+                                            android:layout_height="match_parent"
+                                            android:layout_weight="3"
+                                            android:gravity="center"
+                                            android:text="" />
+                                    </LinearLayout>
+
+                                    <LinearLayout
+                                        android:id="@+id/processLineLayout"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="40dp"
+                                        android:orientation="horizontal"
+                                        android:paddingHorizontal="20dp"
+                                        app:layout_constraintEnd_toEndOf="parent"
+                                        app:layout_constraintStart_toStartOf="parent"
+                                        app:layout_constraintTop_toBottomOf="@+id/partiallyDeliveredLayout">
+
+                                        <RelativeLayout
+                                            android:layout_width="0dp"
+                                            android:layout_height="40dp"
+                                            android:layout_weight="3">
+
+                                            <View
+                                                android:id="@+id/receivedImageLine"
+                                                android:layout_width="1dp"
+                                                android:layout_height="match_parent"
+                                                android:layout_centerInParent="true"
+                                                android:layout_marginHorizontal="10dp"
+                                                android:background="@color/ordersTextColor" />
+                                        </RelativeLayout>
+
+                                        <TextView
+                                            android:layout_width="0dp"
+                                            android:layout_height="match_parent"
+                                            android:layout_weight="4"
+                                            android:gravity="center_vertical" />
+
+                                        <TextView
+                                            android:layout_width="0dp"
+                                            android:layout_height="match_parent"
+                                            android:layout_weight="3"
+                                            android:gravity="center" />
+                                    </LinearLayout>
+
+                                    <LinearLayout
+                                        android:id="@+id/deliveredLayout"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="40dp"
+                                        android:orientation="horizontal"
+                                        android:paddingHorizontal="20dp"
+                                        app:layout_constraintEnd_toEndOf="parent"
+                                        app:layout_constraintStart_toStartOf="parent"
+                                        app:layout_constraintTop_toBottomOf="@+id/processLineLayout">
+
+                                        <RelativeLayout
+                                            android:layout_width="0dp"
+                                            android:layout_height="40dp"
+                                            android:layout_weight="3">
+
+                                            <ImageView
+                                                android:id="@+id/departedImage"
+                                                android:layout_width="40dp"
+                                                android:layout_height="40dp"
+                                                android:layout_centerInParent="true"
+                                                android:background="@drawable/circle_border_background"
+                                                android:padding="10dp"
+                                                android:src="@drawable/completed" />
+                                        </RelativeLayout>
+
+                                        <TextView
+                                            android:layout_width="0dp"
+                                            android:layout_height="match_parent"
+                                            android:layout_weight="4"
+                                            android:gravity="center_vertical"
+                                            android:text="Delivered" />
+
+                                        <TextView
+                                            android:id="@+id/departedImageText"
+                                            android:layout_width="0dp"
+                                            android:layout_height="match_parent"
+                                            android:layout_weight="3"
+                                            android:gravity="center"
+                                            android:text="" />
+                                    </LinearLayout>
+
+                                    <LinearLayout
+                                        android:id="@+id/canceledLayout"
+                                        android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
-                                        android:text="Order was canceled due to"
-                                        android:textSize="18sp"
-                                        android:textColor="@color/red"/>
-                                </LinearLayout>
+                                        android:orientation="horizontal"
+                                        android:paddingHorizontal="20dp"
+                                        android:paddingVertical="20dp"
+                                        android:visibility="gone"
+                                        app:layout_constraintEnd_toEndOf="parent"
+                                        app:layout_constraintStart_toStartOf="parent"
+                                        app:layout_constraintTop_toBottomOf="@+id/deliveredLayout">
 
-                            </androidx.constraintlayout.widget.ConstraintLayout>
-                    </androidx.cardview.widget.CardView>
+                                        <TextView
+                                            android:id="@+id/canceledTextView"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:text="Order was canceled due to"
+                                            android:textColor="@color/red"
+                                            android:textSize="18sp" />
+                                    </LinearLayout>
+
+                                </androidx.constraintlayout.widget.ConstraintLayout>
+                            </androidx.cardview.widget.CardView>
                         </LinearLayout>
 
                     </RelativeLayout>

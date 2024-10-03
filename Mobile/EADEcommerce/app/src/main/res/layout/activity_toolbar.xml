@@ -36,12 +36,10 @@
                 android:scaleType="fitCenter"
                 android:src="@drawable/logo" />
 
-            <!-- Container for Cart Icon and Count Badge -->
             <FrameLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content">
 
-                <!-- Cart Button -->
                 <ImageButton
                     android:id="@+id/buttonDrawerMenuRight"
                     android:layout_width="wrap_content"
@@ -50,7 +48,6 @@
                     android:padding="5dp"
                     android:src="@drawable/cart" />
 
-                <!-- Cart Count TextView -->
                 <TextView
                     android:id="@+id/cart_count"
                     android:layout_width="20dp"

@@ -46,7 +46,6 @@
             android:text="Date"
             android:textSize="12sp" />
 
-        <!-- RatingBar -->
         <RatingBar
             android:id="@+id/ratingBar"
             style="?android:attr/ratingBarStyleSmall"
@@ -61,44 +60,6 @@
             android:rating="0"
             android:stepSize="0.1" />
 
-        <!--        <LinearLayout-->
-        <!--            android:layout_width="match_parent"-->
-        <!--            android:layout_height="wrap_content"-->
-        <!--            android:orientation="horizontal"-->
-        <!--            android:layout_marginTop="8dp"-->
-        <!--            android:gravity="center_vertical">-->
-
-        <!--            &lt;!&ndash; RatingBar &ndash;&gt;-->
-        <!--            <RatingBar-->
-        <!--                android:id="@+id/ratingBar"-->
-        <!--                android:layout_width="wrap_content"-->
-        <!--                android:layout_height="wrap_content"-->
-        <!--                android:rating="4"-->
-        <!--                android:numStars="5"-->
-        <!--                android:progressTint="@color/gold"-->
-        <!--                android:max="5"-->
-        <!--                android:progressTintMode="src_atop"-->
-        <!--                android:stepSize="0.1"-->
-        <!--                android:isIndicator="true"-->
-        <!--                style="?android:attr/ratingBarStyleSmall" />-->
-
-        <!--            <LinearLayout-->
-        <!--                android:layout_width="0dp"-->
-        <!--                android:layout_weight="1"-->
-        <!--                android:gravity="end"-->
-        <!--                android:layout_height="wrap_content">-->
-        <!--            <ImageView-->
-        <!--                android:id="@+id/profileEditImage"-->
-        <!--                android:layout_width="40dp"-->
-        <!--                android:layout_height="40dp"-->
-        <!--                android:padding="10dp"-->
-        <!--                android:background="@drawable/cus_button_update"-->
-        <!--                android:src="@drawable/edit_profile" />-->
-
-        <!--        </LinearLayout>-->
-        <!--        </LinearLayout>-->
-
-        <!-- Comments -->
         <TextView
             android:id="@+id/commentTextView"
             android:layout_width="wrap_content"
@@ -107,17 +68,16 @@
             android:text="This is a comment"
             android:textSize="14sp" />
 
-        <!-- EditText for user comments -->
         <EditText
             android:id="@+id/commentEditTextInput"
-            android:visibility="gone"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
+            android:gravity="top"
+            android:hint="Enter your comments..."
+            android:inputType="textMultiLine|textCapSentences"
             android:minHeight="100dp"
             android:textSize="14sp"
-            android:inputType="textMultiLine|textCapSentences"
-            android:hint="Enter your comments..."
-            android:gravity="top" />
+            android:visibility="gone" />
     </LinearLayout>
 </androidx.cardview.widget.CardView>
