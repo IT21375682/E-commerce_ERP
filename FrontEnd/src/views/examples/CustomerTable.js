@@ -5,7 +5,10 @@ import {
   Table,
   Container,
   Row,
-  Button
+  Button,
+  FormGroup,
+  Col,
+  Input
 } from "reactstrap";
 import Header from "components/Headers/Header.js";
 import React, { useState, useEffect } from "react"; 
@@ -14,6 +17,7 @@ import axios from "axios";
 const CustomerTable = () => {
   const [users, setUsers] = useState([]); // Initialize state to hold user data
   const [loading, setLoading] = useState(true); // State to track loading status
+  const [searchTerm, setSearchTerm] = useState(""); // State to hold search input
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -33,13 +37,20 @@ const CustomerTable = () => {
   // Filter the users to only include those with the role of 'CUSTOMER' and who are active
   const activeCustomers = users.filter((user) => user.role === 'CUSTOMER' && user.isActive);
 
+  // Filter active customers based on search term (name, email, or phone)
+  const filteredCustomers = activeCustomers.filter((customer) => 
+    customer.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    customer.email?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    customer.phone?.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
   const UserStatus = async (customerId) => {
     // Confirmation dialog
     const confirmDelete = window.confirm('Are you sure you want to deactivate this Customer account?');
     
     if (confirmDelete) {
       try {
-        // Call the API to update the vendor's active status
+        // Call the API to update the customer's active status
         const response = await axios.put(
           `https://localhost:7179/api/User/${customerId}/status`, 
           { isActive: false }, 
@@ -49,7 +60,7 @@ const CustomerTable = () => {
         if (response.status === 204) { // No Content status returned on successful update
           alert('Customer account has been deactivated successfully.');
 
-          // Update the local state to reflect the deactivated vendor
+          // Update the local state to reflect the deactivated customer
           setUsers((prevUsers) =>
             prevUsers.map((user) =>
               user.id === customerId ? { ...user, isActive: false } : user
@@ -63,7 +74,8 @@ const CustomerTable = () => {
         alert('An error occurred while trying to deactivate the Customer.');
       }
     }
-  }
+  };
+
   return (
     <>
       <Container className="mt--7" fluid>
@@ -72,7 +84,21 @@ const CustomerTable = () => {
           <div className="col mt-7">
             <Card className="shadow">
               <CardHeader className="border-0">
-                <h3 className="mb-0">Active Customers</h3>
+                <Row>
+                  <Col md="8">
+                    <h3 className="mb-0">Active Customers</h3>
+                  </Col>
+                  <Col md="4" className="text-right">
+                    <FormGroup>
+                      <Input
+                        type="text"
+                        placeholder="Search by name, email, or phone"
+                        value={searchTerm}  // Bind the input field to the searchTerm state
+                        onChange={(e) => setSearchTerm(e.target.value)} // Update searchTerm when input changes
+                      />
+                    </FormGroup>
+                  </Col>
+                </Row>
               </CardHeader>
               <Table className="align-items-center table-flush" responsive>
                 <thead className="thead-light">
@@ -105,15 +131,15 @@ const CustomerTable = () => {
                       <td colSpan="7" className="text-center">Loading...</td>
                     </tr>
                   ) : (
-                    activeCustomers.length > 0 ? (
-                      activeCustomers.map((customer) => (
+                    filteredCustomers.length > 0 ? (
+                      filteredCustomers.map((customer) => (
                         <tr key={customer.id}>
                           <td>{customer.name}</td>
                           <td>{customer.email}</td>
                           <td>{customer.phone}</td>
                           <td>
                             {customer.address
-                              ? `${customer.address?.street || 'N/A'}, ${customer.address?.city || 'N/A'}, ${customer.address?.postalCode || 'N/A'}, ${customer.address?.country || 'N/A'}`
+                              ? `${customer.address?.street || 'N/A'}, ${customer.address?.city || 'N/A'}, ${customer.address?.postalCode || 'N/A'}, ${customer.address?.country || 'N/A'}` 
                               : 'No Address'}
                           </td>
                           <td>
@@ -133,7 +159,7 @@ const CustomerTable = () => {
                             <Button
                               color="danger"
                               size="md"
-                              onClick={() => UserStatus(customer.id)} // Navigate to activate customer page
+                              onClick={() => UserStatus(customer.id)} // Deactivate customer
                               className="text-end"
                             >
                               Deactivate

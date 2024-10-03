@@ -5,7 +5,10 @@ import {
   Table,
   Container,
   Row,
-  Button
+  Button,
+  FormGroup,
+  Col,
+  Input
 } from "reactstrap";
 import Header from "components/Headers/Header.js";
 import React, { useState, useEffect } from "react"; 
@@ -14,6 +17,7 @@ import axios from "axios";
 const CustomerReqTable = () => {
   const [users, setUsers] = useState([]); // Initialize state to hold user data
   const [loading, setLoading] = useState(true); // State to track loading status
+  const [searchTerm, setSearchTerm] = useState(""); // State to hold search input
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -31,41 +35,47 @@ const CustomerReqTable = () => {
   }, []); // Empty dependency array means this useEffect runs once when the component mounts
 
   // Filter the users to only include those with the role of 'CUSTOMER' and who are inactive
-  const inactiveCustomers = users.filter((user) => user.role === 'CUSTOMER' && !user.isActive);
+  const inactiveCustomers = users.filter((user) => user.role === 'CUSTOMER' && !user.isActive && user.isNew);
+
+  // Filter inactive customers based on search term (name, email, or phone)
+  const filteredCustomers = inactiveCustomers.filter((customer) =>
+    (customer.name?.toLowerCase() || "").includes(searchTerm.toLowerCase()) ||
+    (customer.email?.toLowerCase() || "").includes(searchTerm.toLowerCase()) ||
+    (customer.phone?.toLowerCase() || "").includes(searchTerm.toLowerCase())
+  );
 
   const UserStatus = async (customerId) => {
     // Confirmation dialog
-    const confirmDelete = window.confirm('Are you sure you want to deactivate this vendor account?');
+    const confirmActivate = window.confirm('Are you sure you want to activate this customer account?');
     
-    if (confirmDelete) {
+    if (confirmActivate) {
       try {
-        // Call the API to update the vendor's active status
+        // Call the API to update the customer's active status
         const response = await axios.put(
           `https://localhost:7179/api/User/${customerId}/status`, 
-          { isActive: true }, 
+          { isActive: true, isNew: false }, 
           { headers: { 'Content-Type': 'application/json' } }
         );
 
         if (response.status === 204) { // No Content status returned on successful update
-          alert('Vendor account has been deactivated successfully.');
+          alert('Customer account has been activated successfully.');
 
-          // Update the local state to reflect the deactivated vendor
+          // Update the local state to reflect the activated customer
           setUsers((prevUsers) =>
             prevUsers.map((user) =>
-              user.id === customerId ? { ...user, isActive: false } : user
+              user.id === customerId ? { ...user, isActive: true, isNew: false } : user
             )
           );
         } else {
-          alert('Failed to deactivate the vendor.');
+          alert('Failed to activate the customer.');
         }
       } catch (error) {
-        console.error('Error deactivating vendor:', error);
-        alert('An error occurred while trying to deactivate the vendor.');
+        console.error('Error activating customer:', error);
+        alert('An error occurred while trying to activate the customer.');
       }
     }
+  };
 
-  }
-  
   return (
     <>
       <Container className="mt--7" fluid>
@@ -74,7 +84,21 @@ const CustomerReqTable = () => {
           <div className="col mt-7">
             <Card className="shadow">
               <CardHeader className="border-0">
-                <h3 className="mb-0"> Customer Requests</h3>
+                <Row>
+                  <Col md="8">
+                    <h3 className="mb-0">Customer Requests</h3>
+                  </Col>
+                  <Col md="4" className="text-right">
+                    <FormGroup>
+                      <Input
+                        type="text"
+                        placeholder="Search by name, email, or phone"
+                        value={searchTerm}  // Bind the input field to the searchTerm state
+                        onChange={(e) => setSearchTerm(e.target.value)} // Update searchTerm when input changes
+                      />
+                    </FormGroup>
+                  </Col>
+                </Row>
               </CardHeader>
               <Table className="align-items-center table-flush" responsive>
                 <thead className="thead-light">
@@ -86,7 +110,7 @@ const CustomerReqTable = () => {
                         onClick={() => window.location.href = "/admin/InactiveCus-table"} // Or use React Router for navigation
                         className="text-end"
                       >
-                        Inactive Customer
+                        Inactive Customers
                       </Button>
                     </th>
                   </tr>
@@ -107,15 +131,15 @@ const CustomerReqTable = () => {
                       <td colSpan="7" className="text-center">Loading...</td>
                     </tr>
                   ) : (
-                    inactiveCustomers.length > 0 ? (
-                      inactiveCustomers.map((customer) => (
+                    filteredCustomers.length > 0 ? (
+                      filteredCustomers.map((customer) => (
                         <tr key={customer.id}>
                           <td>{customer.name}</td>
                           <td>{customer.email}</td>
                           <td>{customer.phone}</td>
                           <td>
                             {customer.address
-                              ? `${customer.address?.street || 'N/A'}, ${customer.address?.city || 'N/A'}, ${customer.address?.postalCode || 'N/A'}, ${customer.address?.country || 'N/A'}`
+                              ? `${customer.address?.street || 'N/A'}, ${customer.address?.city || 'N/A'}, ${customer.address?.postalCode || 'N/A'}, ${customer.address?.country || 'N/A'}` 
                               : 'No Address'}
                           </td>
                           <td>
@@ -135,7 +159,7 @@ const CustomerReqTable = () => {
                             <Button
                               color="success"
                               size="md"
-                              onClick={() => UserStatus(customer.id)} // Navigate to activate customer page
+                              onClick={() => UserStatus(customer.id)} // Activate customer
                               className="text-end"
                             >
                               Activate
