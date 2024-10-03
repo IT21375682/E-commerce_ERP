@@ -18,10 +18,13 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import java.util.ArrayList;
+
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * Fragment class for displaying pending orders with filtering options.
+ */
 public class PendingOrderFragment extends Fragment {
     private RecyclerView ordersRecyclerView;
     private PendingOrderAdapter orderAdapter;
@@ -31,15 +34,15 @@ public class PendingOrderFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        // Inflate the layout for this fragment and initialize views
         View view = inflater.inflate(R.layout.fragment_pending_order, container, false);
         ordersRecyclerView = view.findViewById(R.id.ordersRecyclerView);
         filterSpinner = view.findViewById(R.id.filterSpinner);
 
-        // Initialize mock data
-        orderList = new ArrayList<>();
-        orderList.add(new Order("Order #1", "2024-09-24", 50.00));
-        orderList.add(new Order("Order #2", "2024-09-23", 30.00));
-        orderList.add(new Order("Order #3", "2024-09-22", 20.00));
+        // Retrieve the order list from arguments
+        if (getArguments() != null) {
+            orderList = getArguments().getParcelableArrayList("orderList");
+        }
 
         // Set up RecyclerView
         orderAdapter = new PendingOrderAdapter(orderList, getContext());
@@ -66,10 +69,11 @@ public class PendingOrderFragment extends Fragment {
             }
         });
 
-        return view;
+        return view; // Return the inflated view
     }
 
     private void sortOrderList(String sortOption) {
+        // Sort the order list based on the selected option
         if (sortOption.equals("Sort by Newest")) {
             // Sort by newest (descending order)
             Collections.sort(orderList, (o1, o2) -> o2.getDate().compareTo(o1.getDate()));
@@ -77,6 +81,6 @@ public class PendingOrderFragment extends Fragment {
             // Sort by oldest (ascending order)
             Collections.sort(orderList, (o1, o2) -> o1.getDate().compareTo(o2.getDate()));
         }
-        orderAdapter.notifyDataSetChanged();
+        orderAdapter.notifyDataSetChanged(); // Notify the adapter of data changes
     }
 }

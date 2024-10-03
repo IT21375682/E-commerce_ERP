@@ -1,29 +1,37 @@
 package com.example.eadecommerce.adapter;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.eadecommerce.CheckoutActivity;
 import com.example.eadecommerce.ProductDetailActivity;
 import com.example.eadecommerce.R;
-import com.example.eadecommerce.model.CartItem;
-import com.squareup.picasso.Picasso;
+import com.example.eadecommerce.model.CartProductResponse;
 
 import java.util.List;
 
+/**
+ * The CheckoutAdapter class is a RecyclerView adapter for displaying cart items during checkout.
+ * It binds cart item data to the views and handles item click events to navigate to product details.
+ */
 public class CheckoutAdapter extends RecyclerView.Adapter<CheckoutAdapter.CartViewHolder> {
-    private List<CartItem> cartItems;
+    private List<CartProductResponse> cartItems;
 
-    public CheckoutAdapter(List<CartItem> cartItems) {
+    /**
+     * Constructor to initialize the adapter with a list of cart items.
+     * @param cartItems The list of cart items.
+     */
+    public CheckoutAdapter(List<CartProductResponse> cartItems) {
         this.cartItems = cartItems;
     }
 
@@ -35,32 +43,24 @@ public class CheckoutAdapter extends RecyclerView.Adapter<CheckoutAdapter.CartVi
 
     @Override
     public void onBindViewHolder(CartViewHolder holder, int position) {
-        CartItem item = cartItems.get(position);
-        holder.itemNameTextView.setText(item.getName());
-        holder.itemPriceTextView.setText(String.format("Price: $%.2f", item.getPrice()));
+        CartProductResponse item = cartItems.get(position);
+        holder.itemNameTextView.setText(item.getProductName());
+        holder.itemPriceTextView.setText(String.format("Price: LKR %.2f", item.getPrice()));
         holder.itemCountTextView.setText("Count: " + item.getCount());
-        // Load image using an image loading library like Picasso
-        Picasso.get()
-                .load(item.getImageUrl())
-                .placeholder(R.drawable.logo_dark)
-                .error(R.drawable.logo_dark)
-                .into(holder.itemImageView);
 
-        // Handle item click to open ProductDetailActivity
+        // Decode the base64 image string and set it to the ImageView
+        if (item.getProductImage() != null && !item.getProductImage().isEmpty()) {
+            byte[] decodedString = Base64.decode(item.getProductImage(), Base64.DEFAULT);
+            Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+            holder.itemImageView.setImageBitmap(decodedByte);
+        } else {
+            holder.itemImageView.setImageResource(R.drawable.placeholder);
+        }
+
         holder.itemLayout.setOnClickListener(v -> {
             Log.d("Checkout Adapter", "Item clicked");
-
-            // Create an Intent to start ProductDetailActivity
             Intent intent = new Intent(holder.itemLayout.getContext(), ProductDetailActivity.class);
-
-            // Pass product details to ProductDetailActivity
-            intent.putExtra("productName", item.getName());
-            intent.putExtra("productPrice", item.getPrice());
-            intent.putExtra("productImageUrl", item.getImageUrl());
-            intent.putExtra("productCategory", "Default");
-            intent.putExtra("productCount", item.getCount());
-
-            // Start the ProductDetailActivity
+            intent.putExtra("productId", item.getProductId());
             holder.itemLayout.getContext().startActivity(intent);
         });
     }

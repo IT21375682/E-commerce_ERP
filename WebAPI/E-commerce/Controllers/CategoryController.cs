@@ -3,6 +3,7 @@ using E_commerce.Services;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System;
+using E_commerce.DTOs;
 
 namespace E_commerce.Controllers
 {
@@ -24,6 +25,16 @@ namespace E_commerce.Controllers
             var category = _categoryService.GetAllCategories();
             return Ok(category);
         }
+
+        // Get only active categories
+        [HttpGet("active")]
+         public ActionResult<IEnumerable<Category>> GetAllActiveCategories()
+         {
+            var activeCategories = _categoryService.GetAllActiveCategories();
+            return Ok(activeCategories);
+         }
+
+
 
         // Get category by id
         [HttpGet("{id}")]
@@ -79,5 +90,15 @@ namespace E_commerce.Controllers
             _categoryService.DeleteCategory(id);
             return NoContent();
         }
+
+        // Get all active categories
+        [HttpGet("active-categories")]
+        public ActionResult<IEnumerable<CategoryDto>> GetAllActiveCategoriesNames()
+        {
+            var activeCategories = _categoryService.GetAllActiveCategoriesNames();
+            return Ok(activeCategories);
+        }
+
+
     }
 }

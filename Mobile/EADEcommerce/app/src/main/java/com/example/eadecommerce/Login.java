@@ -1,12 +1,13 @@
 package com.example.eadecommerce;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.os.Handler;
 import android.text.SpannableString;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
 import android.text.style.UnderlineSpan;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -17,9 +18,22 @@ import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
+
+import com.auth0.android.jwt.JWT;
+import com.example.eadecommerce.responses.LoginRequest;
+import com.example.eadecommerce.responses.LoginResponse;
+import com.example.eadecommerce.network.ApiService;
+import com.example.eadecommerce.network.RetrofitClient;
+
+import org.json.JSONObject;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class Login extends AppCompatActivity {
 
@@ -47,6 +61,16 @@ public class Login extends AppCompatActivity {
         cusLoginNoUsernamePassword = findViewById(R.id.cus_login_no_username_password);
         layoutPassword = findViewById(R.id.layout_password);
 
+        // Check for an existing session
+        SharedPreferences preferences = getSharedPreferences("myPrefs", MODE_PRIVATE);
+        String token = preferences.getString("jwt_token", null);
+        if (token != null) {
+            // Token exists, navigate to Main activity
+            Intent intent = new Intent(Login.this, Main.class);
+            startActivity(intent);
+            finish();
+        }
+
         // Underline "Register" text
         String registerString = "Register";
         SpannableString mSpannableString = new SpannableString(registerString);
@@ -58,26 +82,105 @@ public class Login extends AppCompatActivity {
 
         // Handle sign-up text click
         txtSignup.setOnClickListener(v -> {
-        Intent intent = new Intent(Login.this, SignUp.class);
-        startActivity(intent);
-    });
+            Intent intent = new Intent(Login.this, SignUp.class);
+            startActivity(intent);
+        });
 
         // Handle login button click
         btnLogin.setOnClickListener(v -> {
-        String email = edtEmail.getText().toString().trim();
-        String password = edtPassword.getText().toString().trim();
+            String email = edtEmail.getText().toString().trim();
+            String password = edtPassword.getText().toString().trim();
 
-        if (validateInputs(email, password)) {
-            cusLoginNoUsernamePassword.setVisibility(View.GONE);
-            showLoading();
-            // Navigate to Main activity after 2 seconds
-            new Handler().postDelayed(() -> {
-                Intent intent = new Intent(Login.this, Main.class);
-                finish();
-                startActivity(intent);
-            }, 2000);
-        }
-    });
+            // Log the start of the login process
+            Log.d("LoginActivity", "Login button clicked");
+
+            if (validateInputs(email, password)) {
+                cusLoginNoUsernamePassword.setVisibility(View.GONE);
+                showLoading();
+
+                // Log input values
+                Log.d("LoginActivity", "Email: " + email);
+                Log.d("LoginActivity", "Password: " + password);
+
+                // Create the login request object
+                LoginRequest loginRequest = new LoginRequest(email, password);
+
+                // Call the API
+                ApiService apiService = RetrofitClient.getRetrofitInstance().create(ApiService.class);
+                Call<LoginResponse> call = apiService.loginUser(loginRequest);
+
+                // Handle the API response
+                call.enqueue(new Callback<LoginResponse>() {
+                    @Override
+                    public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
+                        hideLoading();
+                        // Log the API response
+                        Log.d("LoginActivity", "API call successful. Response code: " + response.code());
+
+                        if (response.isSuccessful() && response.body() != null) {
+                            // Save token (use SharedPreferences or other storage)
+                            String token = response.body().getToken();
+                            Log.d("LoginActivity", "Token received: " + token);
+
+                            // Decode the JWT
+                            JWT jwt = new JWT(token);
+                            String email = jwt.getClaim("email").asString();
+                            String role = jwt.getClaim("role").asString();
+                            String name = jwt.getClaim("Name").asString();
+                            String userId = jwt.getClaim("id").asString();
+
+                            // Log the extracted claims
+                            Log.d("Decoded JWT", "Email: " + email);
+                            Log.d("Decoded JWT", "Role: " + role);
+                            Log.d("Decoded JWT", "Name: " + name);
+                            Log.d("Decoded JWT", "User ID: " + userId);
+
+                            SharedPreferences preferences = getSharedPreferences("myPrefs", MODE_PRIVATE);
+                            SharedPreferences.Editor editor = preferences.edit();
+                            editor.putString("jwt_token", token);
+                            editor.apply();
+                            Log.d("My jwt_token", token);
+
+                            // Navigate to the main activity
+                            Intent intent = new Intent(Login.this, Main.class);
+                            startActivity(intent);
+                            finish();
+                        } else {
+                            // Handle different error cases
+                            try {
+                                JSONObject errorBody = new JSONObject(response.errorBody().string());
+                                String message = errorBody.getString("message"); // Change "Message" to "message"
+
+                                if (message.equals("Your account is not active. Please contact support.")) {
+                                    cusLoginNoUsernamePassword.setVisibility(View.VISIBLE);
+                                    cusLoginNoUsernamePassword.setText("Your account is not active. Please contact support.");
+                                } else {
+                                    cusLoginNoUsernamePassword.setVisibility(View.VISIBLE);
+                                    cusLoginNoUsernamePassword.setText("Invalid email or password");
+                                }
+
+                                Log.e("LoginActivity", "Invalid login attempt. Message: " + message);
+                            } catch (Exception e) {
+                                Log.e("LoginActivity", "Error parsing error response: " + e.getMessage());
+                                cusLoginNoUsernamePassword.setVisibility(View.VISIBLE);
+                                cusLoginNoUsernamePassword.setText("An error occurred. Please try again.");
+                            }
+
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<LoginResponse> call, Throwable t) {
+                        hideLoading();
+                        cusLoginNoUsernamePassword.setVisibility(View.VISIBLE);
+                        cusLoginNoUsernamePassword.setText("Login failed. Please try again.");
+                        // Log the error in case the call fails
+                        Log.e("LoginActivity", "Login API call failed: " + t.getMessage());
+                    }
+                });
+            }
+        });
+
     }
 
     // Function to toggle password visibility
@@ -132,12 +235,12 @@ public class Login extends AppCompatActivity {
     // Create the horizontal rotation animation for the world image
     private RotateAnimation createHorizontalRotationAnimation() {
         RotateAnimation rotateAnimation = new RotateAnimation(
-            0.0f,
-            360.0f,
-            RotateAnimation.RELATIVE_TO_SELF,
-            0.5f,
-            RotateAnimation.RELATIVE_TO_SELF,
-            0.5f
+                0.0f,
+                360.0f,
+                RotateAnimation.RELATIVE_TO_SELF,
+                0.5f,
+                RotateAnimation.RELATIVE_TO_SELF,
+                0.5f
         );
         rotateAnimation.setDuration(1000); // Animation duration in milliseconds
         return rotateAnimation;
@@ -155,5 +258,14 @@ public class Login extends AppCompatActivity {
         moveAnimation.setDuration(2000); // Animation duration in milliseconds
         moveAnimation.setRepeatCount(Animation.INFINITE); // Repeat indefinitely
         return moveAnimation;
+    }
+
+    // Hide loading spinner
+    private void hideLoading() {
+        if (cusWalletProgressBarLayout != null) {
+            cusWalletProgressBarLayout.setVisibility(View.GONE);
+            cusWalletProgressBarLayout.setClickable(false);
+            cusWalletProgressBarLayout.setFocusable(false);
+        }
     }
 }

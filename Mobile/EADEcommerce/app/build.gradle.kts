@@ -42,4 +42,13 @@ dependencies {
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
     implementation(libs.picasso)
+
+    implementation(libs.retrofit)
+    implementation(libs.converter.gson)
+    implementation(libs.logging.interceptor)
+    implementation(libs.lifecycle.runtime.ktx)
+
+    implementation(libs.logging.interceptor.v493)
+    implementation(libs.lifecycle.runtime.ktx.v240)
+    implementation (libs.jwtdecode)
 }

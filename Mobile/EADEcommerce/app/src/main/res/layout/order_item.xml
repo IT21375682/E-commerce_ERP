@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -12,12 +11,11 @@
         android:id="@+id/orderLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
         android:layout_gravity="center"
         android:gravity="center"
+        android:orientation="horizontal"
         android:padding="16dp">
 
-        <!-- Left Side for Order Number and Date -->
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -36,24 +34,23 @@
                 android:id="@+id/dateTextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="01/01/2024"
                 android:paddingTop="10dp"
+                android:text="01/01/2024"
                 android:textSize="12sp" />
         </LinearLayout>
 
-        <!-- Right Side for Currency and Total -->
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="end">
+            android:gravity="end"
+            android:orientation="horizontal">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginRight="10dp"
                 android:text="LKR"
-                android:textSize="14sp"
-                android:layout_marginRight="10dp" />
+                android:textSize="14sp" />
 
             <TextView
                 android:id="@+id/totalTextView"

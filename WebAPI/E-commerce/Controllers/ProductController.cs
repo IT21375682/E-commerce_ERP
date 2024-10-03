@@ -1,4 +1,5 @@
-﻿using E_commerce.Models;
+﻿using E_commerce.DTOs;
+using E_commerce.Models;
 using E_commerce.Services;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
@@ -120,6 +121,64 @@ namespace E_commerce.Controllers
                 return Ok(message);
             }
             return BadRequest(message);
+        }
+
+        // Get available stock by product ID
+        [HttpGet("stock/{productId}")]
+        public ActionResult<int> GetAvailableStockById(string productId)
+        {
+            try
+            {
+                var stock = _productService.GetProductStockById(productId);
+                return Ok(stock);
+            }
+            catch (Exception ex)
+            {
+                return NotFound(ex.Message);
+            }
+        }
+
+        // GET: api/product/active
+        [HttpGet("active")]
+        public ActionResult<IEnumerable<Product>> GetAllActiveProducts()
+        {
+            var products = _productService.GetAllActiveProducts();
+            return Ok(products);
+        }
+
+        // GET: api/product/active/category/{categoryId}
+        [HttpGet("active/category/{categoryId}")]
+        public ActionResult<IEnumerable<Product>> GetAllActiveCategoryProducts(string categoryId)
+        {
+            var products = _productService.GetAllActiveCategoryProducts(categoryId);
+            return Ok(products);
+        }
+
+        // GET: api/product/active-categories-products
+        [HttpGet("active-categories-products")]
+        public ActionResult<IEnumerable<(Category, IEnumerable<Product>)>> GetAllActiveCategoryAndActiveProducts()
+        {
+            var result = _productService.GetAllActiveCategoryAndActiveProducts();
+            return Ok(result);
+        }
+          [HttpGet("active-details")]
+        public ActionResult<IEnumerable<ProductDetailsDto>> GetAllActiveProductsWithDetails()
+        {
+            var products = _productService.GetAllActiveProductsWithDetails();
+            return Ok(products);
+        }
+
+        [HttpGet("active-details/{productId}")]
+        public ActionResult<ProductDetailsDto> GetActiveProductWithDetailsById(string productId)
+        {
+            var product = _productService.GetActiveProductWithDetailsById(productId);
+
+            if (product == null)
+            {
+                return NotFound($"Product with Id {productId} not found or is inactive.");
+            }
+
+            return Ok(product);
         }
 
     }

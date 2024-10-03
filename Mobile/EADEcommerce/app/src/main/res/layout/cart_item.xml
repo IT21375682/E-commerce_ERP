@@ -23,9 +23,9 @@
             android:id="@+id/itemLayout"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
             android:layout_weight="1"
-            android:orientation="vertical"
-            android:layout_marginStart="8dp">
+            android:orientation="vertical">
 
             <TextView
                 android:id="@+id/itemNameTextView"
@@ -39,7 +39,7 @@
                 android:id="@+id/itemPriceTextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Price: $0.00"
+                android:text="Price: LKR 0.00"
                 android:textSize="14sp" />
 
             <TextView
@@ -50,41 +50,40 @@
                 android:textSize="14sp" />
         </LinearLayout>
 
-        <!-- Plus and Minus buttons on the right -->
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
             android:descendantFocusability="blocksDescendants"
-            android:gravity="center">
+            android:gravity="center"
+            android:orientation="horizontal">
 
             <Button
                 android:id="@+id/minusButton"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:text="-"
+                android:layout_gravity="center"
                 android:gravity="center"
-                android:textSize="18sp"
                 android:padding="0dp"
-                android:layout_gravity="center" />
+                android:text="-"
+                android:textSize="18sp" />
 
             <TextView
                 android:id="@+id/itemCountChangeTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:gravity="center"
                 android:padding="8dp"
                 android:text="1"
-                android:textSize="18sp"
-                android:gravity="center" />
+                android:textSize="18sp" />
 
             <Button
                 android:id="@+id/plusButton"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:text="+"
+                android:layout_gravity="center"
                 android:padding="0dp"
-                android:textSize="18sp"
-                android:layout_gravity="center" />
+                android:text="+"
+                android:textSize="18sp" />
         </LinearLayout>
 
     </LinearLayout>

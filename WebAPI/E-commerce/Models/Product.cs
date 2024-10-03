@@ -1,13 +1,14 @@
-﻿using MongoDB.Bson.Serialization.Attributes;
-using MongoDB.Bson;
+﻿using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Attributes;
 
 namespace E_commerce.Models
 {
     public class Product
     {
         [BsonId]
-        [BsonRepresentation(BsonType.ObjectId)]
-        public string Id { get; set; }  // Unique product ID
+        [BsonRepresentation(BsonType.ObjectId)]  // Tells MongoDB to store this as an ObjectId but treat it as a string in C#
+        public string? Id { get; set; }  // Unique product ID
+
         [BsonElement("name")]
         public string Name { get; set; }
 
@@ -19,7 +20,7 @@ namespace E_commerce.Models
 
         [BsonElement("description")]
         public string Description { get; set; }
-
+        
         [BsonElement("price")]
         public decimal Price { get; set; }
 
@@ -36,6 +37,7 @@ namespace E_commerce.Models
         public DateTime CreatedAt { get; set; }
 
         [BsonElement("stockLastUpdated")]
-        public DateTime StockLastUpdated { get; set; }
+        public DateTime StockLastUpdated { get; set; } 
+
     }
 }

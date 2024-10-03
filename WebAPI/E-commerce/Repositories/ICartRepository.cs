@@ -9,16 +9,19 @@ using E_commerce.Models;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using MongoDB.Bson;
+using E_commerce.DTO;
 
 namespace E_commerce.Repositories
 {
     public class ICartRepository
     {
         private readonly IMongoCollection<Cart> _carts;
+        private readonly IMongoCollection<Product> _products;
 
         public ICartRepository(IMongoDatabase database)
         {
             _carts = database.GetCollection<Cart>("Carts");
+            _products = database.GetCollection<Product>("Products");
         }
 
         // Get all carts
@@ -42,22 +45,19 @@ namespace E_commerce.Repositories
         // Update a cart
         public async Task UpdateCart(string cartId, Cart cart)
         {
-            var objectId = new ObjectId(cartId);
-            await _carts.ReplaceOneAsync(c => c.CartId == objectId, cart);
+            await _carts.ReplaceOneAsync(c => c.CartId == cartId, cart);
         }
 
         // Delete a cart
         public async Task DeleteCart(string cartId)
         {
-            var objectId = new ObjectId(cartId);
-            await _carts.DeleteOneAsync(c => c.CartId == objectId);
+            await _carts.DeleteOneAsync(c => c.CartId == cartId);
         }
 
         // Add or update a product in the cart
         public async Task AddOrUpdateProductInCart(string cartId, CartProductItem product)
         {
-            var objectId = new ObjectId(cartId);
-            var filter = Builders<Cart>.Filter.Eq(c => c.CartId, objectId);
+            var filter = Builders<Cart>.Filter.Eq(c => c.CartId, cartId);
             var cart = await _carts.Find(filter).FirstOrDefaultAsync();
 
             if (cart != null)
@@ -85,6 +85,41 @@ namespace E_commerce.Repositories
                 // Update the cart in the database
                 await _carts.ReplaceOneAsync(filter, cart);
             }
+        }
+
+        // Get a cart by user ID with product details
+        public async Task<CartWithProductDetailsDto> GetCartWithProductByUserId(string userId)
+        {
+            var cart = await _carts.Find(c => c.UserId == userId).FirstOrDefaultAsync();
+            if (cart == null)
+            {
+                return null;
+            }
+
+            var cartWithProductDetails = new CartWithProductDetailsDto
+            {
+                CartId = cart.CartId,
+                UserId = cart.UserId,
+                Products = new List<ProductDetailsDto>()
+            };
+
+            foreach (var cartProduct in cart.Products)
+            {
+                var product = await _products.Find(p => p.Id == cartProduct.ProductId).FirstOrDefaultAsync();
+
+                if (product != null)
+                {
+                    cartWithProductDetails.Products.Add(new ProductDetailsDto
+                    {
+                        ProductId = product.Id,
+                        ProductName = product.Name,
+                        Price = product.Price,
+                        Count = cartProduct.Count
+                    });
+                }
+            }
+
+            return cartWithProductDetails;
         }
     }
 }

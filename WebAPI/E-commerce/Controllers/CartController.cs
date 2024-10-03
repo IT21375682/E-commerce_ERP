@@ -73,5 +73,17 @@ namespace E_commerce.Controllers
             await _cartService.AddOrUpdateProductInCart(cartId, product);
             return NoContent();
         }
+
+        // GET: api/Cart/{userId}/product-details
+        [HttpGet("{userId}/product-details")]
+        public async Task<IActionResult> GetCartWithProductByUserId(string userId)
+        {
+            var cart = await _cartService.GetCartWithProductByUserId(userId);
+            if (cart == null)
+            {
+                return NotFound();
+            }
+            return Ok(cart);
+        }
     }
 }

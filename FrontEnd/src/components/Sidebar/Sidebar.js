@@ -238,7 +238,7 @@ const Sidebar = (props) => {
               </NavLink>
             </NavItem>
             <NavItem>
-              <NavLink href="/admin/tables">
+              <NavLink href="/admin/Customer-table">
                 <i className="ni ni-ui-04" />
                 Customer Management
               </NavLink>

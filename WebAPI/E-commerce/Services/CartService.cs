@@ -5,6 +5,7 @@
  * including operations for retrieving, creating, updating, and deleting carts, as well as adding or updating products within a cart.
  */
 
+using E_commerce.DTO;
 using E_commerce.Models;
 using E_commerce.Repositories;
 using System.Collections.Generic;
@@ -56,6 +57,12 @@ namespace E_commerce.Services
         public async Task AddOrUpdateProductInCart(string cartId, CartProductItem product)
         {
             await _cartRepository.AddOrUpdateProductInCart(cartId, product);
+        }
+
+        // Retrieves a cart with product details by user ID
+        public async Task<CartWithProductDetailsDto> GetCartWithProductByUserId(string userId)
+        {
+            return await _cartRepository.GetCartWithProductByUserId(userId);
         }
     }
 }

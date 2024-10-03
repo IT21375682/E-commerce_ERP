@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.RatingBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -13,9 +14,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.eadecommerce.model.ProductCommentData;
 import com.example.eadecommerce.R;
 
-
 import java.util.List;
 
+/**
+ * Adapter class for displaying product comments in a RecyclerView.
+ */
 public class ProductCommentAdapter extends RecyclerView.Adapter<ProductCommentAdapter.CommentViewHolder> {
 
     private Context context;
@@ -30,22 +33,24 @@ public class ProductCommentAdapter extends RecyclerView.Adapter<ProductCommentAd
     @NonNull
     @Override
     public CommentViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.product_comment_item, parent, false);
+        // Inflate the layout for each comment item
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.product_comment_item, parent, false);
         return new CommentViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull CommentViewHolder holder, int position) {
+        // Bind the data for the current comment
         ProductCommentData item = comments.get(currentCommentIndex);
-        holder.commentText.setText(item.getComment());
-        holder.commentUserText.setText(item.getCommentGmail());
-
+        holder.commentText.setText(item.getCommentText());
+        holder.commentUserText.setText(item.getUsername());
+        holder.ratingBarInput.setRating(item.getRating());
         holder.arrowLeft.setOnClickListener(v -> showPreviousComment());
         holder.arrowRight.setOnClickListener(v -> showNextComment());
     }
 
     private void showPreviousComment() {
+        // Show the previous comment if available
         if (currentCommentIndex > 0) {
             currentCommentIndex--;
             notifyDataSetChanged();
@@ -53,6 +58,7 @@ public class ProductCommentAdapter extends RecyclerView.Adapter<ProductCommentAd
     }
 
     private void showNextComment() {
+        // Show the next comment if available
         if (currentCommentIndex < comments.size() - 1) {
             currentCommentIndex++;
             notifyDataSetChanged();
@@ -61,7 +67,7 @@ public class ProductCommentAdapter extends RecyclerView.Adapter<ProductCommentAd
 
     @Override
     public int getItemCount() {
-        return 1; // Always display one comment at a time
+        return 1;
     }
 
     public static class CommentViewHolder extends RecyclerView.ViewHolder {
@@ -69,13 +75,16 @@ public class ProductCommentAdapter extends RecyclerView.Adapter<ProductCommentAd
         public TextView commentUserText;
         public ImageButton arrowLeft;
         public ImageButton arrowRight;
+        public RatingBar ratingBarInput;
 
         public CommentViewHolder(@NonNull View itemView) {
             super(itemView);
+            // Initialize views for the comment item
             commentText = itemView.findViewById(R.id.commentText);
             commentUserText = itemView.findViewById(R.id.commentUserText);
             arrowLeft = itemView.findViewById(R.id.arrowLeft);
             arrowRight = itemView.findViewById(R.id.arrowRight);
+            ratingBarInput = itemView.findViewById(R.id.ratingBarInput);
         }
     }
 }

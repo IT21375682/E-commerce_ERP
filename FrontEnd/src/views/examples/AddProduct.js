@@ -1,236 +1,188 @@
+import React, { useState } from 'react';
 import {
-    Button,
-    Card,
-    CardHeader,
-    CardBody,
-    FormGroup,
-    Form,
-    Input,
-    Container,
-    Row,
-    Col,
-  } from "reactstrap";
-  // core components
-  import UserHeader from "components/Headers/UserHeader.js";
-  
-  const AddVendor = () => {
-    return (
-      <>
-        {/* <UserHeader /> */}
-        {/* Page content */}
-        <Container className="mt--7" fluid>
-          <Row>
-            <Col className="order-xl-1" xl="12">
-              <Card className="bg-secondary shadow mt-7">
-                <CardHeader className="bg-white border-0">
-                  <Row className="align-items-center">
-                    <Col xs="8">
-                      <h3 className="mb-0">My account</h3>
-                    </Col>
-                  </Row>
-                </CardHeader>
-                <CardBody>
-                  <Form>
-                    <h6 className="heading-small text-muted mb-4">
-                      User information
-                    </h6>
-                    <div className="pl-lg-4">
-                      <Row>
-                        <Col lg="6">
-                          <FormGroup>
-                            <label
-                              className="form-control-label"
-                              htmlFor="input-username"
-                            >
-                              Username
-                            </label>
-                            <Input
-                              className="form-control-alternative"
-                              defaultValue="lucky.jesse"
-                              id="input-username"
-                              placeholder="Username"
-                              type="text"
-                            />
-                          </FormGroup>
-                        </Col>
-                        <Col lg="6">
-                          <FormGroup>
-                            <label
-                              className="form-control-label"
-                              htmlFor="input-email"
-                            >
-                              Email address
-                            </label>
-                            <Input
-                              className="form-control-alternative"
-                              id="input-email"
-                              placeholder="jesse@example.com"
-                              type="email"
-                            />
-                          </FormGroup>
-                        </Col>
-                      </Row>
-                      <Row>
-                        <Col lg="6">
-                          <FormGroup>
-                            <label
-                              className="form-control-label"
-                              htmlFor="input-first-name"
-                            >
-                              First name
-                            </label>
-                            <Input
-                              className="form-control-alternative"
-                              defaultValue="Lucky"
-                              id="input-first-name"
-                              placeholder="First name"
-                              type="text"
-                            />
-                          </FormGroup>
-                        </Col>
-                        <Col lg="6">
-                          <FormGroup>
-                            <label
-                              className="form-control-label"
-                              htmlFor="input-last-name"
-                            >
-                              Last name
-                            </label>
-                            <Input
-                              className="form-control-alternative"
-                              defaultValue="Jesse"
-                              id="input-last-name"
-                              placeholder="Last name"
-                              type="text"
-                            />
-                          </FormGroup>
-                        </Col>
-                      </Row>
-                    </div>
-                    <hr className="my-4" />
-                    {/* Address */}
-                    <h6 className="heading-small text-muted mb-4">
-                      Contact information
-                    </h6>
-                    <div className="pl-lg-4">
-                      <Row>
-                        <Col md="12">
-                          <FormGroup>
-                            <label
-                              className="form-control-label"
-                              htmlFor="input-address"
-                            >
-                              Address
-                            </label>
-                            <Input
-                              className="form-control-alternative"
-                              defaultValue="Bld Mihail Kogalniceanu, nr. 8 Bl 1, Sc 1, Ap 09"
-                              id="input-address"
-                              placeholder="Home Address"
-                              type="text"
-                            />
-                          </FormGroup>
-                        </Col>
-                      </Row>
-                      <Row>
-                        <Col lg="4">
-                          <FormGroup>
-                            <label
-                              className="form-control-label"
-                              htmlFor="input-city"
-                            >
-                              City
-                            </label>
-                            <Input
-                              className="form-control-alternative"
-                              defaultValue="New York"
-                              id="input-city"
-                              placeholder="City"
-                              type="text"
-                            />
-                          </FormGroup>
-                        </Col>
-                        <Col lg="4">
-                          <FormGroup>
-                            <label
-                              className="form-control-label"
-                              htmlFor="input-country"
-                            >
-                              Country
-                            </label>
-                            <Input
-                              className="form-control-alternative"
-                              defaultValue="United States"
-                              id="input-country"
-                              placeholder="Country"
-                              type="text"
-                            />
-                          </FormGroup>
-                        </Col>
-                        <Col lg="4">
-                          <FormGroup>
-                            <label
-                              className="form-control-label"
-                              htmlFor="input-country"
-                            >
-                              Postal code
-                            </label>
-                            <Input
-                              className="form-control-alternative"
-                              id="input-postal-code"
-                              placeholder="Postal code"
-                              type="number"
-                            />
-                          </FormGroup>
-                        </Col>
-                      </Row>
-                    </div>
-                    <hr className="my-4" />
-                    {/* Description */}
-                    {/* <h6 className="heading-small text-muted mb-4">About me</h6>
-                    <div className="pl-lg-4">
-                      <FormGroup>
-                        <label>About Me</label>
-                        <Input
-                          className="form-control-alternative"
-                          placeholder="A few words about you ..."
-                          rows="4"
-                          defaultValue="A beautiful Dashboard for Bootstrap 4. It is Free and
-                          Open Source."
-                          type="textarea"
-                        />
-                      </FormGroup>
-                    </div> */}
-                    <Row>
-                    <Col className="text-center">
-                      <Button
-                        color="primary"
-                        href="#pablo"
-                        onClick={(e) => e.preventDefault()}
-                        size="md"
-                      >
-                        Settings
-                      </Button>
-  
-                      <Button
-                        color="danger"
-                        href="#pablo"
-                        onClick={(e) => e.preventDefault()}
-                        size="md"
-                      >
-                        Cancel
-                      </Button>
-                    </Col>
-                    </Row>
-                  </Form>
-                </CardBody>
-              </Card>
-            </Col>
-          </Row>
-        </Container>
-      </>
-    );
+  Button,
+  Card,
+  CardHeader,
+  CardBody,
+  FormGroup,
+  Form,
+  Input,
+  Container,
+  Row,
+  Col,
+} from 'reactstrap';
+
+const AddProduct = () => {
+  const [menuImage, setMenuImage] = useState(null);
+
+  const handleImageUpload = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setMenuImage(reader.result);
+      };
+      reader.readAsDataURL(file);
+    }
   };
-  
-  export default AddVendor;
-  
+
+  return (
+    <Container fluid className="mt-7">
+      <Row>
+        <Col lg="1" />
+        <Col lg="10">
+          <Card className="shadow mb-4">
+            <CardHeader className="py-3">
+              <h1 className="m-0 font-weight-bold text-primary text-center">
+                <b>Add Menu Item</b>
+              </h1>
+            </CardHeader>
+            <CardBody>
+              <Form>
+                <Row>
+                  <Col xl="6" lg="6" md="12">
+                    <FormGroup>
+                      <label htmlFor="txtProductName">Product Name</label>
+                      <Input
+                        type="text"
+                        id="txtProductName"
+                        className="form-control-user"
+                        required
+                        style={{ borderRadius: '10px' }}
+                      />
+                    </FormGroup>
+
+                    <Row>
+                      <Col xs="12" sm="6">
+                        <FormGroup>
+                          <label htmlFor="ddlSelectCategory">Category</label>
+                          <Input type="select" id="ddlSelectCategory">
+                            <option value="">Select category</option>
+                            <option value="COMBO">COMBO</option>
+                            <option value="POPCORN">POPCORN</option>
+                            <option value="SOFT DRINKS">SOFT DRINKS</option>
+                            <option value="COFFEE">COFFEE</option>
+                            <option value="CHOCOLATES">CHOCOLATES</option>
+                          </Input>
+                        </FormGroup>
+                      </Col>
+
+                      <Col xs="12" sm="6">
+                        <FormGroup>
+                          <label htmlFor="txtSize">Size</label>
+                          <Input
+                            type="text"
+                            id="txtSize"
+                            className="form-control-user"
+                            required
+                            style={{ borderRadius: '10px' }}
+                          />
+                        </FormGroup>
+                      </Col>
+                    </Row>
+
+                    <FormGroup>
+                      <label htmlFor="AdditionalInf">Additional Description</label>
+                      <Input
+                        type="textarea"
+                        id="AdditionalInf"
+                        rows="2"
+                        className="form-control-user"
+                        required
+                        style={{ borderRadius: '10px' }}
+                      />
+                    </FormGroup>
+
+                    <FormGroup>
+                      <label htmlFor="txtUnitPrice">Unit Price</label>
+                      <div style={{ position: 'relative' }}>
+                        <Input
+                          type="number"
+                          id="txtUnitPrice"
+                          className="form-control-user"
+                          placeholder="00.00"
+                          step="0.01"
+                          required
+                          style={{ paddingLeft: '50px' }}
+                        />
+                        <span
+                          style={{
+                            position: 'absolute',
+                            top: '50%',
+                            left: '10px',
+                            transform: 'translateY(-50%)',
+                            color: '#aaa',
+                            pointerEvents: 'none',
+                            fontSize: '0.85rem',
+                          }}
+                        >
+                          Rs.
+                        </span>
+                      </div>
+                    </FormGroup>
+                  </Col>
+
+                  <Col xl="4" lg="4" md="10" className="mx-auto mb-4">
+                    <div
+                      style={{
+                        maxWidth: '100%',
+                        height: '240px',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        color: '#fff',
+                        background: '#aaa',
+                      }}
+                    >
+                      {menuImage ? (
+                        <img src={menuImage} alt="Menu" className="img-fluid" />
+                      ) : (
+                        'No image selected'
+                      )}
+                    </div>
+                    <Input
+                      type="file"
+                      id="imageInput"
+                      accept="image/*"
+                      onChange={handleImageUpload}
+                      className="mt-3"
+                    />
+                    <Button color="primary" className="btn-block mt-3">
+                      UPLOAD PRODUCT IMAGE
+                    </Button>
+                  </Col>
+                </Row>
+
+                <Row className="mt-4">
+                  <Col lg="4" />
+                  <Col lg="2">
+                    <Button color="success" className="btn-block">
+                      <i className="fas fa-check"></i> Create
+                    </Button>
+                  </Col>
+                  <Col lg="2">
+                    <Button color="danger" className="btn-block">
+                      <i className="fas fa-trash"></i> Cancel
+                    </Button>
+                  </Col>
+                  <Col lg="4" />
+                </Row>
+
+                <Row className="mt-3">
+                  <Col lg="3" />
+                  <Col lg="6">
+                    <div id="divValidationError" />
+                  </Col>
+                  <Col lg="3" />
+                </Row>
+              </Form>
+            </CardBody>
+          </Card>
+        </Col>
+        <Col lg="1" />
+      </Row>
+    </Container>
+  );
+};
+
+export default AddProduct;

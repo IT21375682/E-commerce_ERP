@@ -4,6 +4,7 @@ using E_commerce.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using E_commerce.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,7 +21,12 @@ builder.Services.AddScoped(sp =>
     return client.GetDatabase("ECommerceDB");
 });
 
-// Add CORS services
+// Register IMongoCollection<Order>
+builder.Services.AddScoped(sp =>
+{
+    var database = sp.GetRequiredService<IMongoDatabase>();
+    return database.GetCollection<Order>("Orders"); // Ensure "Orders" matches your MongoDB collection name
+});
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowSpecificOrigin",
@@ -47,8 +53,10 @@ builder.Services.AddScoped<UserService>(); // Registering the UserService
 builder.Services.AddScoped<ProductService>(); // Registering the Product Service
 builder.Services.AddScoped<OrderService>(); // Registering the Order Service
 builder.Services.AddScoped<CategoryService>(); // Registering the UserService
+builder.Services.AddScoped<EmailService>(); // Registering the EmailService
 builder.Services.AddScoped<CommentService>(); // Registering the CommentService
 builder.Services.AddScoped<CartService>(); // Registering the CartService
+
 
 builder.Services.AddScoped<JwtService>(sp =>
 {
@@ -91,7 +99,7 @@ builder.Services.AddCors(options =>
 builder.Services.AddControllersWithViews();
 
 // Bind the server to all network interfaces (0.0.0.0) to make it accessible externally
-builder.WebHost.UseUrls("http://192.168.82.187:5004");
+builder.WebHost.UseUrls("https://localhost:5004");
 
 
 
@@ -117,8 +125,6 @@ app.UseRouting();
 
 // Apply CORS policy
 app.UseCors("AllowSpecificOrigin");
-
-//app.UseHttpsRedirection();
 
 app.UseAuthorization();
 

@@ -21,10 +21,18 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
 
+import com.example.eadecommerce.model.User;
+import com.example.eadecommerce.network.ApiService;
+import com.example.eadecommerce.network.RetrofitClient;
+import com.example.eadecommerce.responses.LoginResponse;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class SignUp extends AppCompatActivity {
 
-    private EditText edtFirstName;
-    private EditText edtLastName;
+    private EditText edtName;
     private EditText edtEmail;
     private EditText edtPassword;
     private EditText edtConfirmPassword;
@@ -47,8 +55,7 @@ public class SignUp extends AppCompatActivity {
 
         pwdVisible = findViewById(R.id.imgPasswordVisibility);
         pwdConfirmVisible = findViewById(R.id.imgConfirmPasswordVisibility);
-        edtFirstName = findViewById(R.id.edt_first_name);
-        edtLastName = findViewById(R.id.edt_last_name);
+        edtName = findViewById(R.id.edt_name);
         edtEmail = findViewById(R.id.edt_email);
         edtPassword = findViewById(R.id.edt_password);
         edtConfirmPassword = findViewById(R.id.edt_confirm_password);
@@ -94,8 +101,7 @@ public class SignUp extends AppCompatActivity {
     }
 
     private void validateInputsAndProceed() {
-        String firstName = edtFirstName.getText().toString().trim();
-        String lastName = edtLastName.getText().toString().trim();
+        String name = edtName.getText().toString().trim();
         String email = edtEmail.getText().toString().trim();
         String password = edtPassword.getText().toString().trim();
         String confirmPassword = edtConfirmPassword.getText().toString().trim();
@@ -105,12 +111,8 @@ public class SignUp extends AppCompatActivity {
 
         boolean isValid = true;
 
-        if (firstName.isEmpty()) {
-            highlightField(edtFirstName);
-            isValid = false;
-        }
-        if (lastName.isEmpty()) {
-            highlightField(edtLastName);
+        if (name.isEmpty()) {
+            highlightField(edtName);
             isValid = false;
         }
         if (email.isEmpty()) {
@@ -134,12 +136,38 @@ public class SignUp extends AppCompatActivity {
 
         if (isValid) {
             showLoading();
-            // Simulate starting the main activity
-            new Handler().postDelayed(() -> {
-                Intent intent = new Intent(SignUp.this, Main.class);
-                startActivity(intent);
-                finish();
-            }, 2000);
+
+            // Create a User object
+            User newUser = new User(name, email, password, "CUSTOMER", false); // Replace "UserRole" with actual role if needed
+
+            // Call the API
+            ApiService apiService = RetrofitClient.getRetrofitInstance().create(ApiService.class);
+            Call<User> call = apiService.createUser(newUser);
+
+            call.enqueue(new Callback<User>() {
+                @Override
+                public void onResponse(Call<User> call, Response<User> response) {
+                    if (response.isSuccessful()) {
+                        // User created successfully
+                        Intent intent = new Intent(SignUp.this, Login.class);
+                        startActivity(intent);
+                        finish();
+                    } else {
+                        // Handle error case
+                        cusLoginNoUsernamePassword.setText("Sign up failed: " + response.message());
+                        cusLoginNoUsernamePassword.setVisibility(View.VISIBLE);
+                    }
+                    hideLoading(); // Hide loading indicator
+                }
+
+                @Override
+                public void onFailure(Call<User> call, Throwable t) {
+                    // Handle network errors
+                    cusLoginNoUsernamePassword.setText("Network error: " + t.getMessage());
+                    cusLoginNoUsernamePassword.setVisibility(View.VISIBLE);
+                    hideLoading(); // Hide loading indicator
+                }
+            });
         }
     }
 
@@ -181,4 +209,12 @@ public class SignUp extends AppCompatActivity {
         return moveAnimation;
     }
 
+    // Hide loading spinner
+    private void hideLoading() {
+        if (cusWalletProgressBarLayout != null) {
+            cusWalletProgressBarLayout.setVisibility(View.GONE);
+            cusWalletProgressBarLayout.setClickable(false);
+            cusWalletProgressBarLayout.setFocusable(false);
+        }
+    }
 }

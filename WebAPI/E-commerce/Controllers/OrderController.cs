@@ -8,6 +8,7 @@
 using E_commerce.Models;
 using E_commerce.Services;
 using Microsoft.AspNetCore.Mvc;
+using MongoDB.Bson;
 using System.Collections.Generic;
 
 namespace E_commerce.Controllers
@@ -104,13 +105,118 @@ namespace E_commerce.Controllers
             return NoContent();
         }
 
-        // Updates the order status: PATCH api/Order/{orderId}/status/{statusType}
+        //[HttpPatch("{orderId}/status/{statusType}")]
+        //public async Task<IActionResult> UpdateOrderStatus(string orderId, string statusType)
+        //{
+        //    await _orderService.UpdateOrderStatus(orderId, statusType);
+        //    return NoContent();
+        //}
+
         [HttpPatch("{orderId}/status/{statusType}")]
-        public IActionResult UpdateOrderStatus(string orderId, string statusType)
+        public async Task<IActionResult> UpdateOrderStatus(string orderId, string statusType, [FromBody] string customMessage = null)
         {
-            _orderService.UpdateOrderStatus(orderId, statusType);
-            return NoContent();
+            try
+            {
+                await _orderService.UpdateOrderStatus(orderId, statusType, customMessage);
+                return NoContent(); // Return 204 No Content if the update was successful
+            }
+            catch (Exception ex)
+            {
+                // Handle exceptions (e.g., order not found, email sending failed, etc.)
+                return StatusCode(500, $"Internal server error: {ex.Message}"); // You may want to log the error here
+            }
         }
+
+
+        // Cancels an order: POST api/Order/{orderId}/cancel
+        [HttpPost("{orderId}/cancel")]
+        public async Task<IActionResult> CancelOrder(string orderId, [FromBody] string customMessage = null)
+        {
+            try
+            {
+                await _orderService.CancelOrder(orderId, customMessage);
+                return NoContent(); // Return 204 No Content if the cancellation was successful
+            }
+            catch (Exception ex)
+            {
+                // Handle exceptions (e.g., order not found, email sending failed, etc.)
+                return StatusCode(500, $"Internal server error: {ex.Message}"); // You may want to log the error here
+            }
+        }
+
+        //// HTTP GET method to get order status by ID
+        //[HttpGet("{orderId}/status")]
+        //public IActionResult GetOrderStatus(string orderId)
+        //{
+        //    // Call service method to get the order status
+        //    var status = _orderService.GetOrderStatusById(orderId);
+
+        //    if (status == null)
+        //    {
+        //        // Return a 404 response if the order is not found
+        //        return NotFound(new { Message = "Order not found" });
+        //    }
+
+        //    // Return the order status
+        //    return Ok(status);
+        //}
+
+        [HttpGet("{orderId}/status")]
+        public ActionResult<string> GetLatestOrderStatus(string orderId)
+        {
+            if (string.IsNullOrEmpty(orderId))
+            {
+                return BadRequest("Order ID cannot be null or empty.");
+            }
+
+            var latestStatus = _orderService.GetLatestOrderStatusById(orderId);
+
+            if (latestStatus == "Unknown")
+            {
+                return NotFound("Order status not found.");
+            }
+
+            return Ok(latestStatus);
+        }
+
+        // GET api/order/orderList/{vendorId}/{orderId}
+        [HttpGet("{vendorId}/{orderId}")]
+        public ActionResult<List<ProductItem>> GetProductsByVendor(string vendorId, string orderId)
+        {
+            try
+            {
+                var products = _orderService.GetProductsByVendorId(orderId, vendorId);
+                return Ok(products);
+            }
+            catch (Exception ex)
+            {
+                return NotFound(ex.Message);
+            }
+        }
+
+        [HttpPatch("update-delivery-status/{orderId}/{vendorId}/{productId}")]
+        public IActionResult UpdateProductDeliveryStatus(string orderId, string vendorId, string productId)
+        {
+            try
+            {
+                // Convert productId from string to ObjectId
+                var productObjectId = new ObjectId(productId);
+
+                _orderService.UpdateProductDeliveryStatus(orderId, vendorId, productObjectId);
+                return NoContent(); // 204 No Content
+            }
+            catch (FormatException ex)
+            {
+                // Handle the case where the productId is not a valid ObjectId
+                return BadRequest(new { Message = "Invalid Product ID format." });
+            }
+            catch (Exception ex)
+            {
+                // Return a 404 with the exception message
+                return NotFound(new { Message = ex.Message }); // Return a more structured response
+            }
+        }
+
     }
 
 }

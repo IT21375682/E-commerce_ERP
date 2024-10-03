@@ -2,21 +2,20 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
-    android:fillViewport="true">
+    android:fillViewport="true"
+    android:fitsSystemWindows="true">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <!-- Top Bar with Back Button and Cart Title -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:gravity="center_vertical"
             android:orientation="horizontal"
-            android:padding="20dp"
-            android:gravity="center_vertical">
+            android:padding="20dp">
 
             <ImageButton
                 android:id="@+id/buttonBack"
@@ -24,45 +23,93 @@
                 android:layout_height="wrap_content"
                 android:background="@null"
                 android:backgroundTint="@null"
-                android:src="@drawable/left_arrow2"
-                android:contentDescription="Back" />
+                android:contentDescription="Back"
+                android:src="@drawable/left_arrow2" />
 
             <TextView
                 android:id="@+id/cartTitleTextView"
                 android:layout_width="0dp"
-                android:layout_weight="1"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
+                android:layout_weight="1"
                 android:text="Checkout"
                 android:textSize="20sp"
                 android:textStyle="bold" />
 
         </LinearLayout>
 
-        <!-- Header for Name and Address -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:padding="20dp">
 
-            <TextView
-                android:id="@+id/userNameTextView"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="User Name"
-                android:textSize="18sp"
-                android:textStyle="bold" />
+                android:orientation="horizontal"
+                android:paddingVertical="4dp">
 
-            <TextView
-                android:id="@+id/userAddressTextView"
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Name"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:id="@+id/userNameTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="User Name"
+                    android:textSize="16sp" />
+            </LinearLayout>
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="User Address"
-                android:textSize="14sp" />
+                android:orientation="horizontal"
+                android:paddingVertical="4dp">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Contact"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:id="@+id/userPhoneTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Phone Number"
+                    android:textSize="16sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingVertical="4dp">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Address"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:id="@+id/userAddressTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="User Address"
+                    android:textSize="16sp" />
+            </LinearLayout>
+
+
         </LinearLayout>
 
-        <!-- RecyclerView for Cart Items -->
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/cartRecyclerView"
             android:layout_width="match_parent"
@@ -73,32 +120,29 @@
             android:padding="20dp"
             android:paddingBottom="8dp" />
 
-        <androidx.cardview.widget.CardView
-            xmlns:card_view="http://schemas.android.com/apk/res-auto"
+        <androidx.cardview.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:padding="16dp"
             card_view:cardCornerRadius="8dp"
-            card_view:cardElevation="4dp"
-            android:padding="16dp">
+            card_view:cardElevation="4dp">
 
             <LinearLayout
                 android:id="@+id/checkoutLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="20dp"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:padding="20dp">
 
-                <!-- Title "Summary" -->
                 <TextView
                     android:id="@+id/summaryTitleTextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:paddingBottom="10dp"
                     android:text="Summary"
-                    android:textStyle="bold"
                     android:textSize="18sp"
-                    android:paddingBottom="10dp" />
+                    android:textStyle="bold" />
 
-                <!-- Subtotal Row -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -108,8 +152,8 @@
                     <TextView
                         android:id="@+id/subtotalTextView"
                         android:layout_width="0dp"
-                        android:layout_weight="1"
                         android:layout_height="wrap_content"
+                        android:layout_weight="1"
                         android:text="Subtotal"
                         android:textSize="16sp" />
 
@@ -121,7 +165,6 @@
                         android:textSize="16sp" />
                 </LinearLayout>
 
-                <!-- Delivery Fee Row -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -131,8 +174,8 @@
                     <TextView
                         android:id="@+id/deliveryFeeTextView"
                         android:layout_width="0dp"
-                        android:layout_weight="1"
                         android:layout_height="wrap_content"
+                        android:layout_weight="1"
                         android:text="Delivery Fee"
                         android:textSize="16sp" />
 
@@ -144,7 +187,6 @@
                         android:textSize="16sp" />
                 </LinearLayout>
 
-                <!-- Total Row -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -154,8 +196,8 @@
                     <TextView
                         android:id="@+id/totalTextView"
                         android:layout_width="0dp"
-                        android:layout_weight="1"
                         android:layout_height="wrap_content"
+                        android:layout_weight="1"
                         android:text="Total"
                         android:textSize="16sp"
                         android:textStyle="bold" />
@@ -169,7 +211,6 @@
                         android:textStyle="bold" />
                 </LinearLayout>
 
-                <!-- Payment Method Radio Buttons -->
                 <RadioGroup
                     android:id="@+id/paymentOptionsGroup"
                     android:layout_width="match_parent"
@@ -192,16 +233,15 @@
                         android:textSize="14sp" />
                 </RadioGroup>
 
-                <!-- Checkout Button -->
                 <Button
                     android:id="@+id/payNowButton"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Pay Now"
-                    android:textColor="@android:color/white"
+                    android:layout_marginTop="16dp"
                     android:background="@drawable/cus_button_update"
                     android:padding="12dp"
-                    android:layout_marginTop="16dp" />
+                    android:text="Pay Now"
+                    android:textColor="@android:color/white" />
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 

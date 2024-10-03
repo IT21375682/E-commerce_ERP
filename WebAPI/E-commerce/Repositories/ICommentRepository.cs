@@ -31,8 +31,7 @@ namespace E_commerce.Repositories
         // Retrieves a comment by its ID.
         public Comment GetCommentById(string id)
         {
-            var objectId = new ObjectId(id);
-            return _comments.Find(comment => comment.CommentId == objectId).FirstOrDefault();
+            return _comments.Find(comment => comment.id == id).FirstOrDefault();
         }
 
         // Adds a new comment to the database.
@@ -44,33 +43,69 @@ namespace E_commerce.Repositories
         // Retrieves all comments by a specific user ID.
         public List<Comment> GetCommentsByUserId(string userId)
         {
-            return _comments.Find(comment => comment.UserId == userId).ToList();
+            return _comments.Find(comment => comment.userId == userId).ToList();
         }
 
         // Retrieves comments by a specific vendor ID.
         public List<Comment> GetCommentsByVendorId(string vendorId)
         {
-            return _comments.Find(comment => comment.VendorId == vendorId).ToList();
+            return _comments.Find(comment => comment.vendorId == vendorId).ToList();
         }
 
         // Retrieves comments by a specific product ID.
         public List<Comment> GetCommentsByProductId(string productId)
         {
-            return _comments.Find(comment => comment.ProductId == productId).ToList();
+            return _comments.Find(comment => comment.productId == productId).ToList();
         }
 
         // Updates an existing comment by its ID.
         public void UpdateComment(string id, Comment updatedComment)
         {
-            var objectId = new ObjectId(id);
-            _comments.ReplaceOne(comment => comment.CommentId == objectId, updatedComment);
+            _comments.ReplaceOne(comment => comment.id == id, updatedComment);
         }
 
         // Deletes a comment by its ID.
         public void DeleteComment(string id)
         {
-            var objectId = new ObjectId(id);
-            _comments.DeleteOne(comment => comment.CommentId == objectId);
+            _comments.DeleteOne(comment => comment.id == id);
+        }
+
+        // Retrieves the average rating for a specific vendor
+        public double GetAverageRatingByVendorId(string vendorId)
+        {
+            return _comments.AsQueryable()
+                            .Where(comment => comment.vendorId == vendorId)
+                            .Average(comment => comment.rating);
+        }
+
+        // Retrieves the average rating for a specific product
+        public double GetAverageRatingByProductId(string productId)
+        {
+            return _comments.AsQueryable()
+                            .Where(comment => comment.productId == productId)
+                            .Average(comment => comment.rating);
+        }
+
+        // Adds or updates a comment in the database based on userId, vendorId, and productId.
+        public void AddOrUpdateComment(Comment comment)
+        {
+            var existingComment = _comments.Find(c => c.userId == comment.userId
+                                                      && c.userId == comment.userId
+                                                      && c.productId == comment.productId)
+                                             .FirstOrDefault();
+
+            if (existingComment != null)
+            {
+                comment.id = existingComment.id; // Set the existing ID to update
+                _comments.ReplaceOne(c => c.id == existingComment.id, comment);
+            }
+            else
+            {
+                // Set default values if not passed
+                comment.rating = comment.rating != 0 ? comment.rating : 0;
+                comment.commentText = string.IsNullOrEmpty(comment.commentText) ? "" : comment.commentText;
+                _comments.InsertOne(comment);
+            }
         }
     }
 }

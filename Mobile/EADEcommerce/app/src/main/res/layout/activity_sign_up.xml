@@ -1,221 +1,215 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".SignUp"
-    android:background="@color/primary">
+    android:background="@color/primary"
+    tools:context=".SignUp">
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-    <RelativeLayout
-        android:paddingVertical="20dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <ImageView
-            android:id="@+id/app_logo"
-            android:layout_width="500dp"
-            android:layout_height="300dp"
-            android:src="@drawable/app_logo"
-            android:layout_centerHorizontal="true" />
-        <EditText
-            android:id="@+id/edt_first_name"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_below="@id/app_logo"
-            android:hint="First Name"
-            android:singleLine="true"
-            android:layout_marginTop="10dp"
-            android:textColor="@color/white"
-            android:textColorHint="@color/lightWhite"
-            android:padding="10dp"
-            android:background="@drawable/edt_background"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"/>
-        <EditText
-            android:id="@+id/edt_last_name"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_below="@id/edt_first_name"
-            android:hint="Last Name"
-            android:textColor="@color/white"
-            android:textColorHint="@color/lightWhite"
-            android:singleLine="true"
-            android:layout_marginTop="10dp"
-            android:padding="10dp"
-            android:background="@drawable/edt_background"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"/>
-        <EditText
-            android:id="@+id/edt_email"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_below="@id/edt_last_name"
-            android:hint="Email"
-            android:singleLine="true"
-            android:textColor="@color/white"
-            android:textColorHint="@color/lightWhite"
-            android:layout_marginTop="10dp"
-            android:padding="10dp"
-            android:background="@drawable/edt_background"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"/>
+            android:layout_height="wrap_content"
+            android:paddingVertical="20dp">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/layout_password"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_below="@id/edt_email"
-            android:layout_marginTop="10dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            android:background="@drawable/edt_background">
+            <ImageView
+                android:id="@+id/app_logo"
+                android:layout_width="500dp"
+                android:layout_height="300dp"
+                android:layout_centerHorizontal="true"
+                android:src="@drawable/app_logo" />
 
             <EditText
-                android:id="@+id/edt_password"
-                android:layout_width="0dp"
+                android:id="@+id/edt_name"
+                android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:hint="Password"
+                android:layout_below="@id/app_logo"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="20dp"
+                android:background="@drawable/edt_background"
+                android:hint="First Name"
                 android:padding="10dp"
                 android:singleLine="true"
                 android:textColor="@color/white"
-                android:textColorHint="@color/lightWhite"
-                android:backgroundTint="@android:color/transparent"
-                android:inputType="textPassword"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintEnd_toStartOf="@id/imgPasswordVisibility"/>
-
-            <ImageView
-                android:id="@+id/imgPasswordVisibility"
-                android:layout_width="wrap_content"
-                android:layout_height="50dp"
-                android:src="@drawable/visibility"
-                android:contentDescription="Toggle Password Visibility"
-                android:clickable="true"
-                android:padding="10dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                android:layout_alignParentEnd="true"/>
-        </androidx.constraintlayout.widget.ConstraintLayout>
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/layout_confirm_password"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_below="@id/layout_password"
-            android:layout_marginTop="10dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            android:background="@drawable/edt_background">
+                android:textColorHint="@color/lightWhite" />
 
             <EditText
-                android:id="@+id/edt_confirm_password"
-                android:layout_width="0dp"
+                android:id="@+id/edt_email"
+                android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:hint="Confirm Password"
+                android:layout_below="@id/edt_name"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="20dp"
+                android:background="@drawable/edt_background"
+                android:hint="Email"
                 android:padding="10dp"
                 android:singleLine="true"
                 android:textColor="@color/white"
-                android:textColorHint="@color/lightWhite"
-                android:backgroundTint="@android:color/transparent"
-                android:inputType="textPassword"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintEnd_toStartOf="@id/imgConfirmPasswordVisibility"/>
+                android:textColorHint="@color/lightWhite" />
 
-            <ImageView
-                android:id="@+id/imgConfirmPasswordVisibility"
-                android:layout_width="wrap_content"
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/layout_password"
+                android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:src="@drawable/visibility"
-                android:contentDescription="Toggle Password Visibility"
-                android:clickable="true"
-                android:padding="10dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                android:layout_alignParentEnd="true"/>
-        </androidx.constraintlayout.widget.ConstraintLayout>
-        <LinearLayout
-            android:id="@+id/loginLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_horizontal"
-            android:layout_below="@id/layout_confirm_password"
-            android:orientation="vertical">
+                android:layout_below="@id/edt_email"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="20dp"
+                android:background="@drawable/edt_background">
+
+                <EditText
+                    android:id="@+id/edt_password"
+                    android:layout_width="0dp"
+                    android:layout_height="50dp"
+                    android:backgroundTint="@android:color/transparent"
+                    android:hint="Password"
+                    android:inputType="textPassword"
+                    android:padding="10dp"
+                    android:singleLine="true"
+                    android:textColor="@color/white"
+                    android:textColorHint="@color/lightWhite"
+                    app:layout_constraintEnd_toStartOf="@id/imgPasswordVisibility"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <ImageView
+                    android:id="@+id/imgPasswordVisibility"
+                    android:layout_width="wrap_content"
+                    android:layout_height="50dp"
+                    android:layout_alignParentEnd="true"
+                    android:clickable="true"
+                    android:contentDescription="Toggle Password Visibility"
+                    android:padding="10dp"
+                    android:src="@drawable/visibility"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/layout_confirm_password"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_below="@id/layout_password"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="20dp"
+                android:background="@drawable/edt_background">
+
+                <EditText
+                    android:id="@+id/edt_confirm_password"
+                    android:layout_width="0dp"
+                    android:layout_height="50dp"
+                    android:backgroundTint="@android:color/transparent"
+                    android:hint="Confirm Password"
+                    android:inputType="textPassword"
+                    android:padding="10dp"
+                    android:singleLine="true"
+                    android:textColor="@color/white"
+                    android:textColorHint="@color/lightWhite"
+                    app:layout_constraintEnd_toStartOf="@id/imgConfirmPasswordVisibility"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <ImageView
+                    android:id="@+id/imgConfirmPasswordVisibility"
+                    android:layout_width="wrap_content"
+                    android:layout_height="50dp"
+                    android:layout_alignParentEnd="true"
+                    android:clickable="true"
+                    android:contentDescription="Toggle Password Visibility"
+                    android:padding="10dp"
+                    android:src="@drawable/visibility"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <LinearLayout
+                android:id="@+id/loginLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/layout_confirm_password"
+                android:gravity="center_horizontal"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/cus_login_no_username_password"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:gravity="center"
+                    android:paddingHorizontal="20dp"
+                    android:paddingVertical="10dp"
+                    android:textColor="@color/red"
+                    android:textSize="16dp"
+                    android:visibility="gone" />
+
+                <TextView
+                    android:id="@+id/cus_matching_password"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:gravity="center"
+                    android:paddingHorizontal="20dp"
+                    android:paddingVertical="10dp"
+                    android:textColor="@color/red"
+                    android:textSize="16dp"
+                    android:visibility="gone" />
+
+                <Button
+                    android:id="@+id/btnSignup"
+                    android:layout_width="120dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:background="@drawable/hint_profile_login"
+                    android:text="Sign Up"
+                    android:textColor="@color/white"
+                    android:textSize="18dp" />
+            </LinearLayout>
 
             <TextView
-                android:id="@+id/cus_login_no_username_password"
+                android:id="@+id/text_dont_have_account"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:visibility="gone"
-                android:layout_gravity="center_horizontal"
-                android:textColor="@color/red"
-                android:textSize="16dp"
-                android:paddingHorizontal="20dp"
-                android:paddingVertical="10dp"
-                android:gravity="center"/>
-            <TextView
-                android:id="@+id/cus_matching_password"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:visibility="gone"
-                android:layout_gravity="center_horizontal"
-                android:textColor="@color/red"
-                android:textSize="16dp"
-                android:paddingHorizontal="20dp"
-                android:paddingVertical="10dp"
-                android:gravity="center"/>
-            <Button
-                android:id="@+id/btnSignup"
-                android:layout_width="120dp"
-                android:layout_height="wrap_content"
-                android:text="Sign Up"
-                android:textSize="18dp"
+                android:layout_below="@+id/loginLayout"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="40dp"
+                android:layout_marginBottom="5dp"
+                android:text="Don't have an account?"
                 android:textColor="@color/white"
-                android:background="@drawable/hint_profile_login"
-                android:layout_marginTop="20dp"/>
-        </LinearLayout>
-        <TextView
-            android:id="@+id/text_dont_have_account"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/white"
-            android:textColorHint="@color/white"
-            android:layout_centerHorizontal="true"
-            android:layout_below="@+id/loginLayout"
-            android:layout_marginTop="40dp"
-            android:layout_marginBottom="5dp"
-            android:text="Don't have an account?"
-            android:textSize="16sp"/>
+                android:textColorHint="@color/white"
+                android:textSize="16sp" />
 
-        <TextView
-            android:id="@+id/text_login"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="5dp"
-            android:text="Register"
-            android:textColor="@color/white"
-            android:textColorHint="@color/white"
-            android:textSize="16sp"
-            android:clickable="true"
-            android:layout_below="@+id/text_dont_have_account"
-            android:layout_alignParentBottom="true"
-            android:onClick="onRegisterClicked"
-            android:textStyle="bold" />
-    </RelativeLayout>
-</ScrollView>
+            <TextView
+                android:id="@+id/text_login"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/text_dont_have_account"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="5dp"
+                android:clickable="true"
+                android:onClick="onRegisterClicked"
+                android:text="Register"
+                android:textColor="@color/white"
+                android:textColorHint="@color/white"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+        </RelativeLayout>
+    </ScrollView>
+
     <FrameLayout
         android:id="@+id/cusWalletProgressBarLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_centerInParent="true"
-        android:visibility="gone"
-        android:background="@color/primary">
+        android:background="@color/primary"
+        android:visibility="gone">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -227,19 +221,25 @@
                 android:id="@+id/worldImageView"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
-                android:layout_marginBottom="20dp"
                 android:layout_gravity="center"
+                android:layout_marginBottom="20dp"
                 android:src="@drawable/cart" />
-
+            <View
+                android:layout_width="wrap_content"
+                android:layout_height="2dp"
+                android:layout_marginHorizontal="20dp"
+                android:layout_gravity="center_horizontal"
+                android:background="@color/white" />
             <TextView
                 android:id="@+id/worldImageViewText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:layout_marginTop="20dp"
+                android:text="Verifying Your Email"
                 android:textColor="@color/white"
                 android:textColorHint="@color/white"
-                android:textSize="20sp"
-                android:gravity="center_horizontal"
-                android:text="Verifying Your Email" />
+                android:textSize="20sp" />
         </LinearLayout>
     </FrameLayout>
 </RelativeLayout>

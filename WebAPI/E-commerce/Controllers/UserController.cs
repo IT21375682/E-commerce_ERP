@@ -1,4 +1,5 @@
-﻿using E_commerce.Models;
+﻿using E_commerce.DTOs;
+using E_commerce.Models;
 using E_commerce.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -124,15 +125,37 @@ namespace E_commerce.Controllers
             }
         }
 
+        // GET: api/User/{id} - Fetch a user name by ID
+        [HttpGet("Only/{id}")]
+        public ActionResult<UserDto> GetUserNameById(string id)
+        {
+            var user = _userService.GetUserNameById(id);
+            if (user == null)
+            {
+                return NotFound();
+            }
+            return Ok(user);
+        }
+
+        [HttpPut("{id}/status")]
+        public IActionResult ToggleUserStatus(string id, [FromBody] ToggleStatusRequest request)
+        {
+            if (request == null || !ModelState.IsValid)
+            {
+                return BadRequest("Invalid request.");
+            }
+
+            var existingUser = _userService.GetUserById(id);
+            if (existingUser == null)
+            {
+                return NotFound();
+            }
+
+            _userService.ToggleUserStatus(id, request.IsActive);
+            return NoContent();
+        }
+
     }
-
-
-
-
-
-
-
-
 
 
 
