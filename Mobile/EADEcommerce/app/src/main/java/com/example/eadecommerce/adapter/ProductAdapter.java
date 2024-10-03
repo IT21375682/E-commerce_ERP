@@ -48,7 +48,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
         Product product = productList.get(position);
 
         holder.textViewName.setText(product.getName());
-        holder.textViewPrice.setText(String.format("$%.2f", product.getPrice()));
+        holder.textViewPrice.setText(String.format("LKR %.2f", product.getPrice()));
 
         // Decode the base64 image string and set it to the ImageView
         if (product.getProductImage() != null && !product.getProductImage().isEmpty()) {

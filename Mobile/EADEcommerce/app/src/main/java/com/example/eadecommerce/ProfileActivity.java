@@ -4,6 +4,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.activity.EdgeToEdge;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import android.app.Activity;
 import android.content.Intent;
@@ -90,7 +91,7 @@ public class ProfileActivity extends AppCompatActivity {
 
 
         // Handle Home click to load HomeFragment
-        buttonCart.setOnClickListener(new View.OnClickListener() {
+        clickcartHome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // Load HomeFragment when clickcart_logo is clicked
@@ -158,12 +159,21 @@ public class ProfileActivity extends AppCompatActivity {
             // Check if the name is empty or only contains whitespace
             String updatedName = editTextFirstName.getText().toString().trim();
             if (updatedName.isEmpty()) {
-                // Show an error message to the user
                 Snackbar.make(findViewById(android.R.id.content), "Name cannot be empty", Snackbar.LENGTH_SHORT).show();
-                return; // Exit the method if the name is invalid
+                return;
             }
-            // Call the method to update user details
-            updateUserDetails(userId);
+            new AlertDialog.Builder(this)
+                    .setTitle("Update Profile")
+                    .setMessage("Are you sure you want to update your profile?")
+                    .setPositiveButton("Yes", (dialog, which) -> {
+                        // Call the method to update user details
+                        updateUserDetails(userId);
+                    })
+                    .setNegativeButton("No", (dialog, which) -> {
+                        // Dismiss the dialog
+                        dialog.dismiss();
+                    })
+                    .show();
         });
 
         // Set click listeners
@@ -171,6 +181,23 @@ public class ProfileActivity extends AppCompatActivity {
             toggleEditMode();
             getUserDetails(userId);
         });
+
+        // Set click listeners for deactivate button
+        btnCusDeActivate.setOnClickListener(v -> {
+            new AlertDialog.Builder(this)
+                    .setTitle("Deactivate Account")
+                    .setMessage("Are you sure you want to deactivate your account?")
+                    .setPositiveButton("Yes", (dialog, which) -> {
+                        // Call the method to deactivate
+                        deactivateAccount(userId);
+                    })
+                    .setNegativeButton("No", (dialog, which) -> {
+                        // Dismiss the dialog
+                        dialog.dismiss();
+                    })
+                    .show();
+        });
+
 
         getUserDetails(userId);
     }
@@ -369,5 +396,42 @@ public class ProfileActivity extends AppCompatActivity {
             }
         });
     }
+
+    private void deactivateAccount(String userId) {
+
+        ApiService apiService = RetrofitClient.getRetrofitInstance().create(ApiService.class);
+        Call<Void> call = apiService.deactivateAccount(userId);
+
+        call.enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                if (response.isSuccessful()) {
+                    // Account successfully deactivated
+                    Snackbar.make(findViewById(android.R.id.content), "Account deactivated successfully" , Snackbar.LENGTH_LONG).show();
+
+                    // Handle logout
+                    SharedPreferences preferences = getSharedPreferences("myPrefs", MODE_PRIVATE);
+                    SharedPreferences.Editor editor = preferences.edit();
+                    editor.remove("jwt_token");
+                    editor.apply();
+
+                    Intent intent = new Intent(ProfileActivity.this, Login.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    startActivity(intent);
+                    finish();
+                } else {
+                    // Handle the error case
+                    Snackbar.make(findViewById(android.R.id.content), "Failed to deactivate account" , Snackbar.LENGTH_LONG).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+                // Handle network or API call failure
+                Snackbar.make(findViewById(android.R.id.content), "Error: " + t.getMessage(), Snackbar.LENGTH_LONG).show();
+            }
+        });
+    }
+
 
 }

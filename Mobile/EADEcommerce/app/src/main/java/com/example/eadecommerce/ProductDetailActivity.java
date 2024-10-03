@@ -265,7 +265,7 @@ public class ProductDetailActivity extends AppCompatActivity {
                     productNameTextView.setText(product.getName());
                     productCategoryTextView.setText(product.getProductCategoryName());
                     productVendorTextView.setText(product.getVendorName());
-                    productPriceTextView.setText(String.format("LKR %.2f", product.getPrice()));
+                    productPriceTextView.setText(String.format("%.2f", product.getPrice()));
                     productDescriptionTextView.setText(product.getDescription());
                     MAX_QUANTITY = product.getAvailableStock();
                     unitPrice = product.getPrice();
@@ -309,7 +309,7 @@ public class ProductDetailActivity extends AppCompatActivity {
     private void updateTotalPrice() {
         // Calculate total price
         double totalPrice = quantity * unitPrice; // Calculate total price based on quantity and unit price
-        textAddToCart.setText(String.format("Total: LKR %.2f", totalPrice)); // Update the TextView with total price
+        textAddToCart.setText(String.format("LKR %.2f", totalPrice)); // Update the TextView with total price
     }
 
     private void fetchComments(String productId) {

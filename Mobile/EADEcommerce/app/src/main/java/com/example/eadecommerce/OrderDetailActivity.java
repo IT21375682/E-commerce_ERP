@@ -255,7 +255,7 @@ public class OrderDetailActivity extends AppCompatActivity {
 
         // Change for dispatched
         if (status.isDispatched()) {
-            paymentImageLine.setBackgroundResource(R.color.primary);
+            paymentImageLine.setBackgroundResource(R.color.statusColor);
             receivedImage.setBackgroundResource(R.drawable.circle_border_background_done);
             receivedImage.setImageResource(R.drawable.pending_done);
             if(status.getDispatchedDate()!=null) {
@@ -267,7 +267,7 @@ public class OrderDetailActivity extends AppCompatActivity {
 
         // Change for partially delivered
         if (status.isPartiallyDelivered()) {
-            partiallyDeliveredImageLine.setBackgroundResource(R.color.primary);
+            partiallyDeliveredImageLine.setBackgroundResource(R.color.statusColor);
             partiallyDeliveredImage.setBackgroundResource(R.drawable.circle_border_background_done);
             partiallyDeliveredImage.setImageResource(R.drawable.partial_done);
             if(status.getPartiallyDeliveredDate()!=null) {
@@ -278,7 +278,7 @@ public class OrderDetailActivity extends AppCompatActivity {
 
         // Change for delivered
         if (status.isDelivered()) {
-            receivedImageLine.setBackgroundResource(R.color.primary);
+            receivedImageLine.setBackgroundResource(R.color.statusColor);
             departedImage.setBackgroundResource(R.drawable.circle_border_background_done);
             departedImage.setImageResource(R.drawable.completed_done);
             if(status.getDeliveredDate()!=null) {

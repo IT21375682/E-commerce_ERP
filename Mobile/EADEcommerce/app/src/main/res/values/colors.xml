@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="black">#FF000000</color>
-    <color name="lightBlack">#353535</color>
+    <color name="lightBlack">#767676</color>
     <color name="white">#FFFFFFFF</color>
     <color name="lightWhite">#BDBDBD</color>
     <color name="primary">#051F52</color>
@@ -14,4 +14,5 @@
     <color name="divider_color">#353535</color>
     <color name="ordersTextColor">@color/lightBlack</color>
     <color name="ordersOnTextColor">@color/black</color>
+    <color name="statusColor">@color/secondary</color>
 </resources>
