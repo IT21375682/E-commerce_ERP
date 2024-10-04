@@ -31,9 +31,9 @@ namespace E_commerce.Repositories
             return _category.Find(category => category.IsActive == false).ToList();
         }
 
-        public async Task<Category> GetCategoryByIdAsync(string id)
+        public Task<Category> GetCategoryById(string id)
         {
-            return await _category.Find(c => c.Id == id).FirstOrDefaultAsync();
+            return  _category.Find(c => c.Id == id).FirstOrDefaultAsync();
         }
 
         public async Task UpdateCategoryAsync(FilterDefinition<Category> filter, UpdateDefinition<Category> update)

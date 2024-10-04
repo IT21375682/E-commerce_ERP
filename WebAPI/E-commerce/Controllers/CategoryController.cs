@@ -46,9 +46,9 @@ namespace E_commerce.Controllers
 
         // Get category by id
         [HttpGet("{id}")]
-        public ActionResult<Category> GetCategoryById(string id)
+        public async Task<ActionResult<Category>> GetCategoryById(string id)
         {
-            var category = _categoryService.GetCategoryById(id);
+            var category = await _categoryService.GetCategoryById(id);
             if (category == null)
             {
                 return NotFound();

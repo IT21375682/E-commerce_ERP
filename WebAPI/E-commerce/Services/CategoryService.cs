@@ -31,9 +31,9 @@ namespace E_commerce.Services
             return _categoryRepository.GetAllDeactivatedCategories();
         }
 
-        public async Task<Category> GetCategoryById(string id)
+        public  Task<Category> GetCategoryById(string id)
         {
-            return await _categoryRepository.GetCategoryByIdAsync(id); // Call the async method
+            return  _categoryRepository.GetCategoryById(id); // Call the async method
         }
 
         public void CreateCategory(Category category)
@@ -61,7 +61,7 @@ namespace E_commerce.Services
             var filter = Builders<Category>.Filter.Eq(c => c.Id, categoryId);
 
             // Fetch the current category asynchronously
-            var category = await _categoryRepository.GetCategoryByIdAsync(categoryId);
+            var category = await _categoryRepository.GetCategoryById(categoryId);
 
             if (category != null)
             {
