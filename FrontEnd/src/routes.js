@@ -74,7 +74,7 @@ var routes = [
     layout: "/admin",
   },
   {
-    path: "/view-category/:id",
+    path: "/view-category",
     name: "view Category",
     icon: "ni ni-circle-08 text-pink",
     component: <ViewCategory/>,

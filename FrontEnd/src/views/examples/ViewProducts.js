@@ -26,14 +26,14 @@ const ViewProduct = () => {
     let apiUrl;
     switch (view) {
       case "activeProducts":
-        apiUrl = 'http://192.168.8.102:5004/api/Product/active';
+        apiUrl = 'https://localhost:5004/api/Product/active';
         break;
       case "deactivatedProducts":
-        apiUrl = 'http://192.168.8.102:5004/api/Product/deactivated';
+        apiUrl = 'https://localhost:5004/api/Product/deactivated';
         break;
       case "allProducts":
       default:
-        apiUrl = 'http://192.168.8.102:5004/api/Product';
+        apiUrl = 'https://localhost:5004/api/Product';
         break;
     }
 
@@ -47,7 +47,7 @@ const ViewProduct = () => {
     }
   };
   const toggleProductStatusus = async (productId) => {
-    const apiUrl = `http://192.168.8.102:5004/api/Product/${productId}/toggle-active`; // Toggle Active API
+    const apiUrl = `https://localhost:5004/api/Product/${productId}/toggle-active`; // Toggle Active API
   
     try {
       await axios.patch(apiUrl); // Send PUT request to toggle active status
@@ -59,8 +59,8 @@ const ViewProduct = () => {
   // Function to handle the activation/deactivation of a product
   const toggleProductStatus = async (productId, isActive) => {
     const apiUrl = isActive
-      ? `http://192.168.8.102:5004/api/Product/deactivate/${productId}` // Deactivate API
-      : `http://192.168.8.102:5004/api/Product/activate/${productId}`;  // Activate API
+      ? `https://localhost:5004/api/Product/deactivate/${productId}` // Deactivate API
+      : `https://localhost:5004/api/Product/activate/${productId}`;  // Activate API
 
     try {
       await axios.put(apiUrl); // Call the appropriate API
@@ -72,7 +72,7 @@ const ViewProduct = () => {
 
   // Function to handle the deletion of a product
   const deleteProduct = async (productId) => {
-    const apiUrl = `http://192.168.8.102:5004/api/Product/${productId}`; // Delete API URL
+    const apiUrl = `https://localhost:5004/api/Product/${productId}`; // Delete API URL
 
     try {
       await axios.delete(apiUrl); // Send DELETE request to the API

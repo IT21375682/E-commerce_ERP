@@ -37,7 +37,7 @@ const EditProduct = () => {
     useEffect(() => {
         const fetchActiveCategories = async () => {
             try {
-                const response = await axios.get("http://192.168.8.102:5004/api/Category/active");
+                const response = await axios.get("http://localhost:5004/api/Category/active");
                 setActiveCategories(response.data); // Set active categories
             } catch (error) {
                 console.error("Error fetching active categories:", error);
@@ -46,7 +46,7 @@ const EditProduct = () => {
 
         const fetchActiveVendors = async () => {
             try {
-                const response = await axios.get("http://192.168.8.102:5004/api/User/active");
+                const response = await axios.get("http://localhost:5004/api/User/active");
                 const vendors = response.data.filter(user => user.role === "VENDOR");
                 setActiveVendors(vendors); // Set only the vendors
             } catch (error) {
@@ -62,7 +62,7 @@ const EditProduct = () => {
     useEffect(() => {
         const fetchProduct = async () => {
             try {
-                const response = await axios.get(`http://192.168.8.102:5004/api/Product/${id}`); // Fetch product data by ID
+                const response = await axios.get(`http://localhost:5004/api/Product/${id}`); // Fetch product data by ID
                 setProduct(response.data); // Set the product state with the fetched data
 
                 // Set the image preview if an image exists
@@ -106,7 +106,7 @@ const EditProduct = () => {
     const handleSubmit = async (e) => {
         e.preventDefault(); // Prevent the default form submission behavior
         try {
-            const response = await axios.put(`http://192.168.8.102:5004/api/Product/${id}`, product, {
+            const response = await axios.put(`http://localhost:5004/api/Product/${id}`, product, {
                 headers: {
                     'Content-Type': 'application/json', // Set the content type to JSON
                 },

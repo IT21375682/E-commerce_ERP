@@ -26,14 +26,14 @@ const ViewCategory = () => {
         let apiUrl;
         switch (view) {
             case "activeCategories":
-                apiUrl = 'http://192.168.8.102:5004/api/Category/active'; // API for active categories
+                apiUrl = 'https://localhost:5004/api/Category/active'; // API for active categories
                 break;
             case "deactivatedCategories":
-                apiUrl = 'http://192.168.8.102:5004/api/Category/deactive'; // API for deactivated categories
+                apiUrl = 'https://localhost:5004/api/Category/deactive'; // API for deactivated categories
                 break;
             case "allCategories":
             default:
-                apiUrl = 'http://192.168.8.102:5004/api/Category'; // API for all categories
+                apiUrl = 'https://localhost:5004/api/Category'; // API for all categories
                 break;
         }
 
@@ -50,8 +50,8 @@ const ViewCategory = () => {
     // Function to toggle category status
     const toggleCategoryStatus = async (categoryId, isActive) => {
         const apiUrl = isActive
-            ? `http://192.168.8.102:5004/api/Category/deactive/${categoryId}` // Deactivate API
-            : `http://192.168.8.102:5004/api/Category/activate/${categoryId}`;  // Activate API
+            ? `http://localhost:5004/api/Category/deactive/${categoryId}` // Deactivate API
+            : `http://localhost:5004/api/Category/activate/${categoryId}`;  // Activate API
 
         try {
             await axios.put(apiUrl); // Call the appropriate API
@@ -63,7 +63,7 @@ const ViewCategory = () => {
 
     // Function to handle the deletion of a category
     const deleteCategory = async (categoryId) => {
-        const apiUrl = `http://192.168.8.102:5004/api/Category/${categoryId}`; // Delete API URL
+        const apiUrl = `http://localhost:5004/api/Category/${categoryId}`; // Delete API URL
 
         try {
             await axios.delete(apiUrl); // Send DELETE request to the API

@@ -33,7 +33,7 @@ const AddProduct = () => {
   useEffect(() => {
     const fetchActiveCategories = async () => {
       try {
-        const response = await axios.get("http://192.168.8.102:5004/api/Category/active");
+        const response = await axios.get("http://localhost:5004/api/Category/active");
         setActiveCategories(response.data); // Assuming the API returns an array of categories
         toast.success('Product Added successfully!', {
           position: "top-right",
@@ -59,7 +59,7 @@ const AddProduct = () => {
     };
     const fetchActiveVendors = async () => {
       try {
-        const response = await axios.get("http://192.168.8.102:5004/api/User/active");
+        const response = await axios.get("http://localhost:5004/api/User/active");
         // console.log(response.data); // Log the API response to see what data is returned
 
         const vendors = response.data.filter(user => user.role === "VENDOR");
@@ -108,7 +108,7 @@ const AddProduct = () => {
   const handleSubmit = async (e) => {
     e.preventDefault(); // Prevent the default form submission behavior
     try {
-      const response = await axios.post('http://192.168.8.102:5004/api/Product', product, {
+      const response = await axios.post('http://localhost:5004/api/Product', product, {
         headers: {
           'Content-Type': 'application/json', // Set the content type to JSON
         },
