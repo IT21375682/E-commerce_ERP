@@ -11,6 +11,9 @@ import CustomerReqTable from "views/examples/CustomerReqTable.js"
 import ViewVendor from "views/examples/ViewVendor";
 import ViewCustomer from "views/examples/ViewCustomer";
 import InactiveCusTable from "views/examples/InactiveCusTable";
+import EditProduct from "views/examples/EditProduct";
+import ViewCategory from "views/examples/ViewCategory";
+import ViewOrder from "views/examples/ViewOrder";
 
 
 var routes = [
@@ -104,6 +107,27 @@ var routes = [
     icon: "ni ni-circle-08 text-pink",
     component: <Register />,
     layout: "/auth",
+  },
+  {
+    path: "/edit-product/:id",
+    name: "Edit Product",
+    icon: "ni ni-circle-08 text-pink",
+    component: <EditProduct/>,
+    layout: "/admin",
+  },
+  {
+    path: "/view-category",
+    name: "view Category",
+    icon: "ni ni-circle-08 text-pink",
+    component: <ViewCategory/>,
+    layout: "/admin",
+  },
+  {
+    path: "/view-order",
+    name: "view Order",
+    icon: "ni ni-circle-08 text-pink",
+    component: <ViewOrder/>,
+    layout: "/admin",
   },
 ];
 export default routes;

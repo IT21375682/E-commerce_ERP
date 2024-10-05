@@ -62,99 +62,6 @@ using System.Numerics;
             _products.DeleteOne(product => product.Id == ObjectId.Parse(id).ToString());
         }
 
-        //public void UpdateStock(string productId, int quantity)
-        //{
-        //    var product = GetProductById(productId);
-        //    if (product != null)
-        //    {
-        //        product.AvailableStock += quantity;  // Update available stock
-        //        product.StockLastUpdated = DateTime.UtcNow;  // Update last modified time
-
-        //        UpdateProduct(productId, product);  // Save the updated product
-        //    }
-        //    else
-        //    {
-        //        throw new Exception($"Product with ID {productId} not found.");
-        //    }
-        //}
-
-        //public void RemoveStock(string productId, int quantity)
-        //{
-        //    var product = GetProductById(productId);
-        //    if (product != null)
-        //    {
-        //        if (product.AvailableStock >= quantity)
-        //        {
-        //            product.AvailableStock -= quantity;  // Remove the stock
-        //            product.StockLastUpdated = DateTime.UtcNow;  // Update last modified time
-
-        //            UpdateProduct(productId, product);  // Save the updated product
-        //        }
-        //        else
-        //        {
-        //            throw new Exception($"Not enough stock to remove for product ID {productId}. Available stock: {product.AvailableStock}");
-        //        }
-        //    }
-        //    else
-        //    {
-        //        throw new Exception($"Product with ID {productId} not found.");
-        //    }
-        //}
-        //public (bool isSuccess, string message) UpdateStock(string productId, int quantity)
-        //{
-        //    var product = GetProductById(productId);
-        //    if (product != null)
-        //    {
-        //        product.AvailableStock += quantity;  // Update available stock
-        //        product.StockLastUpdated = DateTime.UtcNow;  // Update last modified time
-
-        //        UpdateProduct(productId, product);  // Save the updated product
-
-        //        // Check for low stock alert
-        //        if (product.AvailableStock < 50)
-        //        {
-        //            return (true, $"Alert: Stock for product '{product.Name}' is below 50. Current stock: {product.AvailableStock}");
-        //        }
-
-        //        return (true, "Stock updated successfully.");
-        //    }
-        //    else
-        //    {
-        //        throw new Exception($"Product with ID {productId} not found.");
-        //    }
-        //}
-
-        //public (bool isSuccess, string message) RemoveStock(string productId, int quantity)
-        //{
-        //    var product = GetProductById(productId);
-        //    if (product != null)
-        //    {
-        //        if (product.AvailableStock >= quantity)
-        //        {
-        //            product.AvailableStock -= quantity;  // Remove the stock
-        //            product.StockLastUpdated = DateTime.UtcNow;  // Update last modified time
-
-        //            UpdateProduct(productId, product);  // Save the updated product
-
-        //            // Check for low stock alert
-        //            if (product.AvailableStock < 50)
-        //            {
-        //                return (true, $"Alert: Stock for product '{product.Name}' is below 50. Current stock: {product.AvailableStock}");
-        //            }
-
-        //            return (true, "Stock removed successfully.");
-        //        }
-        //        else
-        //        {
-        //            throw new Exception($"Not enough stock to remove for product ID {productId}. Available stock: {product.AvailableStock}");
-        //        }
-        //    }
-        //    else
-        //    {
-        //        throw new Exception($"Product with ID {productId} not found.");
-        //    }
-        //}
-
         public (bool isSuccess, string message) UpdateStock(string productId, int quantity)
         {
             var product = GetProductById(productId);
@@ -256,6 +163,11 @@ using System.Numerics;
         public IEnumerable<Product> GetAllActiveProducts()
         {
             return _products.Find(product => product.IsActive).ToList();
+        }
+
+        public IEnumerable<Product> GetAllDeActivatedProducts()
+        {
+            return _products.Find(product => !product.IsActive).ToList();
         }
 
 
@@ -402,6 +314,32 @@ using System.Numerics;
             });
 
             return productDetails;
+        }
+  public async Task ToggleIsActiveAsync(string productId)
+        {
+            var filter = Builders<Product>.Filter.Eq(p => p.Id, productId);
+
+            // Fetch the current product
+            var product = await _products.Find(filter).FirstOrDefaultAsync();
+
+            if (product != null)
+            {
+                // Toggle the IsActive value
+                var newIsActiveValue = !product.IsActive;
+
+                // Update with the new IsActive value
+                var update = Builders<Product>.Update
+                    .Set(p => p.IsActive, newIsActiveValue)
+                    .CurrentDate(p => p.StockLastUpdated); // Update the stock last modified date (optional)
+
+                // Apply the update
+                await _products.UpdateOneAsync(filter, update);
+            }
+        }
+
+        public async Task UpdateManyProductsAsync(FilterDefinition<Product> filter, UpdateDefinition<Product> update)
+        {
+            await _products.UpdateManyAsync(filter, update);
         }
 
 

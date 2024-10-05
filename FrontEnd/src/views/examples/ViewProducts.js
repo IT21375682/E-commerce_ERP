@@ -1,125 +1,237 @@
-import React, { useState } from "react";
 import {
-  Nav,
-  NavItem,
-  NavLink,
-  TabContent,
-  TabPane,
+  Badge,
+  Card,
+  CardHeader,
+  Table,
+  Container,
   Row,
-  Col,
-  Button,
+  Button
 } from "reactstrap";
-import classnames from "classnames";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import { toast, ToastContainer } from 'react-toastify'; // Import toast components
+import 'react-toastify/dist/ReactToastify.css'; // Import toastify CSS
 
 const ViewProduct = () => {
-  // State to track active main tab (Active/Deactivated)
-  const [activeMainTab, setActiveMainTab] = useState("1");
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [view, setView] = useState("activeProducts");  // State to manage the selected view
+  const navigate = useNavigate();
 
-  // State to track active category tab within each main tab
-  const [activeCategoryTab, setActiveCategoryTab] = useState({
-    active: "COMBO",
-    deactivated: "COMBO",
-  });
+  // Function to fetch products based on the selected view
+  const fetchProducts = async (view) => {
+    setLoading(true); // Start loading
 
-  const toggleMainTab = (tab) => {
-    if (activeMainTab !== tab) setActiveMainTab(tab);
+    let apiUrl;
+    switch (view) {
+      case "activeProducts":
+        apiUrl = 'https://localhost:5004/api/Product/active';
+        break;
+      case "deactivatedProducts":
+        apiUrl = 'https://localhost:5004/api/Product/deactivated';
+        break;
+      case "allProducts":
+      default:
+        apiUrl = 'https://localhost:5004/api/Product';
+        break;
+    }
+
+    try {
+      const response = await axios.get(apiUrl); // Fetch products based on the selected view
+      setProducts(response.data);
+      setLoading(false);
+    } catch (error) {
+      console.error('Error fetching products:', error);
+      setLoading(false);
+    }
   };
+  const toggleProductStatusus = async (productId) => {
+    const apiUrl = `https://localhost:5004/api/Product/${productId}/toggle-active`; // Toggle Active API
+  
+    try {
+      await axios.patch(apiUrl); // Send PUT request to toggle active status
+      fetchProducts(view); // Refresh the product list after status change
+    } catch (error) {
+      console.error('Error toggling product status:', error);
+    }
+  };
+  // Function to handle the activation/deactivation of a product
+  const toggleProductStatus = async (productId, isActive) => {
+    const apiUrl = isActive
+      ? `https://localhost:5004/api/Product/deactivate/${productId}` // Deactivate API
+      : `https://localhost:5004/api/Product/activate/${productId}`;  // Activate API
 
-  const toggleCategoryTab = (tab, status) => {
-    if (status === "active") {
-      setActiveCategoryTab((prev) => ({ ...prev, active: tab }));
-    } else {
-      setActiveCategoryTab((prev) => ({ ...prev, deactivated: tab }));
+    try {
+      await axios.put(apiUrl); // Call the appropriate API
+      fetchProducts(view); // Refresh the product list after status change
+    } catch (error) {
+      console.error('Error changing product status:', error);
     }
   };
 
-  const categories = ["COMBO", "POPCORN", "SOFT DRINKS", "COFFEE", "CHOCOLATES"];
+  // Function to handle the deletion of a product
+  const deleteProduct = async (productId) => {
+    const apiUrl = `https://localhost:5004/api/Product/${productId}`; // Delete API URL
+
+    try {
+      await axios.delete(apiUrl); // Send DELETE request to the API
+      // Remove the product from the state after successful deletion
+      setProducts(products.filter(product => product.id !== productId));
+      toast.success('Product deleted successfully!', {
+        position: "top-right",
+        autoClose: 3000, // Auto close after 3 seconds
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+    });
+    } catch (error) {
+      console.error('Error deleting product:', error);
+      toast.error('Error deleting product. Please try again.', {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+    });
+    }
+  };
+
+  // Fetch products when the component mounts or when the view changes
+  useEffect(() => {
+    fetchProducts(view);
+  }, [view]);
 
   return (
-    <div class="container-fluid">
-    <div className="container mt-4">
-      <Row className="mb-3">
-        <Col>
-          <h4 className="text-center">Foods & Beverages</h4>
-        </Col>
-        <Col className="text-right">
-          <Button color="primary" href="/AddCanteenMenu">
-            <i className="fa fa-plus-square" style={{ fontSize: 20, color: "white" }}></i> Add Menu Item
-          </Button>
-        </Col>
+    <Container className="mt-10" fluid>
+       {/* Toast container */}
+       <ToastContainer />
+      <Row>
+        <div className="col mt-7">
+          <Card className="shadow">
+            <CardHeader className="border-0">
+              <h3 className="mb-0">Products</h3>
+            </CardHeader>
+            <Row className="mb-3 align-items-center">
+              <div className="col">
+                <div className="d-flex justify-content-center">
+                  <Button
+                    color={view === "allProducts" ? "secondary" : "info"}
+                    onClick={() => setView("allProducts")}
+                    className="mr-2"
+                  >
+                    All Products
+                  </Button>
+                  <Button
+                    color={view === "activeProducts" ? "secondary" : "primary"}
+                    onClick={() => setView("activeProducts")}
+                    className="mr-2"
+                  >
+                    Active Products
+                  </Button>
+                  <Button
+                    color={view === "deactivatedProducts" ? "secondary" : "warning"}
+                    onClick={() => setView("deactivatedProducts")}
+                    className="mr-2"
+                  >
+                    Deactivated Products
+                  </Button>
+                </div>
+              </div>
+              <div className="col-auto p-4">
+                <Button color="primary" size="md" onClick={() => window.location.href = "/admin/add-product"}>
+                  <i className="fa fa-plus mr-1"></i> Add Product
+                </Button>
+              </div>
+            </Row>
+
+            <Table className="align-items-center table-flush" responsive>
+              <thead className="thead-light">
+                <tr>
+                  <th scope="col">Image</th>
+                  <th scope="col">Name</th>
+                  <th scope="col">Price</th>
+                  <th scope="col">Category</th>
+                  <th scope="col">IsActive</th>
+                  <th scope="col">Edit</th>
+                  <th scope="col">Delete</th>
+                  <th scope="col">Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                {loading ? (
+                  <tr>
+                    <td colSpan="7" className="text-center">Loading...</td>
+                  </tr>
+                ) : (
+                  products.length > 0 ? (
+                    products.map((product) => (
+                      <tr key={product.id}>
+                        <td>
+                          {product.productImage ? (
+                            <img
+                              src={`data:image/jpeg;base64,${product.productImage}`}
+                              alt={product.name}
+                              style={{ width: '50px', height: '50px', objectFit: 'cover' }}
+                              loading="lazy"
+                            />
+                          ) : (
+                            'No Image'
+                          )}
+                        </td>
+                        <td>{product.name}</td>
+                        <td>{product.price}</td>
+                        <td>{product.categoryName || 'N/A'}</td>
+                        <td>
+                          <Badge color={product.isActive ? "success" : "danger"}>
+                            {product.isActive ? "Active" : "Inactive"}
+                          </Badge>
+                        </td>
+                        <td>
+                          <Button
+                            color="primary"
+                            size="md"
+                            onClick={() => navigate(`/admin/edit-product/${product.id}`)}
+                          >
+                            Edit
+                          </Button>
+                        </td>
+                        <td>
+                          <Button
+                            color="danger"
+                            size="md"
+                            onClick={() => deleteProduct(product.id)} // Call the deleteProduct function
+                          >
+                            Delete
+                          </Button>
+                        </td>
+                        <td>
+                          <Button
+                            color={product.isActive ? "warning" : "success"}
+                            size="md"
+                            onClick={() => toggleProductStatusus(product.id, product.isActive)}
+                          >
+                            {product.isActive ? "Deactivate" : "Activate"}
+                          </Button>
+                        </td>
+                      </tr>
+                    ))
+                  ) : (
+                    <tr>
+                      <td colSpan="7" className="text-center">No products found</td>
+                    </tr>
+                  )
+                )}
+              </tbody>
+            </Table>
+          </Card>
+        </div>
       </Row>
-
-      {/* Main Tabs: Active / Deactivated */}
-      <Nav tabs>
-        <NavItem>
-          <NavLink
-            className={classnames({ active: activeMainTab === "1" })}
-            onClick={() => toggleMainTab("1")}
-          >
-            Active
-          </NavLink>
-        </NavItem>
-        <NavItem>
-          <NavLink
-            className={classnames({ active: activeMainTab === "2" })}
-            onClick={() => toggleMainTab("2")}
-          >
-            Deactivated
-          </NavLink>
-        </NavItem>
-      </Nav>
-
-      <TabContent activeTab={activeMainTab}>
-        {/* Active Tab Content */}
-        <TabPane tabId="1">
-          <Nav tabs>
-            {categories.map((category, idx) => (
-              <NavItem key={idx}>
-                <NavLink
-                  className={classnames({ active: activeCategoryTab.active === category })}
-                  onClick={() => toggleCategoryTab(category, "active")}
-                >
-                  {category}
-                </NavLink>
-              </NavItem>
-            ))}
-          </Nav>
-          <TabContent activeTab={activeCategoryTab.active}>
-            {categories.map((category, idx) => (
-              <TabPane tabId={category} key={idx}>
-                <h5>{category} Menu (Active)</h5>
-                {/* Render your active items here for the given category */}
-              </TabPane>
-            ))}
-          </TabContent>
-        </TabPane>
-
-        {/* Deactivated Tab Content */}
-        <TabPane tabId="2">
-          <Nav tabs>
-            {categories.map((category, idx) => (
-              <NavItem key={idx}>
-                <NavLink
-                  className={classnames({ active: activeCategoryTab.deactivated === category })}
-                  onClick={() => toggleCategoryTab(category, "deactivated")}
-                >
-                  {category}
-                </NavLink>
-              </NavItem>
-            ))}
-          </Nav>
-          <TabContent activeTab={activeCategoryTab.deactivated}>
-            {categories.map((category, idx) => (
-              <TabPane tabId={category} key={idx}>
-                <h5>{category} Menu (Deactivated)</h5>
-                {/* Render your deactivated items here for the given category */}
-              </TabPane>
-            ))}
-          </TabContent>
-        </TabPane>
-      </TabContent>
-    </div>
-    </div>
+    </Container>
   );
 };
 

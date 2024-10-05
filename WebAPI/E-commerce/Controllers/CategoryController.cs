@@ -34,13 +34,21 @@ namespace E_commerce.Controllers
             return Ok(activeCategories);
          }
 
+        // Get only deactivated categories
+        [HttpGet("deactive")]
+        public ActionResult<IEnumerable<Category>> GetAllDeactivatedCategories()
+        {
+            var deactiveCategories = _categoryService.GetAllDeactivatedCategories();
+            return Ok(deactiveCategories);
+        }
+
 
 
         // Get category by id
         [HttpGet("{id}")]
-        public ActionResult<Category> GetCategoryById(string id)
+        public async Task<ActionResult<Category>> GetCategoryById(string id)
         {
-            var category = _categoryService.GetCategoryById(id);
+            var category = await _categoryService.GetCategoryById(id);
             if (category == null)
             {
                 return NotFound();
@@ -97,6 +105,14 @@ namespace E_commerce.Controllers
         {
             var activeCategories = _categoryService.GetAllActiveCategoriesNames();
             return Ok(activeCategories);
+        }
+
+        //Toggle the Status
+        [HttpPatch("{id}/toggle-active")]
+        public async Task<IActionResult> ToggleCategoryIsActive(string id)
+        {
+            await _categoryService.ToggleCategoryIsActiveAsync(id);
+            return NoContent(); // 204 No Content response after successful update
         }
 
 
