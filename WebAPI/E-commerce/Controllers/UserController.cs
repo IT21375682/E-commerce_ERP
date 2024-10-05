@@ -144,7 +144,7 @@ namespace E_commerce.Controllers
             {
                 return BadRequest("Invalid request.");
             }
-            _userService.ToggleUserStatus(id, request.IsActive);
+            _userService.ToggleUserStatus(id, request.IsActive, request.IsNew);
             return NoContent();
         }
 
@@ -181,7 +181,18 @@ namespace E_commerce.Controllers
             return Ok(new { Token = token });
         }
 
+        // GET: api/User/check-email?email=test@example.com
+        [HttpGet("check-email")]
+        public IActionResult CheckEmail(string email)
+        {
+            if (string.IsNullOrEmpty(email))
+            {
+                return BadRequest("Email is required.");
+            }
 
+            bool isTaken = _userService.IsEmailTaken(email);
+            return Ok(new { isUnique = !isTaken });
+        }
 
     }
 

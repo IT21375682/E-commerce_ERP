@@ -14,7 +14,6 @@ import React, { useState } from "react";
 import axios from "axios";
 
 const AddVendor = () => {
-  // Set state for user details
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -25,16 +24,16 @@ const AddVendor = () => {
       postalCode: '',
       country: ''
     },
-    role: 'VENDOR', // Default to VENDOR since this form is for adding vendors
-    isActive: true, // Default active status
-    password: '', // Placeholder for password
+    role: 'VENDOR',
+    isActive: true,
+    password: '',
   });
 
-  // Handle form input change
+  const [error, setError] = useState('');
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     
-    // Check if it's a nested address field
     if (name.includes('address.')) {
       const addressField = name.split('.')[1];
       setFormData((prevData) => ({
@@ -52,12 +51,29 @@ const AddVendor = () => {
     }
   };
 
-  // Submit the form data
+  // Function to check if email is unique
+  const isEmailUnique = async (email) => {
+    try {
+      const response = await axios.get(`https://localhost:5004/api/User/check-email?email=${email}`);
+      return response.data.isUnique; // Assuming the backend returns { isUnique: true/false }
+    } catch (error) {
+      console.error('Error checking email:', error);
+      return false; // Treat as non-unique if there is an error
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setError(''); // Reset any previous error messages
+
+    // Check if the email is unique
+    const emailUnique = await isEmailUnique(formData.email);
+    if (!emailUnique) {
+      setError('Email address already exists. Please use a different one.');
+      return; // Prevent submission
+    }
 
     try {
-      // Send form data to backend API (assuming there's an endpoint to add users)
       const response = await axios.post('https://localhost:5004/api/User', formData);
       alert('Vendor added successfully:', response.data);
       // Handle success (e.g., show notification or redirect)
@@ -80,17 +96,14 @@ const AddVendor = () => {
                 </Row>
               </CardHeader>
               <CardBody>
+                {error && <div className="alert alert-danger">{error}</div>} {/* Display error message */}
                 <Form onSubmit={handleSubmit}>
-                  <h6 className="heading-small text-muted mb-4">
-                    Vendor information
-                  </h6>
+                  <h6 className="heading-small text-muted mb-4">Vendor information</h6>
                   <div className="pl-lg-4">
                     <Row>
                       <Col lg="6">
                         <FormGroup>
-                          <label className="form-control-label" htmlFor="input-name">
-                            Name
-                          </label>
+                          <label className="form-control-label" htmlFor="input-name">Name</label>
                           <Input
                             className="form-control-alternative"
                             id="input-name"
@@ -104,9 +117,7 @@ const AddVendor = () => {
                       </Col>
                       <Col lg="6">
                         <FormGroup>
-                          <label className="form-control-label" htmlFor="input-email">
-                            Email address
-                          </label>
+                          <label className="form-control-label" htmlFor="input-email">Email address</label>
                           <Input
                             className="form-control-alternative"
                             id="input-email"
@@ -122,9 +133,7 @@ const AddVendor = () => {
                     <Row>
                       <Col lg="6">
                         <FormGroup>
-                          <label className="form-control-label" htmlFor="input-phone">
-                            Phone
-                          </label>
+                          <label className="form-control-label" htmlFor="input-phone">Phone</label>
                           <Input
                             className="form-control-alternative"
                             id="input-phone"
@@ -138,9 +147,7 @@ const AddVendor = () => {
                       </Col>
                       <Col lg="6">
                         <FormGroup>
-                          <label className="form-control-label" htmlFor="input-password">
-                            Password
-                          </label>
+                          <label className="form-control-label" htmlFor="input-password">Password</label>
                           <Input
                             className="form-control-alternative"
                             id="input-password"
@@ -155,17 +162,12 @@ const AddVendor = () => {
                     </Row>
                   </div>
                   <hr className="my-4" />
-                  {/* Address */}
-                  <h6 className="heading-small text-muted mb-4">
-                    Contact information
-                  </h6>
+                  <h6 className="heading-small text-muted mb-4">Contact information</h6>
                   <div className="pl-lg-4">
                     <Row>
                       <Col md="12">
                         <FormGroup>
-                          <label className="form-control-label" htmlFor="input-address">
-                            Address
-                          </label>
+                          <label className="form-control-label" htmlFor="input-address">Address</label>
                           <Input
                             className="form-control-alternative"
                             id="input-address"
@@ -181,9 +183,7 @@ const AddVendor = () => {
                     <Row>
                       <Col lg="4">
                         <FormGroup>
-                          <label className="form-control-label" htmlFor="input-city">
-                            City
-                          </label>
+                          <label className="form-control-label" htmlFor="input-city">City</label>
                           <Input
                             className="form-control-alternative"
                             id="input-city"
@@ -197,9 +197,7 @@ const AddVendor = () => {
                       </Col>
                       <Col lg="4">
                         <FormGroup>
-                          <label className="form-control-label" htmlFor="input-country">
-                            Country
-                          </label>
+                          <label className="form-control-label" htmlFor="input-country">Country</label>
                           <Input
                             className="form-control-alternative"
                             id="input-country"
@@ -213,9 +211,7 @@ const AddVendor = () => {
                       </Col>
                       <Col lg="4">
                         <FormGroup>
-                          <label className="form-control-label" htmlFor="input-postal-code">
-                            Postal code
-                          </label>
+                          <label className="form-control-label" htmlFor="input-postal-code">Postal code</label>
                           <Input
                             className="form-control-alternative"
                             id="input-postal-code"
@@ -232,16 +228,8 @@ const AddVendor = () => {
                   <hr className="my-4" />
                   <Row>
                     <Col className="text-center">
-                      <Button color="primary" size="md" type="submit">
-                        Save
-                      </Button>
-                      <Button
-                        color="danger"
-                        size="md"
-                        onClick={(e) => e.preventDefault()}
-                      >
-                        Cancel
-                      </Button>
+                      <Button color="primary" size="md" type="submit">Save</Button>
+                      <Button color="danger" size="md" onClick={(e) => e.preventDefault()}>Cancel</Button>
                     </Col>
                   </Row>
                 </Form>

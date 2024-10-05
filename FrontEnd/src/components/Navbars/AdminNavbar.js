@@ -16,6 +16,7 @@
 
 */
 import { Link } from "react-router-dom";
+
 // reactstrap components
 import {
   DropdownMenu,
@@ -35,6 +36,14 @@ import {
 } from "reactstrap";
 
 const AdminNavbar = (props) => {
+
+  const handleLogout = () => {
+    if(localStorage.getItem("token") != "") {
+      localStorage.removeItem("token");
+      window.location.href = "/auth/login"; 
+    }
+    
+  };
   return (
     <>
       <Navbar className="navbar-top navbar-dark" expand="md" id="navbar-main">
@@ -82,7 +91,7 @@ const AdminNavbar = (props) => {
                   <i className="ni ni-single-02" />
                   <span>My profile</span>
                 </DropdownItem>
-                <DropdownItem to="/admin/user-profile" tag={Link}>
+                {/* <DropdownItem to="/admin/user-profile" tag={Link}>
                   <i className="ni ni-settings-gear-65" />
                   <span>Settings</span>
                 </DropdownItem>
@@ -94,8 +103,8 @@ const AdminNavbar = (props) => {
                   <i className="ni ni-support-16" />
                   <span>Support</span>
                 </DropdownItem>
-                <DropdownItem divider />
-                <DropdownItem href="#pablo" onClick={(e) => e.preventDefault()}>
+                <DropdownItem divider /> */}
+                <DropdownItem href="#pablo" onClick={handleLogout}>
                   <i className="ni ni-user-run" />
                   <span>Logout</span>
                 </DropdownItem>

@@ -97,12 +97,13 @@ namespace E_commerce.Services
             return _userRepository.GetDeactiveUsers(); // Fetch active users
         }
 
-        public void ToggleUserStatus(string id, bool isActive)
+        public void ToggleUserStatus(string id, bool isActive,bool isNew)
         {
             var user = _userRepository.GetUserById(id);
             if (user != null)
             {
                 user.IsActive = isActive; // Update the isActive status
+                user.IsNew = isNew; // Update the isNew status
                 _userRepository.UpdateUser(user); // Save the changes
             }
         }
@@ -121,6 +122,14 @@ namespace E_commerce.Services
 
             return Task.FromResult(_jwtService.GenerateToken(user.Email, user.Role, user.Name, user.Id));
         }
+
+
+        // Check if a user with the given email already exists
+        public bool IsEmailTaken(string email)
+        {
+            return _userRepository.GetAllUsers().Any(user => user.Email == email);
+        }
+
 
     }
 }
