@@ -8,6 +8,7 @@ import AddProduct from "views/examples/AddProduct";
 import ViewProduct from "views/examples/ViewProducts";
 import EditProduct from "views/examples/EditProduct";
 import ViewCategory from "views/examples/ViewCategory";
+import ViewOrder from "views/examples/ViewOrder";
 
 var routes = [
   {
@@ -78,6 +79,13 @@ var routes = [
     name: "view Category",
     icon: "ni ni-circle-08 text-pink",
     component: <ViewCategory/>,
+    layout: "/admin",
+  },
+  {
+    path: "/view-order",
+    name: "view Order",
+    icon: "ni ni-circle-08 text-pink",
+    component: <ViewOrder/>,
     layout: "/admin",
   },
 ];

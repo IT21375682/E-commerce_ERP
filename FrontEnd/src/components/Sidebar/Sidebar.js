@@ -261,6 +261,12 @@ const Sidebar = (props) => {
                 Categor Management
               </NavLink>
       </NavItem>
+      <NavItem>
+            <NavLink href="/admin/view-order">
+                <i className="ni ni-ui-04" />
+                Order Management
+              </NavLink>
+      </NavItem>
           </Nav>
          
         </Collapse>
