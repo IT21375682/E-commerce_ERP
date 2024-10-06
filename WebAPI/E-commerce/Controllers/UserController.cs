@@ -67,6 +67,7 @@ namespace E_commerce.Controllers
             {
                 _userService.CreateUser(newUser);
                 return CreatedAtAction(nameof(GetUserById), new { id = newUser.Id }, newUser);
+
             }
             catch (ArgumentException ex)
             {

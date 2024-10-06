@@ -8,7 +8,7 @@ import {
   Button,
   FormGroup,
   Col,
-  Input
+  Input,
 } from "reactstrap";
 import Header from "components/Headers/Header.js";
 import React, { useState, useEffect } from "react"; 
@@ -36,6 +36,11 @@ const CustomerTable = () => {
 
   // Filter the users to only include those with the role of 'CUSTOMER' and who are active
   const activeCustomers = users.filter((user) => user.role === 'CUSTOMER' && user.isActive);
+
+  const CustomerRequests = users.filter((user) => user.role === 'CUSTOMER' && !user.isActive && user.isNew);
+
+  // // Get the count of inactive customers
+  // const CustomerRequestsCount = CustomerRequests.length;
 
   // Filter active customers based on search term (name, email, or phone)
   const filteredCustomers = activeCustomers.filter((customer) => 
@@ -111,6 +116,24 @@ const CustomerTable = () => {
                         className="text-end"
                       >
                         Customer Requests
+                        <div
+                          style={{
+                            backgroundColor: '#C0392B', // Dark red color
+                            color: 'white', // Text color
+                            borderRadius: '50%', // Make it circular
+                            width: '25px', // Width of the badge
+                            height: '25px', // Height of the badge
+                            display: 'flex',
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            position: 'absolute',
+                            top: '1px',
+                            left: '1px',
+                            fontSize: '12px', // Adjust font size
+                              }}
+                        >
+                   {CustomerRequests.length} {/* Display the count */}
+                   </div>
                       </Button>
                     </th>
                   </tr>
