@@ -16,6 +16,7 @@ import ViewCategory from "views/examples/ViewCategory";
 import ViewOrder from "views/examples/ViewOrder";
 import AddChategory from "views/examples/AddChategory";
 import ViewComments from "views/examples/ViewComments";
+import InventoryManagement from "views/examples/inventoryManagement";
 
 var routes = [
   // {
@@ -57,10 +58,10 @@ var routes = [
     path: "/view-product",
     name: "View Product ",
     icon: "ni ni-bullet-list-67 text-red",
-    component: < ViewProduct/>,
+    component: < ViewProduct />,
     layout: "/admin",
   },
-{
+  {
     path: "/Customer-table",
     name: "customer ",
     icon: "ni ni-bullet-list-67 text-red",
@@ -113,35 +114,42 @@ var routes = [
     path: "/edit-product/:id",
     name: "Edit Product",
     icon: "ni ni-circle-08 text-pink",
-    component: <EditProduct/>,
+    component: <EditProduct />,
     layout: "/admin",
   },
   {
     path: "/view-category",
     name: "view Category",
     icon: "ni ni-circle-08 text-pink",
-    component: <ViewCategory/>,
+    component: <ViewCategory />,
     layout: "/admin",
   },
   {
     path: "/add-category",
     name: "AddChategory",
     icon: "ni ni-circle-08 text-pink",
-    component: <AddChategory/>,
+    component: <AddChategory />,
     layout: "/admin",
   },
   {
     path: "/view-comments",
     name: "ViewComments",
     icon: "ni ni-circle-08 text-pink",
-    component: <ViewComments/>,
+    component: <ViewComments />,
     layout: "/admin",
   },
   {
     path: "/view-order",
     name: "view Order",
     icon: "ni ni-circle-08 text-pink",
-    component: <ViewOrder/>,
+    component: <ViewOrder />,
+    layout: "/admin",
+  },
+  {
+    path: "/inventory-mgt",
+    name: "Inventory Management",
+    icon: "ni ni-circle-08 text-pink",
+    component: <InventoryManagement />,
     layout: "/admin",
   },
 ];
