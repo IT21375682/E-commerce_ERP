@@ -42,7 +42,7 @@ const ViewVendor = () => {
     // Fetch vendor details when component mounts
     const fetchVendorDetails = async () => {
       try {
-        const response = await axios.get(`https://localhost:7179/api/User/${vendorId}`); // Replace with actual endpoint
+        const response = await axios.get(`https://localhost:5004/api/User/${vendorId}`); // Replace with actual endpoint
         setFormData(response.data);
       } catch (error) {
         console.error('Error fetching vendor details:', error);
@@ -79,7 +79,7 @@ const ViewVendor = () => {
 
     try {
       // Send updated form data to backend API using PUT method
-      await axios.put(`https://localhost:7179/api/User/${vendorId}`, formData); // Replace with actual endpoint
+      await axios.put(`https://localhost:5004/api/User/${vendorId}`, formData); // Replace with actual endpoint
       alert('Vendor details updated successfully.');
       setIsEditMode(false); // Exit edit mode after saving
     } catch (error) {

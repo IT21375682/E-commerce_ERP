@@ -32,5 +32,7 @@ namespace E_commerce.Models
     public class ToggleStatusRequest
     {
         public bool IsActive { get; set; }
+        public bool IsNew { get; set; }
+
     }
 }

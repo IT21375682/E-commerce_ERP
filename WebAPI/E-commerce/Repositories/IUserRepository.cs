@@ -62,11 +62,14 @@ namespace E_commerce.Repositories
         }
 
         // Activate or deactivate a user account
-        public void ToggleUserActivation(string id, bool activate)
+        public void ToggleUserActivation(string id, bool activate,bool isNew)
         {
-            var update = Builders<User>.Update.Set(u => u.IsActive, activate);
+            var update = Builders<User>.Update
+           .Set(u => u.IsActive, activate)
+           .Set(u => u.IsNew, isNew);
             _users.UpdateOne(user => user.Id == id, update);
         }
+
 
         //Get All active users
         public IEnumerable<User> GetActiveUsers()

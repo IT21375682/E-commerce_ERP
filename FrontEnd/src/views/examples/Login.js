@@ -31,13 +31,14 @@ const Login = () => {
         email: email,
         password: password,
       });
+
+      console.log("Response : " + response.data);
   
       // Assuming the response contains a token
       const token = response.data.Token;
-      localStorage.setItem("token", token); // Store token in local storage
-  
-      // Redirect to dashboard or another page after successful login
-      window.location.href = "/dashboard";
+      localStorage.setItem("token", response.data.token); // Store token in local storage
+      console.log("token: ",response.data);
+      window.location.href = "/admin/index";
     } catch (error) {
       // Handle error, for example, invalid credentials
       if (error.response) {

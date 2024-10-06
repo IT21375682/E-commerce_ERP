@@ -1,88 +1,64 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { NavLink as NavLinkRRD, Link } from "react-router-dom";
 import { PropTypes } from "prop-types";
-
-// reactstrap components
+import { jwtDecode } from "jwt-decode";
+// To decode JWT tokens
 import {
-  Button,
-  Card,
-  CardHeader,
-  CardBody,
-  CardTitle,
   Collapse,
-  DropdownMenu,
-  DropdownItem,
   UncontrolledDropdown,
   DropdownToggle,
-  FormGroup,
-  Form,
-  Input,
-  InputGroupAddon,
-  InputGroupText,
-  InputGroup,
+  DropdownMenu,
+  DropdownItem,
   Media,
   NavbarBrand,
   Navbar,
   NavItem,
   NavLink,
   Nav,
-  Progress,
-  Table,
   Container,
   Row,
   Col,
-  Dropdown
+  Form,
+  Input,
+  InputGroup,
+  InputGroupAddon,
+  InputGroupText
 } from "reactstrap";
 
-var ps;
-
 const Sidebar = (props) => {
-
-
-  const [dropdownOpen, setDropdownOpen] = useState(false);
-
-  const toggleDropdown = () => {
-    setDropdownOpen(!dropdownOpen);
-  };
-
-
-
-
-
-
-
   const [collapseOpen, setCollapseOpen] = useState();
-  // verifies if routeName is the one active (in browser input)
-  const activeRoute = (routeName) => {
-    return props.location.pathname.indexOf(routeName) > -1 ? "active" : "";
-  };
-  // toggles collapse between opened and closed (true/false)
+  const [role, setRole] = useState();
+
+  // Decode JWT token and get the role
+  useEffect(() => {
+    
+    if (!localStorage.getItem("token")) {
+      // If token is not present, redirect to login
+      window.location.href = "/auth/login";
+    }
+    const token = localStorage.getItem("token"); // Retrieve the token from localStorage
+    if (token) {
+      try {
+        const decodedToken = jwtDecode(token);
+        setRole(decodedToken.role);
+        console.log("Role : " + decodedToken.role + ": " + role)
+      } catch (error) {
+        console.error("Failed to decode token", error);
+      }
+    }
+  }, []);
+
+  // Toggles collapse between opened and closed (true/false)
   const toggleCollapse = () => {
     setCollapseOpen((data) => !data);
   };
-  // closes the collapse
+
+  // Closes the collapse
   const closeCollapse = () => {
     setCollapseOpen(false);
   };
-  // creates the links that appear in the left menu / Sidebar
-  const createLinks = (routes) => {
-    return routes.map((prop, key) => {
-      return (
-        <NavItem key={key}>
-          <NavLink
-            to={prop.layout + prop.path}
-            tag={NavLinkRRD}
-            onClick={closeCollapse}
-          >
-            <i className={prop.icon} />
-            {prop.name}
-          </NavLink>
-        </NavItem>
-      );
-    });
-  };
 
-  const { bgColor, routes, logo } = props;
+  const { logo } = props;
   let navbarBrandProps;
   if (logo && logo.innerLink) {
     navbarBrandProps = {
@@ -111,72 +87,14 @@ const Sidebar = (props) => {
         >
           <span className="navbar-toggler-icon" />
         </button>
+
         {/* Brand */}
         {logo ? (
           <NavbarBrand className="pt-0" {...navbarBrandProps}>
-            <img
-              alt={logo.imgAlt}
-              className="navbar-brand-img"
-              src={logo.imgSrc}
-            />
+            <img alt={logo.imgAlt} className="navbar-brand-img" src={logo.imgSrc} />
           </NavbarBrand>
         ) : null}
-        {/* User */}
-        <Nav className="align-items-center d-md-none">
-          <UncontrolledDropdown nav>
-            <DropdownToggle nav className="nav-link-icon">
-              <i className="ni ni-bell-55" />
-            </DropdownToggle>
-            <DropdownMenu
-              aria-labelledby="navbar-default_dropdown_1"
-              className="dropdown-menu-arrow"
-              right
-            >
-              <DropdownItem>Action</DropdownItem>
-              <DropdownItem>Another action</DropdownItem>
-              <DropdownItem divider />
-              <DropdownItem>Something else here</DropdownItem>
-            </DropdownMenu>
-          </UncontrolledDropdown>
-          <UncontrolledDropdown nav>
-            <DropdownToggle nav>
-              <Media className="align-items-center">
-                <span className="avatar avatar-sm rounded-circle">
-                  <img
-                    alt="..."
-                    src={require("../../assets/img/theme/team-1-800x800.jpg")}
-                  />
-                </span>
-              </Media>
-            </DropdownToggle>
-            <DropdownMenu className="dropdown-menu-arrow" right>
-              <DropdownItem className="noti-title" header tag="div">
-                <h6 className="text-overflow m-0">Welcome!</h6>
-              </DropdownItem>
-              <DropdownItem to="/admin/user-profile" tag={Link}>
-                <i className="ni ni-single-02" />
-                <span>My profile</span>
-              </DropdownItem>
-              <DropdownItem to="/admin/user-profile" tag={Link}>
-                <i className="ni ni-settings-gear-65" />
-                <span>Settings</span>
-              </DropdownItem>
-              <DropdownItem to="/admin/user-profile" tag={Link}>
-                <i className="ni ni-calendar-grid-58" />
-                <span>Activity</span>
-              </DropdownItem>
-              <DropdownItem to="/admin/user-profile" tag={Link}>
-                <i className="ni ni-support-16" />
-                <span>Support</span>
-              </DropdownItem>
-              <DropdownItem divider />
-              <DropdownItem href="#pablo" onClick={(e) => e.preventDefault()}>
-                <i className="ni ni-user-run" />
-                <span>Logout</span>
-              </DropdownItem>
-            </DropdownMenu>
-          </UncontrolledDropdown>
-        </Nav>
+
         {/* Collapse */}
         <Collapse navbar isOpen={collapseOpen}>
           {/* Collapse header */}
@@ -196,41 +114,17 @@ const Sidebar = (props) => {
                 </Col>
               ) : null}
               <Col className="collapse-close" xs="6">
-                <button
-                  className="navbar-toggler"
-                  type="button"
-                  onClick={toggleCollapse}
-                >
+                <button className="navbar-toggler" type="button" onClick={toggleCollapse}>
                   <span />
                   <span />
                 </button>
               </Col>
             </Row>
           </div>
-          {/* Form */}
-          <Form className="mt-4 mb-3 d-md-none">
-            <InputGroup className="input-group-rounded input-group-merge">
-              <Input
-                aria-label="Search"
-                className="form-control-rounded form-control-prepended"
-                placeholder="Search"
-                type="search"
-              />
-              <InputGroupAddon addonType="prepend">
-                <InputGroupText>
-                  <span className="fa fa-search" />
-                </InputGroupText>
-              </InputGroupAddon>
-            </InputGroup>
-          </Form>
-          {/* Navigation */}
-          {/* <Nav navbar>{createLinks(routes)}</Nav> */}
-          {/* Divider */}
-          <hr className="my-3" />
-          {/* Heading */}
-         
+
           {/* Navigation */}
           <Nav className="mb-md-3" navbar>
+<<<<<<< HEAD
             <NavItem>
               <NavLink href="/admin/tables">
                 <i className="ni ni-ui-04" />
@@ -267,8 +161,56 @@ const Sidebar = (props) => {
                 Order Management
               </NavLink>
       </NavItem>
+=======
+            {/* Vendor-specific items */}
+            {(role === "VENDOR") && (
+              <>
+                <NavItem>
+                  <NavLink href="/admin/tables">
+                    <i className="ni ni-ui-04" />
+                    Product Management
+                  </NavLink>
+                </NavItem>
+                <NavItem>
+                  <NavLink href="/admin/tables">
+                    <i className="ni ni-ui-04" />
+                    Order Management
+                  </NavLink>
+                </NavItem>
+              </>
+            )}
+
+            {/* Non-vendor-specific items */}
+            {(role == "ADMIN"  || role==='CSR') && (
+              <>
+                <NavItem>
+                  <NavLink href="/admin/tables">
+                    <i className="ni ni-ui-04" />
+                    Vendor Management
+                  </NavLink>
+                </NavItem>
+                <NavItem>
+                  <NavLink href="/admin/Customer-table">
+                    <i className="ni ni-ui-04" />
+                    Customer Management
+                  </NavLink>
+                </NavItem>
+                <NavItem>
+                  <NavLink href="/admin/tables">
+                    <i className="ni ni-ui-04" />
+                    Product Management
+                  </NavLink>
+                </NavItem>
+                <NavItem>
+                  <NavLink href="/admin/tables">
+                    <i className="ni ni-ui-04" />
+                    Order Management
+                  </NavLink>
+                </NavItem>
+              </>
+            )}
+>>>>>>> 3cb0c87ffca14965f81c1c301968648a62faba45
           </Nav>
-         
         </Collapse>
       </Container>
     </Navbar>
@@ -283,15 +225,9 @@ Sidebar.propTypes = {
   // links that will be displayed inside the component
   routes: PropTypes.arrayOf(PropTypes.object),
   logo: PropTypes.shape({
-    // innerLink is for links that will direct the user within the app
-    // it will be rendered as <Link to="...">...</Link> tag
     innerLink: PropTypes.string,
-    // outterLink is for links that will direct the user outside the app
-    // it will be rendered as simple <a href="...">...</a> tag
     outterLink: PropTypes.string,
-    // the image src of the logo
     imgSrc: PropTypes.string.isRequired,
-    // the alt for the img
     imgAlt: PropTypes.string.isRequired,
   }),
 };
