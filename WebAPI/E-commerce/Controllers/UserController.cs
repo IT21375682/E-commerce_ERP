@@ -196,6 +196,21 @@ namespace E_commerce.Controllers
             return Ok(new { isUnique = !isTaken });
         }
 
+        // Deactivate Customer Account
+        [HttpPut("{userId}/my-account-deactivate")]
+        public IActionResult DeactivateMyUserAccount(string userId)
+        {
+            var user = _userService.GetUserById(userId);
+            if (user == null)
+            {
+                return NotFound("User not found");
+            }
+
+            _userService.DeactivateUserAccount(userId);
+            return NoContent();
+        }
+
+
     }
 
 

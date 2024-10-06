@@ -101,6 +101,11 @@ namespace E_commerce.Repositories
             _users.ReplaceOne(u => u.Id == user.Id, user);
         }
 
+        // Deactivate Customer Account
+        public void UpdateUserDeactiveStatus(string userId, User user)
+        {
+            _users.ReplaceOne(existingUser => existingUser.Id == userId, user);
+        }
 
 
     }

@@ -131,5 +131,17 @@ namespace E_commerce.Services
         }
 
 
+        public void DeactivateUserAccount(string userId)
+        {
+            var user = _userRepository.GetUserById(userId);
+            if (user == null)
+            {
+                throw new Exception("User not found");
+            }
+
+            user.IsActive = false; // Deactivate the account
+            _userRepository.UpdateUserDeactiveStatus(userId, user); // Save the changes
+        }
+
     }
 }
