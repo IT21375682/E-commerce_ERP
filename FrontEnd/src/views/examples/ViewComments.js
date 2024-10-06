@@ -5,98 +5,80 @@ import {
   Table,
   Container,
   Row,
-  Button,
-  Input, // Add Input component from reactstrap
+  Input,
   FormGroup,
   Col
 } from "reactstrap";
-import React, { useState, useEffect } from "react"; 
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from 'react-router-dom';
+import { jwtDecode } from "jwt-decode";
+import StarRatings from 'react-star-ratings'; // Import the StarRatings component
+
 const ViewComments = () => {
-  const [users, setUsers] = useState([]);  // Initialize state to hold user data
+  const [comments, setComments] = useState([]);  // Initialize state to hold comment data
   const [loading, setLoading] = useState(true);  // State to track loading status
   const [searchTerm, setSearchTerm] = useState(""); // State to hold search input
 
   const navigate = useNavigate();
 
   useEffect(() => {
-    const fetchUsers = async () => {
+    const vendorId = jwtDecode(localStorage.getItem("token")).id;
+    const fetchComments = async () => {
       try {
-        const response = await axios.get('https://localhost:5004/api/User');  // Fetch the users using Axios
-        setUsers(response.data);  // Store the user data in the state
+        const response = await axios.get(`https://localhost:5004/api/Comment/vendor/${vendorId}`);
+        setComments(response.data);  // Store the comments data in the state
         setLoading(false);  // Set loading to false once data is fetched
       } catch (error) {
-        console.error('Error fetching users:', error);  // Handle any errors
+        console.error('Error fetching comments:', error);  // Handle any errors
         setLoading(false);  // Set loading to false even if there's an error
       }
     };
 
-    fetchUsers();  // Call the Axios fetch function when the component mounts
+    fetchComments();  // Fetch comments when component mounts
   }, []);  // Empty dependency array means this useEffect runs once when the component mounts
 
-  // Filter the users to only include those with the role of 'VENDOR'
-  const vendors = users.filter((user) => user.role === 'VENDOR');
+  // Calculate the average rating
+  const calculateAverageRating = () => {
+    if (comments.length === 0) return 0; // Avoid division by zero
+    const totalRating = comments.reduce((sum, comment) => sum + comment.rating, 0);
+    return totalRating / comments.length; // Return average rating
+  };
 
-  // Filter vendors based on search term (name, email, or phone)
-  const filteredVendors = vendors.filter((vendor) => 
-    vendor.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    vendor.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    vendor.phone.toLowerCase().includes(searchTerm.toLowerCase())  
+  // Filter comments based on search term (username, product name, or comment text)
+  const filteredComments = comments.filter((comment) =>
+    comment.username.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    comment.productName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    comment.commentText.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  const handleDelete = async (vendorId) => {
-    // Confirmation dialog
-    const confirmDelete = window.confirm('Are you sure you want to deactivate this vendor account?');
-    
-    if (confirmDelete) {
-      try {
-        // Call the API to update the vendor's active status
-        const response = await axios.put(
-          `https://localhost:5004/api/User/${vendorId}/status`, 
-          { isActive: false }, 
-          { headers: { 'Content-Type': 'application/json' } }
-        );
+  const averageRating = calculateAverageRating(); // Get the average rating
 
-        if (response.status === 204) { // No Content status returned on successful update
-          alert('Vendor account has been deactivated successfully.');
-
-          // Update the local state to reflect the deactivated vendor
-          setUsers((prevUsers) =>
-            prevUsers.map((user) =>
-              user.id === vendorId ? { ...user, isActive: false } : user
-            )
-          );
-        } else {
-          alert('Failed to deactivate the vendor.');
-        }
-      } catch (error) {
-        console.error('Error deactivating vendor:', error);
-        alert('An error occurred while trying to deactivate the vendor.');
-      }
-    }
-  }
-
-  
   return (
     <>
       <Container className="mt-10" fluid>
-        {/* Table */}
         <Row>
           <div className="col mt-7">
             <Card className="shadow">
               <CardHeader className="border-0">
                 <Row>
-                  <Col md="8">
-                    <h3 className="mb-0">Vendors</h3>
-                  </Col>
+                  <Col md="8" className="d-flex align-items-center">
+                    <h3 className="mb-0 mr-4">My Comments</h3>
+                    <StarRatings
+                      rating={averageRating}
+                      starRatedColor="gold" // Color of the filled stars
+                      numberOfStars={5} // Total number of stars
+                      starDimension="30px" // Size of the stars
+                      starSpacing="2px" // Space between stars
+                      className="ml-2" // Add margin to the left for spacing
+                    />                  </Col>
                   <Col md="4" className="text-right">
                     <FormGroup>
                       <Input
                         type="text"
-                        placeholder="Search by name, email, or phone"
-                        value={searchTerm}  // Bind the input field to the searchTerm state
-                        onChange={(e) => setSearchTerm(e.target.value)} // Update searchTerm when input changes
+                        placeholder="Search by username, product name, or comment"
+                        value={searchTerm}
+                        onChange={(e) => setSearchTerm(e.target.value)}
                       />
                     </FormGroup>
                   </Col>
@@ -105,72 +87,40 @@ const ViewComments = () => {
               <Table className="align-items-center table-flush" responsive>
                 <thead className="thead-light">
                   <tr>
-                    <th colSpan="6" className="text-right"> 
-                      <Button
-                        color="primary"
-                        size="md"
-                        onClick={() => window.location.href = "/admin/add-vendor"} // Or use React Router for navigation
-                        className="text-end"
-                      >
-                        Add Vendor
-                      </Button>
-                    </th>
-                  </tr>
-                  <tr>
-                    <th scope="col">Name</th>
-                    <th scope="col">Email</th>
-                    <th scope="col">Phone</th>
-                    <th scope="col">Address</th>
-                    <th scope="col">IsActive</th>
-                    <th scope="col" />
-                    <th scope="col" />
+                    <th scope="col">Username</th>
+                    <th scope="col">Product Name</th>
+                    <th scope="col">Date</th>
+                    <th scope="col">Rating</th>
+                    <th scope="col">Comment</th>
                   </tr>
                 </thead>
                 <tbody>
                   {loading ? (
                     <tr>
-                      <td colSpan="7" className="text-center">Loading...</td>
+                      <td colSpan="5" className="text-center">Loading...</td>
                     </tr>
                   ) : (
-                    filteredVendors.length > 0 ? (
-                      filteredVendors.map((vendor) => (
-                        <tr key={vendor.id}>
-                          <td>{vendor.name}</td>
-                          <td>{vendor.email}</td>
-                          <td>{vendor.phone}</td>
-                          <td>{vendor.address 
-                            ? `${vendor.address?.street || 'N/A'}, ${vendor.address?.city || 'N/A'}, ${vendor.address?.postalCode || 'N/A'}, ${vendor.address?.country || 'N/A'}` 
-                            : 'No Address'}</td>
+                    filteredComments.length > 0 ? (
+                      filteredComments.map((comment) => (
+                        <tr key={comment.id}>
+                          <td>{comment.username}</td>
+                          <td>{comment.productName}</td>
+                          <td>{new Date(comment.date).toLocaleDateString()}</td>
                           <td>
-                            <Badge color={vendor.isActive ? "success" : "danger"}>
-                              {vendor.isActive ? "Active" : "Inactive"}
-                            </Badge>
+                            <StarRatings
+                              rating={comment.rating} // Assuming rating is a number from 0 to 5
+                              starRatedColor="gold" // Color of the filled stars
+                              numberOfStars={5} // Total number of stars
+                              starDimension="20px" // Size of the stars
+                              starSpacing="2px" // Space between stars
+                            />
                           </td>
-                          <td>
-                          <Button
-                                color="primary"
-                                size="md"
-                                onClick={() => navigate(`/admin/vendor/${vendor.id}`)} // Navigate to the vendor details page with the vendor's ID
-                                className="text-end"
-                              >
-                                View
-                              </Button> 
-                          </td>
-                          <td>
-                            <Button
-                              color="danger"
-                              size="md"
-                              onClick={() => handleDelete(vendor.id)} // Or use React Router for navigation
-                              className="text-end"
-                            >
-                              Deactivate
-                            </Button>
-                          </td>
+                          <td>{comment.commentText}</td>
                         </tr>
                       ))
                     ) : (
                       <tr>
-                        <td colSpan="7" className="text-center">No vendors found</td>
+                        <td colSpan="5" className="text-center">No comments found</td>
                       </tr>
                     )
                   )}
@@ -185,4 +135,3 @@ const ViewComments = () => {
 };
 
 export default ViewComments;
-  

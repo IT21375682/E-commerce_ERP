@@ -14,6 +14,7 @@ import {
   Col,
 } from "reactstrap";
 import axios from "axios"; // Import axios
+import { jwtDecode } from "jwt-decode";
 
 const Login = () => {
   // State to hold email and password
@@ -38,14 +39,15 @@ const Login = () => {
       const token = response.data.Token;
       localStorage.setItem("token", response.data.token); // Store token in local storage
       console.log("token: ",response.data);
-      window.location.href = "/admin/index";
+      window.location.href = "/admin/view-product";
+      
+
     } catch (error) {
       // Handle error, for example, invalid credentials
       if (error.response) {
         // The request was made, but the server responded with a status code
         // that falls out of the range of 2xx (e.g., 400, 401, etc.)
-        const message =
-          error.response.data.Message || error.response.data.error || "Invalid credentials. Please try again.";
+        const message = error.response.data.Message || error.response.data.error || "Invalid credentials. Please try again.";
         setError(message);
       } else if (error.request) {
         // The request was made but no response was received

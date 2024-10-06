@@ -22,6 +22,7 @@ const ViewProduct = () => {
   const [role, setRole] = useState();
   const [view, setView] = useState("activeProducts");  // State to manage the selected view
   const navigate = useNavigate();
+  const [categories, setCategories] = useState([]); 
 
   useEffect(() => {
     
@@ -89,6 +90,19 @@ const ViewProduct = () => {
     }
   };
   
+
+// Function to fetch categories
+const fetchCategories = async () => {
+  try {
+    const response = await axios.get('https://localhost:5004/api/Category'); // API call to fetch categories
+    setCategories(response.data); // Set categories in state
+  } catch (error) {
+    console.error('Error fetching categories:', error);
+  }
+};
+
+
+
   const toggleProductStatusus = async (productId) => {
     const apiUrl = `https://localhost:5004/api/Product/${productId}/toggle-active`; // Toggle Active API
   
@@ -147,6 +161,7 @@ const ViewProduct = () => {
   // Fetch products when the component mounts or when the view changes
   useEffect(() => {
     fetchProducts(view);
+    fetchCategories();
   }, [view]);
 
   return (
@@ -228,7 +243,12 @@ const ViewProduct = () => {
                         </td>
                         <td>{product.name}</td>
                         <td>{product.price}</td>
-                        <td>{product.categoryName || 'N/A'}</td>
+                        <td>
+                          {
+                            // Find the category name based on categoryId
+                            categories.find(category => category.id === product.categoryId)?.categoryName || 'N/A'
+                          }
+                        </td>
                         <td>
                           <Badge color={product.isActive ? "success" : "danger"}>
                             {product.isActive ? "Active" : "Inactive"}

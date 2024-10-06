@@ -67,6 +67,7 @@ namespace E_commerce.Controllers
             {
                 _userService.CreateUser(newUser);
                 return CreatedAtAction(nameof(GetUserById), new { id = newUser.Id }, newUser);
+
             }
             catch (ArgumentException ex)
             {
@@ -194,6 +195,21 @@ namespace E_commerce.Controllers
             bool isTaken = _userService.IsEmailTaken(email);
             return Ok(new { isUnique = !isTaken });
         }
+
+        // Deactivate Customer Account
+        [HttpPut("{userId}/my-account-deactivate")]
+        public IActionResult DeactivateMyUserAccount(string userId)
+        {
+            var user = _userService.GetUserById(userId);
+            if (user == null)
+            {
+                return NotFound("User not found");
+            }
+
+            _userService.DeactivateUserAccount(userId);
+            return NoContent();
+        }
+
 
     }
 

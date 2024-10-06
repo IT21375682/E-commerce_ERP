@@ -1,20 +1,4 @@
-/*!
 
-=========================================================
-* Argon Dashboard React - v1.2.4
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/argon-dashboard-react
-* Copyright 2024 Creative Tim (https://www.creative-tim.com)
-* Licensed under MIT (https://github.com/creativetimofficial/argon-dashboard-react/blob/master/LICENSE.md)
-
-* Coded by Creative Tim
-
-=========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-*/
 import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
 
@@ -39,20 +23,24 @@ import { jwtDecode } from "jwt-decode";
 
 const AdminNavbar = (props) => {
   const [role, setRole] = useState();
+  const [Name, setName] = useState(jwtDecode(localStorage.getItem("token")).Name);
+  const [id, setId] = useState((jwtDecode(localStorage.getItem("token")).id));
 
 
-  useEffect(() => {
-    const token = localStorage.getItem("token"); // Retrieve the token from localStorage
-    if (token) {
-      try {
-        const decodedToken = jwtDecode(token);
-        setRole(decodedToken.role);
-        console.log("Role : " + decodedToken.role + ": " + role)
-      } catch (error) {
-        console.error("Failed to decode token", error);
-      }
-    }
-  }, []);
+  // useEffect(() => {
+  //   const token = localStorage.getItem("token"); // Retrieve the token from localStorage
+  //   if (token) {
+  //     try {
+  //       const decodedToken = jwtDecode(token);
+  //       setRole(decodedToken.role);
+  //       // setName(decodedToken.Name);
+  //       setId(decodedToken.id);
+  //       console.log("Role : " + decodedToken.role + ": " + role + "/ "+ Name+ "/ "+ id)
+  //     } catch (error) {
+  //       console.error("Failed to decode token", error);
+  //     }
+  //   }
+  // }, []);
 
   const handleLogout = () => {
     if(localStorage.getItem("token") != "") {
@@ -95,7 +83,7 @@ const AdminNavbar = (props) => {
                   </span>
                   <Media className="ml-2 d-none d-lg-block">
                     <span className="mb-0 text-sm font-weight-bold">
-                      Jessica Jones
+                      {Name}
                     </span>
                   </Media>
                 </Media>
@@ -104,7 +92,7 @@ const AdminNavbar = (props) => {
                 <DropdownItem className="noti-title" header tag="div">
                   <h6 className="text-overflow m-0">Welcome!</h6>
                 </DropdownItem>
-                <DropdownItem to="/admin/user-profile" tag={Link}>
+              <DropdownItem tag={Link} to={`/admin/vendor/${id}`}>
                   <i className="ni ni-single-02" />
                   <span>My profile</span>
                 </DropdownItem>
