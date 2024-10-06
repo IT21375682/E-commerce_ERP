@@ -14,16 +14,17 @@ import InactiveCusTable from "views/examples/InactiveCusTable";
 import EditProduct from "views/examples/EditProduct";
 import ViewCategory from "views/examples/ViewCategory";
 import ViewOrder from "views/examples/ViewOrder";
+import AddChategory from "views/examples/AddChategory";
 
 
 var routes = [
-  {
-    path: "/index",
-    name: "Dashboard",
-    icon: "ni ni-tv-2 text-primary",
-    component: <Index />,
-    layout: "/admin",
-  },
+  // {
+  //   path: "/index",
+  //   name: "Dashboard",
+  //   icon: "ni ni-tv-2 text-primary",
+  //   component: <Index />,
+  //   layout: "/admin",
+  // },
   {
     path: "/icons",
     name: "Icons",
@@ -120,6 +121,13 @@ var routes = [
     name: "view Category",
     icon: "ni ni-circle-08 text-pink",
     component: <ViewCategory/>,
+    layout: "/admin",
+  },
+  {
+    path: "/add-category",
+    name: "AddChategory",
+    icon: "ni ni-circle-08 text-pink",
+    component: <AddChategory/>,
     layout: "/admin",
   },
   {

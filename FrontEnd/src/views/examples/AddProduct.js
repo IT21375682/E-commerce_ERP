@@ -33,7 +33,7 @@ const AddProduct = () => {
   useEffect(() => {
     const fetchActiveCategories = async () => {
       try {
-        const response = await axios.get("http://localhost:5004/api/Category/active");
+        const response = await axios.get("https://localhost:5004/api/Category/active");
         setActiveCategories(response.data); // Assuming the API returns an array of categories
         toast.success('Product Added successfully!', {
           position: "top-right",
@@ -59,7 +59,7 @@ const AddProduct = () => {
     };
     const fetchActiveVendors = async () => {
       try {
-        const response = await axios.get("http://localhost:5004/api/User/active");
+        const response = await axios.get("https://localhost:5004/api/User/active");
         // console.log(response.data); // Log the API response to see what data is returned
 
         const vendors = response.data.filter(user => user.role === "VENDOR");

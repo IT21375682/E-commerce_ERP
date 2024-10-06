@@ -343,5 +343,9 @@ using System.Numerics;
         }
 
 
+        public async Task<long> CountAsync(FilterDefinition<Product> filter)
+        {
+            return await _products.CountDocumentsAsync(filter);
+        }
     }
 }
