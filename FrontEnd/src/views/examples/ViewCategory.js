@@ -50,8 +50,8 @@ const ViewCategory = () => {
     // Function to toggle category status
     const toggleCategoryStatus = async (categoryId, isActive) => {
         const apiUrl = isActive
-            ? `http://localhost:5004/api/Category/deactive/${categoryId}` // Deactivate API
-            : `http://localhost:5004/api/Category/activate/${categoryId}`;  // Activate API
+            ? `https://localhost:5004/api/Category/deactive/${categoryId}` // Deactivate API
+            : `https://localhost:5004/api/Category/activate/${categoryId}`;  // Activate API
 
         try {
             await axios.put(apiUrl); // Call the appropriate API
@@ -63,7 +63,7 @@ const ViewCategory = () => {
 
     // Function to handle the deletion of a category
     const deleteCategory = async (categoryId) => {
-        const apiUrl = `http://localhost:5004/api/Category/${categoryId}`; // Delete API URL
+        const apiUrl = `https://localhost:5004/api/Category/${categoryId}`; // Delete API URL
 
         try {
             await axios.delete(apiUrl); // Send DELETE request to the API
