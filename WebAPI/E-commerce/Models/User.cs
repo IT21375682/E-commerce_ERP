@@ -15,8 +15,7 @@ namespace E_commerce.Models
         public string ?Phone { get; set; }   // Contact number
         public Address ?Address { get; set; }  // Embedded Address class for user address details
         public string Role { get; set; }  // Administrator, Vendor, CSR, Customer
-        public bool IsActive { get; set; }  // To track if the user is active or deactivated
-        public bool IsNew { get; set; }
+        public bool IsActive { get; set; }  // To track if the user is active or 
         public DateTime CreatedAt { get; set; }  // Date of account creation
         public bool? IsNew { get; set; } = true; //
     }

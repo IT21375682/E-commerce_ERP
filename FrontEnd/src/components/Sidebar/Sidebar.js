@@ -28,6 +28,7 @@ import {
 const Sidebar = (props) => {
   const [collapseOpen, setCollapseOpen] = useState();
   const [role, setRole] = useState();
+  const [email, setEmail] = useState();
 
   // Decode JWT token and get the role
   useEffect(() => {
@@ -41,6 +42,7 @@ const Sidebar = (props) => {
       try {
         const decodedToken = jwtDecode(token);
         setRole(decodedToken.role);
+        setEmail(decodedToken.email);
         console.log("Role : " + decodedToken.role + ": " + role)
       } catch (error) {
         console.error("Failed to decode token", error);
@@ -124,59 +126,27 @@ const Sidebar = (props) => {
 
           {/* Navigation */}
           <Nav className="mb-md-3" navbar>
-<<<<<<< HEAD
-            <NavItem>
-              <NavLink href="/admin/tables">
-                <i className="ni ni-ui-04" />
-                Vender Management
-              </NavLink>
-            </NavItem>
-            <NavItem>
-              <NavLink href="/admin/Customer-table">
-                <i className="ni ni-ui-04" />
-                Customer Management
-              </NavLink>
-            </NavItem>
-            <NavItem>
+            {/* Vendor-specific items */}
+            {(role === "VENDOR") && (
+              <>
+                 <NavItem>
               <NavLink href="/admin/view-product">
                 <i className="ni ni-ui-04" />
                 Product Management
               </NavLink>
             </NavItem>
-            <NavItem>
-              <NavLink href="/admin/tables">
-                <i className="ni ni-ui-04" />
-                Order Management
-              </NavLink>
-            </NavItem>
-            <NavItem>
-            <NavLink href="/admin/view-category">
-                <i className="ni ni-ui-04" />
-                Categor Management
-              </NavLink>
-      </NavItem>
-      <NavItem>
-            <NavLink href="/admin/view-order">
-                <i className="ni ni-ui-04" />
-                Order Management
-              </NavLink>
-      </NavItem>
-=======
-            {/* Vendor-specific items */}
-            {(role === "VENDOR") && (
-              <>
-                <NavItem>
-                  <NavLink href="/admin/tables">
-                    <i className="ni ni-ui-04" />
-                    Product Management
-                  </NavLink>
-                </NavItem>
                 <NavItem>
                   <NavLink href="/admin/tables">
                     <i className="ni ni-ui-04" />
                     Order Management
                   </NavLink>
                 </NavItem>
+                <NavItem>
+            <NavLink href="/admin/view-category">
+                <i className="ni ni-ui-04" />
+                Category Management
+              </NavLink>
+      </NavItem>
               </>
             )}
 
@@ -196,20 +166,27 @@ const Sidebar = (props) => {
                   </NavLink>
                 </NavItem>
                 <NavItem>
-                  <NavLink href="/admin/tables">
-                    <i className="ni ni-ui-04" />
-                    Product Management
-                  </NavLink>
-                </NavItem>
+              <NavLink href="/admin/view-product">
+                <i className="ni ni-ui-04" />
+                Product Management
+              </NavLink>
+            </NavItem>
                 <NavItem>
                   <NavLink href="/admin/tables">
                     <i className="ni ni-ui-04" />
                     Order Management
                   </NavLink>
                 </NavItem>
+                <NavItem>
+            <NavLink href="/admin/view-category">
+                <i className="ni ni-ui-04" />
+                Category Management
+              </NavLink>
+      </NavItem>
+
+                
               </>
             )}
->>>>>>> 3cb0c87ffca14965f81c1c301968648a62faba45
           </Nav>
         </Collapse>
       </Container>

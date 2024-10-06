@@ -16,6 +16,7 @@
 
 */
 import { Link } from "react-router-dom";
+import { useState, useEffect } from "react";
 
 // reactstrap components
 import {
@@ -37,6 +38,19 @@ import {
 
 const AdminNavbar = (props) => {
 
+  useEffect(() => {
+    const token = localStorage.getItem("token"); // Retrieve the token from localStorage
+    if (token) {
+      try {
+        const decodedToken = jwtDecode(token);
+        setRole(decodedToken.role);
+        console.log("Role : " + decodedToken.role + ": " + role)
+      } catch (error) {
+        console.error("Failed to decode token", error);
+      }
+    }
+  }, []);
+
   const handleLogout = () => {
     if(localStorage.getItem("token") != "") {
       localStorage.removeItem("token");
@@ -48,13 +62,13 @@ const AdminNavbar = (props) => {
     <>
       <Navbar className="navbar-top navbar-dark" expand="md" id="navbar-main">
         <Container fluid>
-          {/* <Link
+          <Link
             className="h4 mb-0 text-white text-uppercase d-none d-lg-inline-block"
             to="/"
           >
             {props.brandText}
-          </Link> */}
-          {/* <Form className="navbar-search navbar-search-dark form-inline mr-3 d-none d-md-flex ml-lg-auto">
+          </Link>
+          <Form className="navbar-search navbar-search-dark form-inline mr-3 d-none d-md-flex ml-lg-auto">
             <FormGroup className="mb-0">
               <InputGroup className="input-group-alternative">
                 <InputGroupAddon addonType="prepend">
@@ -65,8 +79,8 @@ const AdminNavbar = (props) => {
                 <Input placeholder="Search" type="text" />
               </InputGroup>
             </FormGroup>
-          </Form> */}
-          {/* <Nav className="align-items-center d-none d-md-flex" navbar>
+          </Form>
+          <Nav className="align-items-center d-none d-md-flex" navbar>
             <UncontrolledDropdown nav>
               <DropdownToggle className="pr-0" nav>
                 <Media className="align-items-center">
@@ -110,7 +124,7 @@ const AdminNavbar = (props) => {
                 </DropdownItem>
               </DropdownMenu>
             </UncontrolledDropdown>
-          </Nav> */}
+          </Nav>
         </Container>
       </Navbar>
     </>
