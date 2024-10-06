@@ -331,7 +331,7 @@ const ViewOrder = () => {
                                     orders.length > 0 ? (
                                         orders.map((order) => (
                                             <React.Fragment key={order.id}>
-                                                <tr style={{ backgroundColor: '#c1c4c7' }}>
+                                                <tr >
 
                                                     <td>{order.id}</td>
                                                     <td>{order.userName}</td>
@@ -365,7 +365,7 @@ const ViewOrder = () => {
                                                     </td>
                                                 </tr>
                                                 {expandedRow === order.id && (
-                                                    <tr>
+                                                    <tr style={{ backgroundColor: '#e6ecf0' }}>
                                                         <td colSpan="6">
                                                             <div>
                                                                 <h5>Product Details</h5>
