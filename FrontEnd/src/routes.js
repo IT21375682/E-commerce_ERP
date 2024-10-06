@@ -15,7 +15,7 @@ import EditProduct from "views/examples/EditProduct";
 import ViewCategory from "views/examples/ViewCategory";
 import ViewOrder from "views/examples/ViewOrder";
 import AddChategory from "views/examples/AddChategory";
-
+import ViewComments from "views/examples/ViewComments";
 
 var routes = [
   // {
@@ -128,6 +128,13 @@ var routes = [
     name: "AddChategory",
     icon: "ni ni-circle-08 text-pink",
     component: <AddChategory/>,
+    layout: "/admin",
+  },
+  {
+    path: "/view-comments",
+    name: "ViewComments",
+    icon: "ni ni-circle-08 text-pink",
+    component: <ViewComments/>,
     layout: "/admin",
   },
   {

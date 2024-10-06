@@ -35,8 +35,11 @@ import {
   Container,
   Media,
 } from "reactstrap";
+import { jwtDecode } from "jwt-decode";
 
 const AdminNavbar = (props) => {
+  const [role, setRole] = useState();
+
 
   useEffect(() => {
     const token = localStorage.getItem("token"); // Retrieve the token from localStorage
@@ -104,6 +107,10 @@ const AdminNavbar = (props) => {
                 <DropdownItem to="/admin/user-profile" tag={Link}>
                   <i className="ni ni-single-02" />
                   <span>My profile</span>
+                </DropdownItem>
+                <DropdownItem to="/admin/view-comments" tag={Link}>
+                  <i className="ni ni-single-02" />
+                  <span>My Comments</span>
                 </DropdownItem>
                 {/* <DropdownItem to="/admin/user-profile" tag={Link}>
                   <i className="ni ni-settings-gear-65" />

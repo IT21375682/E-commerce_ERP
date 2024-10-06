@@ -108,7 +108,7 @@ const AddProduct = () => {
   const handleSubmit = async (e) => {
     e.preventDefault(); // Prevent the default form submission behavior
     try {
-      const response = await axios.post('http://localhost:5004/api/Product', product, {
+      const response = await axios.post('https://localhost:5004/api/Product', product, {
         headers: {
           'Content-Type': 'application/json', // Set the content type to JSON
         },
