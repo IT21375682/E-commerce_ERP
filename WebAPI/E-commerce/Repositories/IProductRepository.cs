@@ -37,8 +37,15 @@ using System.Numerics;
 
         public Product GetProductById(string id)
         {
-            return _products.Find(product => product.Id == ObjectId.Parse(id).ToString()).FirstOrDefault();
+            if (!ObjectId.TryParse(id, out _))
+            {
+                Console.WriteLine($"Invalid ObjectId format: {id}");
+                return null; // Return null if id is not a valid ObjectId
+            }
+
+            return _products.Find(product => product.Id == id).FirstOrDefault();
         }
+
 
         public IEnumerable<Product> GetProductsByCategoryId(string categoryId)
         {

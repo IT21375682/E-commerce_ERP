@@ -49,7 +49,6 @@ const ViewCategory = () => {
 
     const toggleCategoryStatus = async (categoryId, isActive) => {
         const apiUrl = `https://localhost:5004/api/Category/${categoryId}/toggle-active`; // Correct endpoint
-      
         try {
           // Use PATCH method as per your controller
           await axios.patch(apiUrl);
