@@ -47,49 +47,80 @@ const ViewCategory = () => {
         }
     };
 
-    // Function to toggle category status
     const toggleCategoryStatus = async (categoryId, isActive) => {
-        const apiUrl = isActive
-            ? `http://localhost:5004/api/Category/deactive/${categoryId}` // Deactivate API
-            : `http://localhost:5004/api/Category/activate/${categoryId}`;  // Activate API
-
+        const apiUrl = `https://localhost:5004/api/Category/${categoryId}/toggle-active`; // Correct endpoint
+      
         try {
-            await axios.put(apiUrl); // Call the appropriate API
-            fetchCategories(view); // Refresh the category list after status change
+          // Use PATCH method as per your controller
+          await axios.patch(apiUrl);
+      
+          // Show a success message based on the new status
+          toast.success(`Category ${isActive ? "deactivated" : "activated"} successfully!`);
+      
+          // Refresh the category list after the status change
+          fetchCategories();
         } catch (error) {
-            console.error('Error changing category status:', error);
+          // Check if the error is a BadRequest and display the error message
+          if (error.response && error.response.status === 400) {
+            toast.error(error.response.data.message); // Display the custom message from the backend
+          } else {
+            toast.error('An error occurred while changing the category status.');
+          }
         }
-    };
+     
+      
+};
+
 
     // Function to handle the deletion of a category
     const deleteCategory = async (categoryId) => {
-        const apiUrl = `http://localhost:5004/api/Category/${categoryId}`; // Delete API URL
-
+        const apiUrl = `https://localhost:5004/api/Category/${categoryId}/ChkDelete`; // Updated API URL for Check and Delete
+      
         try {
-            await axios.delete(apiUrl); // Send DELETE request to the API
-            // Remove the category from the state after successful deletion
-            setCategories(categories.filter(category => category.id !== categoryId));
-            toast.success('Category deleted successfully!', {
-                position: "top-right",
-                autoClose: 3000, // Auto close after 3 seconds
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-            });
+          // Send PATCH request to the API to check and delete the category
+          await axios.patch(apiUrl);
+      
+          // Remove the category from the state after successful deletion
+          setCategories(categories.filter(category => category.id !== categoryId));
+          
+          toast.success('Category deleted successfully!', {
+            position: "top-right",
+            autoClose: 3000, // Auto close after 3 seconds
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
         } catch (error) {
-            console.error('Error deleting category:', error);
-            toast.error('Error deleting category. Please try again.', {
-                position: "top-right",
-                autoClose: 3000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
+          // Handle error and display a message if deletion fails
+          console.error('Error deleting category:', error);
+      
+          if (error.response && error.response.status === 400) {
+            // Show the error message returned from the server (e.g., category has dependent products)
+            toast.error(error.response.data.message, {
+              position: "top-right",
+              autoClose: 3000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
             });
+          } else {
+            toast.error('Error deleting category. Please try again.', {
+              position: "top-right",
+              autoClose: 3000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+            });
+          }
         }
+     
+      
     };
 
     // Fetch categories when the component mounts or when the view changes
@@ -143,14 +174,14 @@ const ViewCategory = () => {
                         <Table className="align-items-center table-flush" responsive>
                             <thead className="thead-light">
                                 <tr>
-                                    <th scope="col">ID</th>
+                                    {/* <th scope="col">ID</th> */}
                                     <th scope="col">Category Name</th>
                                     <th scope="col">IsActive</th>
                                     <th scope="col">Created At</th>
                                     <th scope="col">Updated At</th>
-                                    <th scope="col">Edit</th>
                                     <th scope="col">Delete</th>
                                     <th scope="col">Status</th>
+                                    {/* <th scope="col">Status</th> */}
                                 </tr>
                             </thead>
                             <tbody>
@@ -162,7 +193,7 @@ const ViewCategory = () => {
                                     categories.length > 0 ? (
                                         categories.map((category) => (
                                             <tr key={category.id}>
-                                                <td>{category.id}</td>
+                                                {/* <td>{category.id}</td> */}
                                                 <td>{category.categoryName}</td>
                                                 <td>
                                                     <Badge color={category.isActive ? "success" : "danger"}>
@@ -171,7 +202,7 @@ const ViewCategory = () => {
                                                 </td>
                                                 <td>{new Date(category.createdAt).toLocaleDateString()}</td>
                                                 <td>{new Date(category.updatedAt).toLocaleDateString()}</td>
-                                                <td>
+                                                {/* <td>
                                                     <Button
                                                         color="primary"
                                                         size="md"
@@ -179,7 +210,7 @@ const ViewCategory = () => {
                                                     >
                                                         Edit
                                                     </Button>
-                                                </td>
+                                                </td> */}
                                                 <td>
                                                     <Button
                                                         color="danger"

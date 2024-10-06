@@ -12,17 +12,39 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { toast, ToastContainer } from 'react-toastify'; // Import toast components
 import 'react-toastify/dist/ReactToastify.css'; // Import toastify CSS
+import { jwtDecode } from "jwt-decode";
+
 
 const ViewProduct = () => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [vendorId, setVendorId] = useState(jwtDecode(localStorage.getItem("token")).Id);
+  const [role, setRole] = useState();
   const [view, setView] = useState("activeProducts");  // State to manage the selected view
   const navigate = useNavigate();
+
+  useEffect(() => {
+    
+    const token = localStorage.getItem("token"); // Retrieve the token from localStorage
+    if (token) {
+      try {
+        const decodedToken = jwtDecode(token);
+        setRole(decodedToken.role);
+        setVendorId(decodedToken.id);
+        console.log("Decoded Token:", decodedToken);
+        console.log("Vendor ID : " + decodedToken.id)
+        console.log("Role : " + role)
+
+      } catch (error) {
+        console.error("Failed to decode token", error);
+      }
+    }
+  }, []);
 
   // Function to fetch products based on the selected view
   const fetchProducts = async (view) => {
     setLoading(true); // Start loading
-
+  
     let apiUrl;
     switch (view) {
       case "activeProducts":
@@ -36,16 +58,37 @@ const ViewProduct = () => {
         apiUrl = 'https://localhost:5004/api/Product';
         break;
     }
-
+  
     try {
       const response = await axios.get(apiUrl); // Fetch products based on the selected view
-      setProducts(response.data);
+      let fetchedProducts = response.data;
+  
+      const token = localStorage.getItem("token");
+      const decodedToken = jwtDecode(token);
+      
+      if (decodedToken.role === "VENDOR") {
+        console.log("VENDOR role detected");
+        console.log("Vendor ID from token:", decodedToken.id);
+        
+        // Apply filter to fetchedProducts based on vendorId
+        fetchedProducts = fetchedProducts.filter(product => product.vendorId === decodedToken.id);
+  
+        // Log all vendor IDs in the filtered products
+        console.log("Filtered Product Vendor IDs:");
+        fetchedProducts.forEach(product => {
+          console.log(product.vendorId);
+        });
+      }
+  
+      // Set the filtered products in state
+      setProducts(fetchedProducts);
       setLoading(false);
     } catch (error) {
       console.error('Error fetching products:', error);
       setLoading(false);
     }
   };
+  
   const toggleProductStatusus = async (productId) => {
     const apiUrl = `https://localhost:5004/api/Product/${productId}/toggle-active`; // Toggle Active API
   

@@ -46,10 +46,10 @@ namespace E_commerce.Services
                 _categoryRepository.UpdateCategory(id, category);
             }
 
-            public void DeleteCategory(string id)
-            {
-                _categoryRepository.DeleteCategory(id);
-            }
+            //public void DeleteCategory(string id)
+            //{
+            //    _categoryRepository.DeleteCategory(id);
+            //}
 
             public IEnumerable<CategoryDto> GetAllActiveCategoriesNames()
             {
@@ -99,5 +99,51 @@ namespace E_commerce.Services
         }
 
 
-    }
+
+
+        public async Task CheckAndDelete(string categoryId)
+        {
+            var filter = Builders<Category>.Filter.Eq(c => c.Id, categoryId);
+
+            // Fetch the current category asynchronously
+            var category = await _categoryRepository.GetCategoryById(categoryId);
+
+            if (category != null)
+            {
+                // If the category is being deactivated (changing from true to false)
+                if (category.IsActive)
+                {
+                    throw new InvalidOperationException("Cannot delete category with active status.");
+
+
+                    //// Build the filter to count active products under this category
+                    //var productFilter = Builders<Product>.Filter.Eq(p => p.CategoryId, categoryId) & Builders<Product>.Filter.Eq(p => p.IsActive, true);
+                    //var activeProductsCount = await _productRepository.CountAsync(productFilter);
+
+                    //if (activeProductsCount > 0)
+                    //{
+                    //    // Throw an exception or return a custom result indicating there are active products
+                    //    throw new InvalidOperationException("Cannot delete category with active products.");
+                    //}
+                }
+
+                // Toggle the IsActive value for the category
+                //var newIsActiveValue = !category.IsActive;
+
+                // Update the category with the new IsActive value
+                //var updateCategory = Builders<Category>.Update
+                //    .Set(c => c.IsActive, newIsActiveValue);
+
+                _categoryRepository.DeleteCategory(categoryId);// Use the async update method
+
+                //// Optionally deactivate all products under this category if deactivated
+                //if (!newIsActiveValue)
+                //{
+                //    await DeactivateProductsByCategoryAsync(categoryId);
+                //}
+            }
+        }
+
+        }
+        
 }

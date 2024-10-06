@@ -101,6 +101,12 @@ namespace E_commerce.Repositories
             }
         }
 
+        public async Task<long> CountAsync(FilterDefinition<Product> filter)
+        {
+            return await _product.CountDocumentsAsync(filter);
+        }
+
+
 
 
 

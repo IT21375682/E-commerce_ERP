@@ -58,6 +58,7 @@ builder.Services.AddScoped<CommentService>(); // Registering the CommentService
 builder.Services.AddScoped<CartService>(); // Registering the CartService
 
 
+
 builder.Services.AddScoped<JwtService>(sp =>
 {
     var config = builder.Configuration;

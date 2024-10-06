@@ -28,11 +28,11 @@ namespace E_commerce.Controllers
 
         // Get only active categories
         [HttpGet("active")]
-         public ActionResult<IEnumerable<Category>> GetAllActiveCategories()
-         {
+        public ActionResult<IEnumerable<Category>> GetAllActiveCategories()
+        {
             var activeCategories = _categoryService.GetAllActiveCategories();
             return Ok(activeCategories);
-         }
+        }
 
         // Get only deactivated categories
         [HttpGet("deactive")]
@@ -62,6 +62,8 @@ namespace E_commerce.Controllers
         {
             try
             {
+                newCategory.CreatedAt = DateTime.Now;
+                newCategory.UpdatedAt = DateTime.Now;
                 _categoryService.CreateCategory(newCategory);
                 return CreatedAtAction(nameof(GetCategoryById), new { id = newCategory.Id }, newCategory);
             }
@@ -86,18 +88,18 @@ namespace E_commerce.Controllers
         }
 
         // Delete category by id
-        [HttpDelete("{id}")]
-        public IActionResult DeleteCategory(string id)
-        {
-            var existingCategory = _categoryService.GetCategoryById(id);
-            if (existingCategory == null)
-            {
-                return NotFound();
-            }
+        //[HttpDelete("{id}")]
+        //public IActionResult DeleteCategory(string id)
+        //{
+        //    var existingCategory = _categoryService.GetCategoryById(id);
+        //    if (existingCategory == null)
+        //    {
+        //        return NotFound();
+        //    }
 
-            _categoryService.DeleteCategory(id);
-            return NoContent();
-        }
+        //    _categoryService.DeleteCategory(id);
+        //    return NoContent();
+        //}
 
         // Get all active categories
         [HttpGet("active-categories")]
@@ -111,9 +113,38 @@ namespace E_commerce.Controllers
         [HttpPatch("{id}/toggle-active")]
         public async Task<IActionResult> ToggleCategoryIsActive(string id)
         {
+
             await _categoryService.ToggleCategoryIsActiveAsync(id);
             return NoContent(); // 204 No Content response after successful update
         }
+
+    
+
+
+
+
+
+        [HttpPatch("{id}/ChkDelete")]
+        public async Task<IActionResult> CheckAndDelete(string id)
+        {
+            try
+            {
+                await _categoryService.CheckAndDelete(id);
+                return NoContent(); // 204 No Content response after successful update
+            }
+            catch (InvalidOperationException ex)
+            {
+                // Return a 400 Bad Request with the error message
+                return BadRequest(new { message = ex.Message });
+            }
+        }
+
+
+
+
+
+
+
 
 
     }
