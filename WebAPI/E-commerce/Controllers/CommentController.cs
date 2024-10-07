@@ -1,6 +1,7 @@
 ﻿/*
  * File: CommentController.cs
  * Author: Sanjayan
+ * Registration No: IT21375514
  * Description: This file defines the API endpoints for managing comments in the e-commerce system. 
  * It includes routes for adding, retrieving, updating, and deleting comments.
  */
@@ -37,7 +38,6 @@ namespace E_commerce.Controllers
         [HttpGet("{id}")]
         public ActionResult<Comment> GetCommentById(string id)
         {
-            // Logic to retrieve a comment by its ID.
             var comment = _commentService.GetCommentById(id);
             if (comment == null)
             {
@@ -126,7 +126,7 @@ namespace E_commerce.Controllers
             try
             {
                 _commentService.AddOrUpdateComment(comment);
-                return Ok(comment); // Return the comment after adding/updating
+                return Ok(comment);
             }
             catch (Exception ex)
             {

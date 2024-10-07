@@ -1,6 +1,7 @@
 ﻿/*
  * File: CommentDto.cs
  * Author: Sanjayan
+ * Registration No: IT21375514
  * Description: This file defines the CommentDto class, which represents the data transfer object for comments in the e-commerce system.
  * It includes fields for user, vendor, product details, and comment information.
  */
