@@ -14,12 +14,14 @@ import React, { useState } from "react";
 import axios from "axios";
 import { toast, ToastContainer } from 'react-toastify'; // Import toast components
 import 'react-toastify/dist/ReactToastify.css'; // Import toastify CSS
+import { useNavigate } from "react-router-dom";
 
 const AddCategory = () => {
   const [category, setCategory] = useState({
     categoryName: "",
     isActive: true,
   });
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -130,7 +132,7 @@ const AddCategory = () => {
                     <Button color="primary" type="submit" size="md">
                       Save
                     </Button>
-                    <Button color="danger" onClick={() => setCategory({ categoryName: "", isActive: false })} size="md">
+                    <Button color="danger" onClick={() => {setCategory({ categoryName: "", isActive: false }); navigate('/admin/view-category');}} size="md">
                       Cancel
                     </Button>
                   </Col>

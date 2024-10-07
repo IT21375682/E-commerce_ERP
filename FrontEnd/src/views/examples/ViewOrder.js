@@ -80,7 +80,6 @@ const ViewOrder = () => {
             )
         );
     };
-    // const [buttonState, setButtonState] = useState({}); // Tracks the state of the button
 
     const fetchOrders = async () => {
         setLoading(true);

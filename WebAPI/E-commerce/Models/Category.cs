@@ -1,4 +1,11 @@
-﻿using MongoDB.Bson.Serialization.Attributes;
+﻿
+/*
+ * File: Category.cs
+ * Author: Krithiga. D. B
+ * Description: This file contains the definition of the Category class, which models a category of product in the e-commerce system.
+ * Each category has name, status
+ */
+using MongoDB.Bson.Serialization.Attributes;
 using MongoDB.Bson;
 
 namespace E_commerce.Models

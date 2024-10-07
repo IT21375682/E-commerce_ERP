@@ -113,19 +113,19 @@ const fetchCategories = async () => {
       console.error('Error toggling product status:', error);
     }
   };
-  // Function to handle the activation/deactivation of a product
-  const toggleProductStatus = async (productId, isActive) => {
-    const apiUrl = isActive
-      ? `https://localhost:5004/api/Product/deactivate/${productId}` // Deactivate API
-      : `https://localhost:5004/api/Product/activate/${productId}`;  // Activate API
+  // // Function to handle the activation/deactivation of a product
+  // const toggleProductStatus = async (productId, isActive) => {
+  //   const apiUrl = isActive
+  //     ? `https://localhost:5004/api/Product/deactivate/${productId}` // Deactivate API
+  //     : `https://localhost:5004/api/Product/activate/${productId}`;  // Activate API
 
-    try {
-      await axios.put(apiUrl); // Call the appropriate API
-      fetchProducts(view); // Refresh the product list after status change
-    } catch (error) {
-      console.error('Error changing product status:', error);
-    }
-  };
+  //   try {
+  //     await axios.put(apiUrl); // Call the appropriate API
+  //     fetchProducts(view); // Refresh the product list after status change
+  //   } catch (error) {
+  //     console.error('Error changing product status:', error);
+  //   }
+  // };
 
   // Function to handle the deletion of a product
   const deleteProduct = async (productId) => {

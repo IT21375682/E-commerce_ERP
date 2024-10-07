@@ -1,6 +1,6 @@
 ﻿/*
- * File: IOrderRepository.cs
- * Author: Sanjayan
+ * File: OrderRepository.cs
+ * Author: Krithiga D. B
  * Description: This repository interfaces with the database to perform CRUD operations on orders.
  */
 
@@ -108,6 +108,8 @@ namespace E_commerce.Repositories
         //        _orders.ReplaceOne(order => order.Id == objectId, updatedOrder);
         //    }
         //}
+
+        // Updates an existing order
         public void UpdateOrder(string id, Order updatedOrder)
         {
             var objectId = new ObjectId(id);
@@ -168,6 +170,8 @@ namespace E_commerce.Repositories
             // Perform the update
             _orders.UpdateOne(filter, update);
         }
+
+        // cancellation Email draft
         private string CreateCancellationMessage(User user, Order order, string customMessage)
         {
             return $@"
@@ -179,6 +183,7 @@ namespace E_commerce.Repositories
     <p>Best regards,<br>E-commerce Team</p>";
         }
 
+        // Delivery Email draft
         private string CreateDeliveryMessage(User user, Order order)
         {
             return $@"
@@ -381,6 +386,8 @@ namespace E_commerce.Repositories
         //    var combinedUpdate = update.Combine(updates);
         //    _orders.UpdateOne(filter, combinedUpdate);
         //}
+
+        //Update order status by CSR & ADmin directly 
         public async Task UpdateOrderStatus(string orderId, string statusType, string customMessage = null)
         {
             var objectId = new ObjectId(orderId);
@@ -450,6 +457,7 @@ namespace E_commerce.Repositories
                     }
                     break;
 
+                //if delivered send delivery email as well
                 case "delivered":
                     if (order.Status.Delivered != true)
                     {
@@ -466,6 +474,7 @@ namespace E_commerce.Repositories
                     }
                     break;
 
+                    //if cancel attach cancellationNote as well
                 case "canceled":
                     if (order.Status.Canceled != true)
                     {
@@ -517,6 +526,7 @@ namespace E_commerce.Repositories
             return orderStatus;
         }
 
+        //Method to get all products by a vendorId
         public List<ProductItem> GetProductsByVendorId(string orderId, string vendorId)
         {
             // Retrieve the order by ID
@@ -653,6 +663,7 @@ namespace E_commerce.Repositories
         //}
 
 
+        //Updates order delivery status with email notification
         public void UpdateProductDeliveryStatus(string orderId, string vendorId, ObjectId productId)
         {
             var objectId = new ObjectId(orderId);

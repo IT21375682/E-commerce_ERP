@@ -12,6 +12,7 @@ import {
 } from "reactstrap";
 import React, { useState } from "react";
 import axios from "axios";
+import { useNavigate } from 'react-router-dom';
 
 const AddVendor = () => {
   const [formData, setFormData] = useState({
@@ -50,6 +51,7 @@ const AddVendor = () => {
       });
     }
   };
+  const navigate = useNavigate();
 
   // Function to check if email is unique
   const isEmailUnique = async (email) => {
@@ -84,7 +86,7 @@ const AddVendor = () => {
 
   return (
     <>
-      <Container className="mt--7" fluid>
+      <Container className="mt-10" fluid>
         <Row>
           <Col className="order-xl-1" xl="12">
             <Card className="bg-secondary shadow mt-7">
@@ -229,7 +231,7 @@ const AddVendor = () => {
                   <Row>
                     <Col className="text-center">
                       <Button color="primary" size="md" type="submit">Save</Button>
-                      <Button color="danger" size="md" onClick={(e) => e.preventDefault()}>Cancel</Button>
+                      <Button color="danger" size="md" onClick={() => navigate('/admin/view-vendor')}>Cancel</Button>
                     </Col>
                   </Row>
                 </Form>

@@ -160,7 +160,7 @@ const Sidebar = (props) => {
             {(role == "ADMIN" || role === 'CSR') && (
               <>
                 <NavItem>
-                  <NavLink href="/admin/tables">
+                  <NavLink href="/admin/view-vendor">
                     <i className="ni ni-ui-04" />
                     Vendor Management
                   </NavLink>

@@ -1,3 +1,9 @@
+/*
+ * File: ProductRepository.cs
+ * Author: krithiga
+ * Description: This file contains the ProductRepository class that handles database operations related to products and inventory.
+ */
+
 using MongoDB.Bson;
 ﻿using E_commerce.DTOs;
 using E_commerce.Models;
@@ -32,11 +38,13 @@ using System.Numerics;
 
         }
 
+        //get all products
         public IEnumerable<Product> GetAllProducts()
         {
             return _products.Find(product => true).ToList();
         }
 
+        //get product by ID
         public Product GetProductById(string id)
         {
             if (!ObjectId.TryParse(id, out _))
@@ -48,34 +56,40 @@ using System.Numerics;
             return _products.Find(product => product.Id == id).FirstOrDefault();
         }
 
-
+        //get product by cetegoryID
         public IEnumerable<Product> GetProductsByCategoryId(string categoryId)
         {
             return _products.Find(product => product.CategoryId == categoryId).ToList();
         }
 
-
+//get products by vendorID
         public IEnumerable<Product> GetProductsByVendorId(string vendorId)
         {
             return _products.Find(product => product.VendorId == vendorId).ToList();
         }
+
+        //create product
         public void CreateProduct(Product product)
         {
             product.Id = ObjectId.GenerateNewId().ToString();
+            product.IsActive = true; // Set IsActive to true
             _products.InsertOne(product);
         }
 
+        //Update product by by id
         public void UpdateProduct(string id, Product product)
         {
             product.Id = ObjectId.Parse(id).ToString(); // Ensure the Id is of type ObjectId
             _products.ReplaceOne(existingProduct => existingProduct.Id == product.Id, product);
         }
 
+        //delete product by id
         public void DeleteProduct(string id)
         {
             _products.DeleteOne(product => product.Id == ObjectId.Parse(id).ToString());
         }
 
+        //update stock by by id & quantity
         public (bool isSuccess, string message) UpdateStock(string productId, int quantity)
         {
             var product = GetProductById(productId);
@@ -106,6 +120,7 @@ using System.Numerics;
             }
         }
 
+        //remove stock by id & quantity
         public (bool isSuccess, string message) RemoveStock(string productId, int quantity)
         {
             var product = GetProductById(productId);
@@ -144,12 +159,14 @@ using System.Numerics;
             }
         }
 
+        //get vendorId by productId
         private User GetVendorById(string vendorId)
         {
             Console.WriteLine("VendorId : " + vendorId);
             return _users.Find(user => user.Id.ToString() == vendorId).FirstOrDefault();  // Fetch the vendor from the users collection
         }
 
+        //send low stock email to vendors 
         private async void SendLowStockEmail(Product product, string vendorEmail)
         {
             Console.WriteLine("Email start 1");
@@ -164,6 +181,7 @@ using System.Numerics;
             await _emailService.SendEmailAsync(vendorEmail, subject, message);
         }
 
+        //get available stock per product by id
         public int GetAvailableStockById(string productId)
         {
             var product = _products.Find(p => p.Id == productId && p.IsActive).FirstOrDefault();
@@ -179,6 +197,7 @@ using System.Numerics;
             return _products.Find(product => product.IsActive).ToList();
         }
 
+        // Get all deactive products
         public IEnumerable<Product> GetAllDeActivatedProducts()
         {
             return _products.Find(product => !product.IsActive).ToList();
@@ -284,7 +303,7 @@ using System.Numerics;
             };
         }
 
-
+        // Method to get average rating of a single product by ID
         private double GetAverageRatingByProductId(string productId)
         {
             var ratings = _comments.Find(comment => comment.productId == productId)
@@ -293,6 +312,7 @@ using System.Numerics;
             return ratings.Any() ? ratings.Average() : 0;
         }
 
+        // Method to get product details with category details
         public IEnumerable<ProductDetailsDto> GetActiveProductsWithDetailsByCategory(string categoryId)
         {
             // Fetch active products
@@ -403,6 +423,7 @@ using System.Numerics;
         //    }
         //}
 
+        // Method to toggle status
         public async Task ToggleIsActiveAsync(string productId)
         {
             var filter = Builders<Product>.Filter.Eq(p => p.Id, productId);
@@ -482,7 +503,6 @@ using System.Numerics;
             }
         }
 
-
         // Helper method to get the latest status based on date
         private string GetLatestStatus(OrderStatus status)
         {
@@ -505,15 +525,13 @@ using System.Numerics;
         }
 
 
-
-
-
+        // Updates multiple products based on a filter with specified updates.
         public async Task UpdateManyProductsAsync(FilterDefinition<Product> filter, UpdateDefinition<Product> update)
         {
             await _products.UpdateManyAsync(filter, update);
         }
 
-
+        // Counts the documents in the collection based on a specific filter.
         public async Task<long> CountAsync(FilterDefinition<Product> filter)
         {
             return await _products.CountDocumentsAsync(filter);

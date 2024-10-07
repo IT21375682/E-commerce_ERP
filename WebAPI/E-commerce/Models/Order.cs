@@ -1,8 +1,8 @@
 ﻿/*
  * File: Order.cs
- * Author: Sanjayan
+ * Author: Krithiga. D. B
  * Description: This file contains the definition of the Order class, which models an order in the e-commerce system.
- * Each order has multiple products, counts, and processed statuses, as well as an overall order status with nested states.
+ * Each order has multiple products as items, counts, processed statuses, as well as an overall order status with nested states and CancellationNote.
  */
 
 using MongoDB.Bson.Serialization.Attributes;

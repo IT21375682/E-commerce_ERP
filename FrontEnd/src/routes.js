@@ -48,7 +48,7 @@ var routes = [
     layout: "/admin",
   },
   {
-    path: "/tables",
+    path: "/view-vendor",
     name: "Vendor ",
     icon: "ni ni-bullet-list-67 text-red",
     component: <Tables />,

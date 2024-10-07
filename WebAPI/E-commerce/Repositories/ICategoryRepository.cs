@@ -16,46 +16,56 @@ namespace E_commerce.Repositories
             _product = database.GetCollection<Product>("Product");
         }
 
+            // fetch all categories from the database.
             public IEnumerable<Category> GetAllCategories()
             {
                 return _category.Find(category => true).ToList();
             }
 
-            public IEnumerable<Category> GetAllActiveCategories()
+            // Fetch all active categories from the database.
+           public IEnumerable<Category> GetAllActiveCategories()
             {
                 return _category.Find(category => category.IsActive == true).ToList();
             }
 
+        // Retrieves all deactivated categories from the database.
         public IEnumerable<Category> GetAllDeactivatedCategories()
         {
             return _category.Find(category => category.IsActive == false).ToList();
         }
 
+        // Retrieves a category by its ID.
         public Task<Category> GetCategoryById(string id)
         {
             return  _category.Find(c => c.Id == id).FirstOrDefaultAsync();
         }
 
+        // Updates a category based on a specified filter and update definition.
         public async Task UpdateCategoryAsync(FilterDefinition<Category> filter, UpdateDefinition<Category> update)
         {
             await _category.UpdateOneAsync(filter, update);
         }
+
+        // Creates a new category in the database.
         public void CreateCategory(Category category)
             {
                  _category.InsertOne(category);
             }
 
-            public void UpdateCategory(string id, Category category)
+        // Updates an existing category with new data based on its ID.
+        public void UpdateCategory(string id, Category category)
             {
                 _category.ReplaceOne(existingCategory => existingCategory.Id == id, category);
             }
 
-            public void DeleteCategory(string id)
+        // Deletes a category from the database by its ID.
+        public void DeleteCategory(string id)
             {
                  _category.DeleteOne(category => category.Id == id);
             }
 
-            public IEnumerable<CategoryDto> GetAllActiveCategoriesNames()
+        // Retrieves the names and IDs of all active categories as DTOs.
+        public IEnumerable<CategoryDto> GetAllActiveCategoriesNames()
             {
                 // Using projection to map to DTO
                 return _category.Find(category => category.IsActive)
@@ -66,6 +76,7 @@ namespace E_commerce.Repositories
                                 }).ToList();
             }
 
+        // Toggles the active status of a category and deactivates its active products if necessary.
         public async Task ToggleCategoryIsActiveAsync(string categoryId)
         {
             var filter = Builders<Category>.Filter.Eq(c => c.Id, categoryId);
@@ -84,7 +95,7 @@ namespace E_commerce.Repositories
 
                 await _category.UpdateOneAsync(filter, updateCategory);
 
-                // If the category is being deactivated (changing from true to false)
+                // If the category is being deactivated (changing status)
                 if (!newIsActiveValue)
                 {
                     // Find and update all active products under this category
@@ -101,6 +112,7 @@ namespace E_commerce.Repositories
             }
         }
 
+        // Counts the number of products matching the specified filter.
         public async Task<long> CountAsync(FilterDefinition<Product> filter)
         {
             return await _product.CountDocumentsAsync(filter);
