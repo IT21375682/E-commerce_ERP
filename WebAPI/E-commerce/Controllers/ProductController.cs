@@ -48,6 +48,19 @@ namespace E_commerce.Controllers
             return Ok(products);
         }
 
+        [HttpGet("vendor/{vendorId}")]
+        public ActionResult<IEnumerable<Product>> GetProductsByVendorId(string vendorId)
+        {
+            var products = _productService.GetProductsByVendorId(vendorId);
+
+            if (products == null || !products.Any())
+            {
+                return NotFound("No products found for the given vendor.");
+            }
+
+            return Ok(products);
+        }
+
         [HttpPost]
         public ActionResult<Product> CreateProduct([FromBody] Product newProduct)
         {

@@ -18,7 +18,7 @@ using System.Numerics;
         private readonly EmailService _emailService;
         private readonly IMongoCollection<User> _vendors; // Add this to fetch vendor details
         private readonly IMongoCollection<Comment> _comments; // Add this to fetch average ratings
-
+        private readonly IMongoCollection<Order> _orders;
 
         public IProductRepository(IMongoDatabase database, EmailService emailService)
         {
@@ -28,6 +28,8 @@ using System.Numerics;
             _categories = database.GetCollection<Category>("Category");
             _vendors = database.GetCollection<User>("Users"); // Assuming users table has vendor info
             _comments = database.GetCollection<Comment>("Comments"); // Assuming comments have ratings
+            _orders = database.GetCollection<Order>("Orders");
+
         }
 
         public IEnumerable<Product> GetAllProducts()
@@ -52,6 +54,11 @@ using System.Numerics;
             return _products.Find(product => product.CategoryId == categoryId).ToList();
         }
 
+
+        public IEnumerable<Product> GetProductsByVendorId(string vendorId)
+        {
+            return _products.Find(product => product.VendorId == vendorId).ToList();
+        }
         public void CreateProduct(Product product)
         {
             product.Id = ObjectId.GenerateNewId().ToString();
@@ -322,7 +329,81 @@ using System.Numerics;
 
             return productDetails;
         }
-  public async Task ToggleIsActiveAsync(string productId)
+        //public async Task ToggleIsActiveAsync(string productId)
+        //      {
+        //          var filter = Builders<Product>.Filter.Eq(p => p.Id, productId);
+
+        //          // Fetch the current product
+        //          var product = await _products.Find(filter).FirstOrDefaultAsync();
+
+        //          if (product != null)
+        //          {
+        //              // Toggle the IsActive value
+        //              var newIsActiveValue = !product.IsActive;
+
+        //              // Update with the new IsActive value
+        //              var update = Builders<Product>.Update
+        //                  .Set(p => p.IsActive, newIsActiveValue)
+        //                  .CurrentDate(p => p.StockLastUpdated); // Update the stock last modified date (optional)
+
+        //              // Apply the update
+        //              await _products.UpdateOneAsync(filter, update);
+        //          }
+        //      }
+
+        //public async Task ToggleIsActiveAsync(string productId)
+        //{
+        //    var filter = Builders<Product>.Filter.Eq(p => p.Id, productId);
+
+        //    // Fetch the current product
+        //    var product = await _products.Find(filter).FirstOrDefaultAsync();
+
+        //    if (product != null && product.IsActive)
+        //    {
+        //        // Find orders with the product and active statuses
+        //        var orderFilter = Builders<Order>.Filter.And(
+        //            Builders<Order>.Filter.ElemMatch(o => o.ProductItems, pi => pi.ProductId == productId),
+        //            Builders<Order>.Filter.Or(
+        //                Builders<Order>.Filter.Eq(o => o.Status.Pending, true),
+        //                Builders<Order>.Filter.Eq(o => o.Status.Processing, true),
+        //                Builders<Order>.Filter.Eq(o => o.Status.Dispatched, true),
+        //                Builders<Order>.Filter.Eq(o => o.Status.Partially_Delivered, true)
+        //            )
+        //        );
+
+        //        // Get orders that match the filter
+        //        var activeOrders = await _orders.Find(orderFilter).ToListAsync();
+
+        //        // Check if the latest status in each order is active
+        //        bool hasRecentActiveStatus = activeOrders.Any(order =>
+        //        {
+        //            // Get the latest status
+        //            string latestStatus = GetLatestStatus(order.Status);
+
+        //            // Return true if the latest status is an active one
+        //            return latestStatus == "Pending" || latestStatus == "Processing" ||
+        //                   latestStatus == "Dispatched" || latestStatus == "Partially Delivered";
+        //        });
+
+        //        // Proceed to deactivate if no orders have a recent active status
+        //        if (!hasRecentActiveStatus)
+        //        {
+        //            var newIsActiveValue = !product.IsActive;
+
+        //            var update = Builders<Product>.Update
+        //                .Set(p => p.IsActive, newIsActiveValue)
+        //                .CurrentDate(p => p.StockLastUpdated); // Optionally update stock last modified date
+
+        //            await _products.UpdateOneAsync(filter, update);
+        //        }
+        //        else
+        //        {
+        //            Console.WriteLine("Product cannot be deactivated as it is part of orders with recent active statuses.");
+        //        }
+        //    }
+        //}
+
+        public async Task ToggleIsActiveAsync(string productId)
         {
             var filter = Builders<Product>.Filter.Eq(p => p.Id, productId);
 
@@ -331,18 +412,101 @@ using System.Numerics;
 
             if (product != null)
             {
-                // Toggle the IsActive value
-                var newIsActiveValue = !product.IsActive;
+                bool newIsActiveValue;
 
-                // Update with the new IsActive value
+                // Find orders with the product regardless of their status
+                var orderFilter = Builders<Order>.Filter.ElemMatch(o => o.ProductItems, pi => pi.ProductId == productId);
+                var allOrders = await _orders.Find(orderFilter).ToListAsync();
+
+                // If the product is currently inactive, always activate it
+                if (!product.IsActive)
+                {
+                    newIsActiveValue = true;
+                    Console.WriteLine("Activating product since it is currently inactive.");
+                }
+                else // The product is currently active
+                {
+                    // Check for orders with Canceled or Delivered statuses
+                    var canceledOrDeliveredOrderFilter = Builders<Order>.Filter.And(
+                        Builders<Order>.Filter.ElemMatch(o => o.ProductItems, pi => pi.ProductId == productId),
+                        Builders<Order>.Filter.Or(
+                            Builders<Order>.Filter.Eq(o => o.Status.Canceled, true),
+                            Builders<Order>.Filter.Eq(o => o.Status.Delivered, true)
+                        )
+                    );
+
+                    var canceledOrDeliveredOrders = await _orders.Find(canceledOrDeliveredOrderFilter).ToListAsync();
+
+                    // Deactivate if there are Canceled or Delivered orders
+                    if (canceledOrDeliveredOrders.Any())
+                    {
+                        newIsActiveValue = false;
+                        Console.WriteLine("Deactivating product as it is part of orders with Canceled or Delivered statuses.");
+                    }
+                    else
+                    {
+                        // Check for active orders
+                        var activeOrderFilter = Builders<Order>.Filter.And(
+                            Builders<Order>.Filter.ElemMatch(o => o.ProductItems, pi => pi.ProductId == productId),
+                            Builders<Order>.Filter.Or(
+                                Builders<Order>.Filter.Eq(o => o.Status.Pending, true),
+                                Builders<Order>.Filter.Eq(o => o.Status.Processing, true),
+                                Builders<Order>.Filter.Eq(o => o.Status.Dispatched, true),
+                                Builders<Order>.Filter.Eq(o => o.Status.Partially_Delivered, true)
+                            )
+                        );
+
+                        // Get active orders
+                        var activeOrders = await _orders.Find(activeOrderFilter).ToListAsync();
+
+                        // If there are no active orders, deactivate the product
+                        if (!activeOrders.Any())
+                        {
+                            newIsActiveValue = false;
+                            Console.WriteLine("Deactivating product as there are no active orders.");
+                        }
+                        else
+                        {
+                            newIsActiveValue = true;
+                            Console.WriteLine("Keeping product active as it is part of active orders.");
+                        }
+                    }
+                }
+
+                // Update the product's IsActive value
                 var update = Builders<Product>.Update
                     .Set(p => p.IsActive, newIsActiveValue)
-                    .CurrentDate(p => p.StockLastUpdated); // Update the stock last modified date (optional)
+                    .CurrentDate(p => p.StockLastUpdated); // Optionally update stock last modified date
 
-                // Apply the update
                 await _products.UpdateOneAsync(filter, update);
             }
         }
+
+
+        // Helper method to get the latest status based on date
+        private string GetLatestStatus(OrderStatus status)
+        {
+            var statusUpdates = new Dictionary<string, DateTime?>()
+    {
+        { "Pending", status.PendingDate },
+        { "Processing", status.ProcessingDate },
+        { "Dispatched", status.DispatchedDate },
+        { "Partially Delivered", status.Partially_Delivered_Date },
+        { "Delivered", status.DeliveredDate },
+        { "Canceled", status.CanceledDate }
+    };
+
+            var latestStatus = statusUpdates
+                .Where(s => s.Value != null) // Filter out null dates
+                .OrderByDescending(s => s.Value) // Order by the most recent date
+                .FirstOrDefault();
+
+            return latestStatus.Key ?? "Unknown";
+        }
+
+
+
+
 
         public async Task UpdateManyProductsAsync(FilterDefinition<Product> filter, UpdateDefinition<Product> update)
         {

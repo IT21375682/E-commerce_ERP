@@ -147,6 +147,12 @@ const Sidebar = (props) => {
                     Category Management
                   </NavLink>
                 </NavItem>
+                <NavItem>
+                  <NavLink href="/admin/inventory-mgt">
+                    <i className="ni ni-ui-04" />
+                    Inventory Management
+                  </NavLink>
+                </NavItem>
               </>
             )}
 

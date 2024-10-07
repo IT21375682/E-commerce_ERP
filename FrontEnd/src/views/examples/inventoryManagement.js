@@ -171,10 +171,7 @@ const InventoryManagement = () => {
     // Function to fetch products based on the selected view
     const fetchProducts = async (view) => {
         setLoading(true); // Start loading
-
         let apiUrl = 'https://localhost:5004/api/Product';
-
-
         try {
             const response = await axios.get(apiUrl); // Fetch products based on the selected view
             let fetchedProducts = response.data;

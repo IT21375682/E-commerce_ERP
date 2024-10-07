@@ -29,6 +29,11 @@ namespace E_commerce.Services
             return _productRepository.GetProductsByCategoryId(categoryId);
         }
 
+        public IEnumerable<Product> GetProductsByVendorId(string vendorId)
+        {
+            return _productRepository.GetProductsByVendorId(vendorId);
+        }
+
         public void CreateProduct(Product product)
         {
             _productRepository.CreateProduct(product);
