@@ -1,4 +1,12 @@
-﻿namespace E_commerce.DTOs
+﻿/*
+ * File: ProductDetailsDto.cs
+ * Author: Sanjayan
+ * Registration No: IT21375514
+ * Description: This file defines the ProductDetailsDto class, which represents the data transfer object for product details in the e-commerce system.
+ * It includes fields for product information, vendor details, and stock management.
+ */
+
+namespace E_commerce.DTOs
 {
     public class ProductDetailsDto
     {

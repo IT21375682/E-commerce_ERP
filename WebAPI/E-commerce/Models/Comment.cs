@@ -1,6 +1,7 @@
 ﻿/*
  * File: Comment.cs
  * Author: Sanjayan
+ * Registration No: IT21375514
  * Description: This file defines the Comment class, which models a user comment for a product/vendor in the e-commerce system.
  * It includes fields for user, vendor, product, comment details, and a rating system.
  */
@@ -13,7 +14,7 @@ namespace E_commerce.Models
 {
     public class Comment
     {
-        [BsonId] // MongoDB auto-generated ID
+        [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
         public string? id { get; set; }   // Unique ID for the comment
 

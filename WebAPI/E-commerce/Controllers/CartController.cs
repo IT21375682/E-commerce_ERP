@@ -1,6 +1,7 @@
 ﻿/*
  * File: CartController.cs
  * Author: Sanjayan
+ * Registration No: IT21375514
  * Description: This file contains the CartController class that handles HTTP requests related to carts.
  */
 
@@ -17,12 +18,13 @@ namespace E_commerce.Controllers
     {
         private readonly CartService _cartService;
 
+        // Initializes the controller with the service.
         public CartController(CartService cartService)
         {
             _cartService = cartService;
         }
 
-        // GET: api/Cart
+        // GET: api/Cart - Retrieves all cart details
         [HttpGet]
         public async Task<IActionResult> GetAllCarts()
         {
@@ -30,7 +32,7 @@ namespace E_commerce.Controllers
             return Ok(carts);
         }
 
-        // GET: api/Cart/{userId}
+        // GET: api/Cart/{userId} - Retrieves all cart details of a user
         [HttpGet("{userId}")]
         public async Task<IActionResult> GetCart(string userId)
         {
@@ -42,7 +44,7 @@ namespace E_commerce.Controllers
             return Ok(cart);
         }
 
-        // POST: api/Cart
+        // POST: api/Cart - Create a cart 
         [HttpPost]
         public async Task<IActionResult> CreateCart([FromBody] Cart cart)
         {
@@ -50,7 +52,7 @@ namespace E_commerce.Controllers
             return CreatedAtAction(nameof(GetCart), new { userId = cart.UserId }, cart);
         }
 
-        // PUT: api/Cart/{cartId}
+        // PUT: api/Cart/{cartId} - Update a cart details
         [HttpPut("{cartId}")]
         public async Task<IActionResult> UpdateCart(string cartId, [FromBody] Cart cart)
         {
@@ -58,7 +60,7 @@ namespace E_commerce.Controllers
             return NoContent();
         }
 
-        // DELETE: api/Cart/{cartId}
+        // DELETE: api/Cart/{cartId} - Delete a cart
         [HttpDelete("{cartId}")]
         public async Task<IActionResult> DeleteCart(string cartId)
         {
@@ -66,7 +68,7 @@ namespace E_commerce.Controllers
             return NoContent();
         }
 
-        // PATCH: api/Cart/{cartId}/product
+        // PATCH: api/Cart/{cartId}/product - Add or Update a cart details
         [HttpPatch("{cartId}/product")]
         public async Task<IActionResult> AddOrUpdateProductInCart(string cartId, [FromBody] CartProductItem product)
         {
@@ -74,7 +76,7 @@ namespace E_commerce.Controllers
             return NoContent();
         }
 
-        // GET: api/Cart/{userId}/product-details
+        // GET: api/Cart/{userId}/product-details - Get a cart details with addition data
         [HttpGet("{userId}/product-details")]
         public async Task<IActionResult> GetCartWithProductByUserId(string userId)
         {
@@ -86,7 +88,7 @@ namespace E_commerce.Controllers
             return Ok(cart);
         }
 
-        // PUT: api/Cart/{cartId}
+        // PUT: api/Cart/{cartId} - Update or Remove cart details
         [HttpPut("update-remove/{cartId}")]
         public async Task<IActionResult> UpdateCartWithRemove(string cartId, [FromBody] Cart cart)
         {
@@ -97,7 +99,7 @@ namespace E_commerce.Controllers
             return NoContent();
         }
 
-        // GET: api/Cart/{userId}/product-count
+        // GET: api/Cart/{userId}/product-count - Get cart product count
         [HttpGet("{userId}/product-count")]
         public async Task<IActionResult> GetProductCountByUserId(string userId)
         {

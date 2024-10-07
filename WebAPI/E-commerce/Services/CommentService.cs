@@ -1,6 +1,7 @@
 ﻿/*
  * File: CommentService.cs
  * Author: Sanjayan
+ * Registration No: IT21375514
  * Description: This file defines the service layer for managing business logic related to comments, such as validation and interaction with the repository.
  */
 

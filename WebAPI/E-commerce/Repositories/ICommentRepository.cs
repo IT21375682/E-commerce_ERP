@@ -1,6 +1,7 @@
 ﻿/*
  * File: CommentRepository.cs
  * Author: Sanjayan
+ * Registration No: IT21375514
  * Description: This file implements the repository pattern for managing CRUD operations on comments in MongoDB.
  */
 
@@ -96,7 +97,7 @@ namespace E_commerce.Repositories
 
             if (existingComment != null)
             {
-                comment.id = existingComment.id; // Set the existing ID to update
+                comment.id = existingComment.id;
                 _comments.ReplaceOne(c => c.id == existingComment.id, comment);
             }
             else
