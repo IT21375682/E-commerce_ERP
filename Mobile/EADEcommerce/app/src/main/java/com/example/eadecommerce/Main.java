@@ -109,6 +109,9 @@ public class Main extends AppCompatActivity {
             }
         });
 
+        // Set up navigation item selected listener
+        // Reference: Navigation Drawer Menu in Android Tutorial | How to Create Navigation Drawer in Android Studio
+        // https://youtu.be/uY9iZiamyZs?si=08ygu9YGsyv2AHKt
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {

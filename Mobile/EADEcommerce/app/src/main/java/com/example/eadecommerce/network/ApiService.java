@@ -30,7 +30,7 @@ import retrofit2.http.Path;
 public interface ApiService {
 
     // Logs in a user and returns a LoginResponse
-    @POST("/api/User/login")
+    @POST("api/User/login")
     Call<LoginResponse> loginUser(@Body LoginRequest loginRequest);
 
     // Creates a new user account
@@ -54,15 +54,15 @@ public interface ApiService {
     Call<Comment> addOrUpdateComment(@Body Comment comment);
 
     // Retrieves the cart associated with a specific user
-    @GET("/api/Cart/{userId}")
+    @GET("api/Cart/{userId}")
     Call<Cart> getCartByUserId(@Path("userId") String userId);
 
     // Updates the quantity or details of a product in the cart
-    @PATCH("/api/Cart/{cartId}/product")
+    @PATCH("api/Cart/{cartId}/product")
     Call<Void> updateCartProduct(@Path("cartId") String cartId, @Body CartProduct cartProduct);
 
     // Creates a new cart for a user
-    @POST("/api/Cart")
+    @POST("api/Cart")
     Call<Void> createCart(@Body Cart cart);
 
     // Retrieves detailed product information from the cart for a specific user
@@ -74,7 +74,7 @@ public interface ApiService {
     Call<Void> updateCart(@Path("cartId") String cartId, @Body Cart cart);
 
     // Clears the entire cart for a specific user
-    @DELETE("/api/Cart/{cartId}")
+    @DELETE("api/Cart/{cartId}")
     Call<Void> clearCart(@Path("cartId") String cartId);
 
     // Retrieves user information by their ID
@@ -82,19 +82,19 @@ public interface ApiService {
     Call<UserResponse> getUserById(@Path("id") String userId);
 
     // Creates a new order
-    @POST("/api/Order")
+    @POST("api/Order")
     Call<Void> createOrder(@Body OrderRequest orderRequest);
 
     // Updates user information and returns a new JWT token
-    @PATCH("/api/User/UpdateUser/{id}")
+    @PATCH("api/User/UpdateUser/{id}")
     Call<LoginResponse> updateUser(@Path("id") String id, @Body UserUpdate user);
 
     // Retrieves a list of orders placed by a specific user
-    @GET("/api/Order/user/{userId}")
+    @GET("api/Order/user/{userId}")
     Call<List<Order>> getUserOrders(@Path("userId") String userId);
 
     // Retrieves details of a specific order by its ID
-    @GET("/api/Order/single-order-detail/{id}")
+    @GET("api/Order/single-order-detail/{id}")
     Call<SingleOrder> getOrderDetails(@Path("id") String orderId);
 
     // Retrieves a list of active categories
@@ -118,6 +118,6 @@ public interface ApiService {
     Call<Integer> getCartProductCount(@Path("userId") String userId);
 
     // Deactivate customer account
-    @PUT("/api/User/{userId}/my-account-deactivate")
+    @PUT("api/User/{userId}/my-account-deactivate")
     Call<Void> deactivateAccount(@Path("userId") String userId);
 }

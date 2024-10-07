@@ -15,4 +15,5 @@
     <color name="ordersTextColor">@color/lightBlack</color>
     <color name="ordersOnTextColor">@color/black</color>
     <color name="statusColor">@color/secondary</color>
+    <color name="green">#20961F</color>
 </resources>

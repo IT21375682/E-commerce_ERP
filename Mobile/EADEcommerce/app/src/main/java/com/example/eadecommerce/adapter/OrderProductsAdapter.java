@@ -33,7 +33,7 @@ public class OrderProductsAdapter extends RecyclerView.Adapter<OrderProductsAdap
     @Override
     public CartViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         // Inflate the layout for each item in the RecyclerView
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.checkout_item, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.order_product_item, parent, false);
         return new CartViewHolder(view);
     }
 
@@ -52,6 +52,10 @@ public class OrderProductsAdapter extends RecyclerView.Adapter<OrderProductsAdap
             holder.itemImageView.setImageBitmap(decodedByte);
         } else {
             holder.itemImageView.setImageResource(R.drawable.placeholder);
+        }
+
+        if (item.isDelivered()){
+            holder.itemDeliveredTextView.setVisibility(View.VISIBLE);
         }
 
         holder.itemLayout.setOnClickListener(v -> {
@@ -74,6 +78,7 @@ public class OrderProductsAdapter extends RecyclerView.Adapter<OrderProductsAdap
         public TextView itemCountTextView;
         public ImageView itemImageView;
         public LinearLayout itemLayout;
+        public TextView itemDeliveredTextView;
 
         public CartViewHolder(View itemView) {
             super(itemView);
@@ -83,6 +88,7 @@ public class OrderProductsAdapter extends RecyclerView.Adapter<OrderProductsAdap
             itemCountTextView = itemView.findViewById(R.id.itemCountTextView);
             itemImageView = itemView.findViewById(R.id.itemImageView);
             itemLayout = itemView.findViewById(R.id.itemLayout);
+            itemDeliveredTextView = itemView.findViewById(R.id.itemDeliveredTextView);
         }
     }
 }
