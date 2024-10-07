@@ -32,7 +32,7 @@ const Sidebar = (props) => {
 
   // Decode JWT token and get the role
   useEffect(() => {
-    
+
     if (!localStorage.getItem("token")) {
       // If token is not present, redirect to login
       window.location.href = "/auth/login";
@@ -129,12 +129,12 @@ const Sidebar = (props) => {
             {/* Vendor-specific items */}
             {(role === "VENDOR") && (
               <>
-                 <NavItem>
-              <NavLink href="/admin/view-product">
-                <i className="ni ni-ui-04" />
-                Product Management
-              </NavLink>
-            </NavItem>
+                <NavItem>
+                  <NavLink href="/admin/view-product">
+                    <i className="ni ni-ui-04" />
+                    Product Management
+                  </NavLink>
+                </NavItem>
                 <NavItem>
                   <NavLink href="/admin/view-order">
                     <i className="ni ni-ui-04" />
@@ -142,19 +142,25 @@ const Sidebar = (props) => {
                   </NavLink>
                 </NavItem>
                 <NavItem>
-            <NavLink href="/admin/view-category">
-                <i className="ni ni-ui-04" />
-                Category Management
-              </NavLink>
-      </NavItem>
+                  <NavLink href="/admin/view-category">
+                    <i className="ni ni-ui-04" />
+                    Category Management
+                  </NavLink>
+                </NavItem>
+                <NavItem>
+                  <NavLink href="/admin/inventory-mgt">
+                    <i className="ni ni-ui-04" />
+                    Inventory Management
+                  </NavLink>
+                </NavItem>
               </>
             )}
 
             {/* Non-vendor-specific items */}
-            {(role == "ADMIN"  || role==='CSR') && (
+            {(role == "ADMIN" || role === 'CSR') && (
               <>
                 <NavItem>
-                  <NavLink href="/admin/tables">
+                  <NavLink href="/admin/view-vendor">
                     <i className="ni ni-ui-04" />
                     Vendor Management
                   </NavLink>
@@ -166,11 +172,11 @@ const Sidebar = (props) => {
                   </NavLink>
                 </NavItem>
                 <NavItem>
-              <NavLink href="/admin/view-product">
-                <i className="ni ni-ui-04" />
-                Product Management
-              </NavLink>
-            </NavItem>
+                  <NavLink href="/admin/view-product">
+                    <i className="ni ni-ui-04" />
+                    Product Management
+                  </NavLink>
+                </NavItem>
                 <NavItem>
                   <NavLink href="/admin/view-order">
                     <i className="ni ni-ui-04" />
@@ -178,13 +184,19 @@ const Sidebar = (props) => {
                   </NavLink>
                 </NavItem>
                 <NavItem>
-            <NavLink href="/admin/view-category">
-                <i className="ni ni-ui-04" />
-                Category Management
-              </NavLink>
-      </NavItem>
+                  <NavLink href="/admin/view-category">
+                    <i className="ni ni-ui-04" />
+                    Category Management
+                  </NavLink>
+                </NavItem>
+                <NavItem>
+                  <NavLink href="/admin/inventory-mgt">
+                    <i className="ni ni-ui-04" />
+                    Inventory Management
+                  </NavLink>
+                </NavItem>
 
-                
+
               </>
             )}
           </Nav>

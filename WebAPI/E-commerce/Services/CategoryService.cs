@@ -1,7 +1,13 @@
-﻿using E_commerce.DTOs;
+﻿/*
+ * File: CategoryService.cs
+ * Author: Krithiga D. B
+ * Description: This service handles the business logic for category operations such as fetching, creating, updating, and deleting category.
+ */
+using E_commerce.DTOs;
 using E_commerce.Models;
 using E_commerce.Repositories;
 using MongoDB.Driver;
+using System;
 
 namespace E_commerce.Services
 {
@@ -16,46 +22,53 @@ namespace E_commerce.Services
                  _productRepository= productRepository;
             }
 
-            public IEnumerable<Category> GetAllCategories()
+        // Retrieves all categories from the repository.
+        public IEnumerable<Category> GetAllCategories()
             {
                 return _categoryRepository.GetAllCategories();
             }
-
+        // Retrieves all active categories from the repository.
         public IEnumerable<Category> GetAllActiveCategories()
         {
             return _categoryRepository.GetAllActiveCategories();
         }
 
+        // Retrieves all deactivated categories from the repository.
         public IEnumerable<Category> GetAllDeactivatedCategories()
         {
             return _categoryRepository.GetAllDeactivatedCategories();
         }
 
-        public  Task<Category> GetCategoryById(string id)
+        // Retrieves a category by its ID from the repository.
+        public Task<Category> GetCategoryById(string id)
         {
             return  _categoryRepository.GetCategoryById(id); // Call the async method
         }
 
+        // Creates a new category in the repository.
         public void CreateCategory(Category category)
             {
                 _categoryRepository.CreateCategory(category);
             }
 
-            public void UpdateCategory(string id, Category category)
+        // Updates an existing category by its ID in the repository.
+        public void UpdateCategory(string id, Category category)
             {
                 _categoryRepository.UpdateCategory(id, category);
             }
 
-            //public void DeleteCategory(string id)
-            //{
-            //    _categoryRepository.DeleteCategory(id);
-            //}
+        //public void DeleteCategory(string id)
+        //{
+        //    _categoryRepository.DeleteCategory(id);
+        //}
 
-            public IEnumerable<CategoryDto> GetAllActiveCategoriesNames()
+        // Retrieves the names and IDs of all active categories as DTOs.
+        public IEnumerable<CategoryDto> GetAllActiveCategoriesNames()
             {
                 return _categoryRepository.GetAllActiveCategoriesNames();
             }
 
+        // Toggles the active status of a category and deactivates its active products if necessary.
         public async Task ToggleCategoryIsActiveAsync(string categoryId)
         {
             var filter = Builders<Category>.Filter.Eq(c => c.Id, categoryId);
@@ -98,9 +111,7 @@ namespace E_commerce.Services
             await _productRepository.UpdateManyProductsAsync(productFilter, updateProducts); // Call a method to update products
         }
 
-
-
-
+        //Checks and deletes a category if it is not active.
         public async Task CheckAndDelete(string categoryId)
         {
             var filter = Builders<Category>.Filter.Eq(c => c.Id, categoryId);

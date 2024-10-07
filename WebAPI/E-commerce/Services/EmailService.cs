@@ -1,4 +1,10 @@
-﻿using System.Net.Mail;
+﻿/*
+ * File: EmailService.cs
+ * Author: Krithiga D. B
+ * Description: This service handles the business logic of sending email to the users as notification
+ */
+
+using System.Net.Mail;
 using MailKit.Net.Smtp;
 using MimeKit;
 using System.Threading.Tasks;
@@ -8,12 +14,14 @@ namespace E_commerce.Services
 {
     public class EmailService
     {
+
+        //Send email asynchronous function from a particular email id given below
         public async Task SendEmailAsync(string toEmail, string subject, string message)
         {
             Console.WriteLine("Vendor Email : " + toEmail);
             var emailMessage = new MimeMessage();
 
-            emailMessage.From.Add(new MailboxAddress("EAD", "krithigadb96@gmail.com"));
+            emailMessage.From.Add(new MailboxAddress("Clickart", "krithigadb96@gmail.com"));
             emailMessage.To.Add(new MailboxAddress("", toEmail));
             emailMessage.Subject = subject;
 

@@ -13,6 +13,7 @@ import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import StatusIndicator from './StatusIndicator';
 import { Modal, ModalHeader, ModalBody, ModalFooter, Input } from "reactstrap";
+import { jwtDecode } from "jwt-decode";
 
 const ViewOrder = () => {
     const [orders, setOrders] = useState([]);
@@ -29,7 +30,56 @@ const ViewOrder = () => {
     const [showMarkAsDelivered, setShowMarkAsDelivered] = useState({}); // Track which products should show the button
     const [cancellationNote, setCancellationNote] = useState('');
     const [showCancellationNote, setShowCancellationNote] = useState(false);
-    // const [buttonState, setButtonState] = useState({}); // Tracks the state of the button
+    const [vendorId, setVendorId] = useState(jwtDecode(localStorage.getItem("token")).Id);
+    const [role, setRole] = useState();
+    const [vendorProducts, setVendorProducts] = useState([]);
+
+    useEffect(() => {
+
+        const token = localStorage.getItem("token"); // Retrieve the token from localStorage
+        if (token) {
+            try {
+                const decodedToken = jwtDecode(token);
+                setRole(decodedToken.role);
+                setVendorId(decodedToken.id);
+                console.log("Decoded Token:", decodedToken);
+                console.log("Vendor ID : " + decodedToken.id)
+                console.log("Role : " + role)
+
+            } catch (error) {
+                console.error("Failed to decode token", error);
+            }
+        }
+    }, []);
+    // Fetch vendor's products if role is 'VENDOR'
+    useEffect(() => {
+        const fetchVendorProducts = async () => {
+            try {
+                const response = await axios.get(`https://localhost:5004/api/Product/vendor/${vendorId}`);
+                setVendorProducts(response.data);
+            } catch (error) {
+                console.error("Error fetching vendor products:", error);
+            }
+        };
+
+        if (role === 'VENDOR' && vendorId) {
+            fetchVendorProducts();
+        }
+    }, [role, vendorId]);
+
+    const filterOrdersByVendorProducts = (orders) => {
+        if (vendorProducts.length === 0) {
+            return orders; // If there are no vendor products, return all orders
+        }
+
+        return orders.filter(order =>
+            order.productItems.some(productItem =>
+                vendorProducts.some(vendorProduct =>
+                    vendorProduct.id === (productItem.ProductId || productItem.productId)
+                )
+            )
+        );
+    };
 
     const fetchOrders = async () => {
         setLoading(true);
@@ -93,13 +143,15 @@ const ViewOrder = () => {
         const fetchData = async () => {
             setLoading(true);
             const [ordersData, usersData] = await Promise.all([fetchOrders(), fetchUsers()]);
-            const mergedOrders = mergeOrdersWithUsers(ordersData, usersData);
+            const filteredOrders = role === 'VENDOR' ? filterOrdersByVendorProducts(ordersData) : ordersData;
+            // const mergedOrders = mergeOrdersWithUsers(ordersData, usersData);
+            const mergedOrders = mergeOrdersWithUsers(filteredOrders, usersData);
             setOrders(mergedOrders);
             setLoading(false);
         };
 
         fetchData();
-    }, []);
+    }, [vendorProducts]);
 
     // Fetch order statuses once orders are loaded
     useEffect(() => {
@@ -120,6 +172,7 @@ const ViewOrder = () => {
             fetchStatuses();
         }
     }, [orders]);
+
 
     const toggleRow = async (orderId) => {
         if (expandedRow === orderId) {
@@ -200,7 +253,7 @@ const ViewOrder = () => {
         // setIsEditMode(true); // Set edit mode to true when editing
         setIsEditModalOpen(true);
     };
-    
+
 
     const handleEditProduct = (orderId, productId) => {
         const order = orders.find(order => order.id === orderId);
@@ -215,10 +268,10 @@ const ViewOrder = () => {
     //         console.error("Order ID or Product ID is undefined.");
     //         return;
     //     }
-    
+
     //     // Remove the "Mark as Delivered" button for the canceled product
     //     setShowMarkAsDelivered((prev) => ({ ...prev, [productId]: false })); 
-    
+
     //     // Optional: If you want to update the product's status in the order (e.g., to canceled), you could also do that
     //     setEditOrder((prevOrder) => ({
     //         ...prevOrder,
@@ -228,35 +281,35 @@ const ViewOrder = () => {
     //                 : item
     //         )
     //     }));
-        
+
     //     // Here you can also make an API call to cancel the order or perform any necessary logic
     // };
-    
+
 
     const handleStatusChange = (newStatus) => {
         setEditOrder(prevOrder => ({
             ...prevOrder,
             Status: newStatus
         }));
-    
+
         // Reset the cancellation note if the status changes away from "Canceled"
         if (newStatus !== 'Canceled') {
             setCancellationNote('');
         }
     };
-    
+
     const handleMarkAsDelivered = async (productId) => {
         try {
             // Fetch the vendor ID from the product table using the product ID
             const productResponse = await axios.get(`https://localhost:5004/api/Product/${productId}`);
             const vendorId = productResponse.data.vendorId; // Adjust this according to your API response structure
-    
+
             // Get the orderId (assuming it's stored in the editOrder state)
             const orderId = editOrder.id; // or however you are storing the order ID
-    
+
             // Call the API to update delivery status
             await axios.patch(`https://localhost:5004/api/Order/update-delivery-status/${orderId}/${vendorId}/${productId}`);
-    
+
             // Update the local state to reflect that the item has been delivered
             setEditOrder(prevOrder => ({
                 ...prevOrder,
@@ -266,42 +319,42 @@ const ViewOrder = () => {
                         : item
                 )
             }));
-    
+
             // Hide the button after marking as delivered
             setShowMarkAsDelivered(prev => ({ ...prev, [productId]: false }));
-    
+
             // Optionally, show a success message
             toast.success('Product marked as delivered successfully!');
-    
+
         } catch (error) {
             console.error('Error marking product as delivered:', error);
             toast.error('Failed to mark product as delivered.');
         }
     };
-    
+
 
     const saveOrderChanges = async () => {
         try {
-            const customMessage = editOrder.Status === 'Canceled' ? editOrder.cancellationNote || editOrder.CancellationNote: null;
+            const customMessage = editOrder.Status === 'Canceled' ? editOrder.cancellationNote || editOrder.CancellationNote : null;
 
             // Update the order status
             // await axios.patch(`https://localhost:5004/api/Order/${editOrder.id}/status/${editOrder.Status||editOrder.status}`);
             await axios.patch(`https://localhost:5004/api/Order/${editOrder.id}/status/${editOrder.Status || editOrder.status}`, customMessage);
             toast.success(`Order status updated to "${editOrder.Status}" successfully`);
-    
+
             // Optionally refresh orders or handle updated state here
             // const ordersData = await fetchOrders(); // Fetch updated orders
             // setOrders(ordersData);
-    
+
             setIsEditModalOpen(false);
         } catch (error) {
             console.error('Error updating order status:', error);
             toast.error('Failed to update order status');
         }
     };
-    
-    
-    
+
+
+
     return (
         <Container className="mt-10" fluid>
             <ToastContainer />
@@ -381,8 +434,17 @@ const ViewOrder = () => {
                                                                         </tr>
                                                                     </thead>
                                                                     <tbody>
+                                                                        {/* {order.productItems && order.productItems.length > 0 ? (
+                                                                            order.productItems.map((productItem, index) => { */}
                                                                         {order.productItems && order.productItems.length > 0 ? (
-                                                                            order.productItems.map((productItem, index) => {
+                                                                            (role === 'VENDOR'
+                                                                                ? order.productItems.filter(productItem =>
+                                                                                    vendorProducts.some(vendorProduct =>
+                                                                                        vendorProduct.id === (productItem.ProductId || productItem.productId)
+                                                                                    )
+                                                                                )
+                                                                                : order.productItems
+                                                                            ).map((productItem, index) => {
                                                                                 const product = productDetails[productItem.ProductId || productItem.productId];
                                                                                 return (
                                                                                     <tr key={index}>
@@ -404,16 +466,16 @@ const ViewOrder = () => {
                                                                                                 {productItem.Delivered || productItem.delivered ? "Delivered" : "Not Delivered"}
                                                                                             </Badge>
                                                                                             {/* Show the "Delivered" button only in edit mode and if not delivered */}
-                                                                                            {isEditMode && 
-    // Show the button only if the product has not been delivered and is not canceled
-    !(productItem.Delivered || productItem.delivered) && 
-    !productItem.Canceled && (
-    <Button
-        color="success"
-        onClick={() => handleMarkAsDelivered(productItem.ProductId || productItem.productId)}>
-        Mark as Delivered
-    </Button>
-)}
+                                                                                            {isEditMode &&
+                                                                                                // Show the button only if the product has not been delivered and is not canceled
+                                                                                                !(productItem.Delivered || productItem.delivered) &&
+                                                                                                !productItem.Canceled && (
+                                                                                                    <Button
+                                                                                                        color="success"
+                                                                                                        onClick={() => handleMarkAsDelivered(productItem.ProductId || productItem.productId)}>
+                                                                                                        Mark as Delivered
+                                                                                                    </Button>
+                                                                                                )}
 
                                                                                         </td>
                                                                                     </tr>
@@ -438,7 +500,9 @@ const ViewOrder = () => {
                                                                         </Button>
                                                                     </div> */}
                                                                     <div className="d-flex justify-content-end">
-                                                                       <Button color="warning" onClick={() => handleEditProduct(order.id)}>Edit Product Status</Button>
+                                                                    {role === 'VENDOR' && (
+    <Button color="warning" onClick={() => handleEditProduct(order.id)}>Edit Product Status</Button>
+)}
                                                                         <Button color="warning" onClick={() => handleEdit(order.id)}>Edit Order Status</Button>
                                                                         {/* <Button color="danger" onClick={() => handleDelete(order.id)}>Delete</Button> */}
                                                                         {/* <Button 
@@ -469,43 +533,43 @@ const ViewOrder = () => {
             </Row>
             {/* Edit Order Modal */}
             <Modal isOpen={isEditModalOpen} toggle={() => setIsEditModalOpen(!isEditModalOpen)}>
-    <ModalHeader toggle={() => setIsEditModalOpen(!isEditModalOpen)}>Edit Order</ModalHeader>
-    <ModalBody>
-        {editOrder && (
-            <div>
-                <h5>Order ID: {editOrder.id}</h5>
-                <h6>Customer Name: {editOrder.userName}</h6>
-                <div>
-                    <label>Status:</label>
-                    <select value={editOrder.Status} onChange={(e) => handleStatusChange(e.target.value)}>
-                        <option value="Pending">Pending</option>
-                        <option value="Processing">Processing</option>
-                        <option value="Dispatched">Dispatched</option>
-                        <option value="Delivered">Delivered</option>
-                        <option value="Canceled">Canceled</option>
-                    </select>
-                </div>
-                 {/* Conditionally render the cancellation note textbox */}
-                 {editOrder.Status === 'Canceled' && (
-                    <div>
-                        <label>Cancellation Note:</label>
-                        <br/>
-                        <textarea 
-                            style={{ width: '100%', height: '100px', resize: 'vertical' }} // Adjust height as necessary
-                            value={editOrder.cancellationNote} 
-                            onChange={(e) => setCancellationNote(e.target.value)} 
-                            placeholder="Enter cancellation reason..."
-                        />
-                    </div>
-                )}
-            </div>
-        )}
-    </ModalBody>
-    <ModalFooter>
-        <Button color="primary" onClick={saveOrderChanges}>Save Changes</Button>
-        <Button color="secondary" onClick={() => setIsEditModalOpen(false)}>Cancel</Button>
-    </ModalFooter>
-</Modal>
+                <ModalHeader toggle={() => setIsEditModalOpen(!isEditModalOpen)}>Edit Order</ModalHeader>
+                <ModalBody>
+                    {editOrder && (
+                        <div>
+                            <h5>Order ID: {editOrder.id}</h5>
+                            <h6>Customer Name: {editOrder.userName}</h6>
+                            <div>
+                                <label>Status:</label>
+                                <select value={editOrder.Status} onChange={(e) => handleStatusChange(e.target.value)}>
+                                    <option value="Pending">Pending</option>
+                                    <option value="Processing">Processing</option>
+                                    <option value="Dispatched">Dispatched</option>
+                                    <option value="Delivered">Delivered</option>
+                                    <option value="Canceled">Canceled</option>
+                                </select>
+                            </div>
+                            {/* Conditionally render the cancellation note textbox */}
+                            {editOrder.Status === 'Canceled' && (
+                                <div>
+                                    <label>Cancellation Note:</label>
+                                    <br />
+                                    <textarea
+                                        style={{ width: '100%', height: '100px', resize: 'vertical' }} // Adjust height as necessary
+                                        value={editOrder.cancellationNote}
+                                        onChange={(e) => setCancellationNote(e.target.value)}
+                                        placeholder="Enter cancellation reason..."
+                                    />
+                                </div>
+                            )}
+                        </div>
+                    )}
+                </ModalBody>
+                <ModalFooter>
+                    <Button color="primary" onClick={saveOrderChanges}>Save Changes</Button>
+                    <Button color="secondary" onClick={() => setIsEditModalOpen(false)}>Cancel</Button>
+                </ModalFooter>
+            </Modal>
 
         </Container>
     );

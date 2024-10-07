@@ -89,7 +89,7 @@ const ViewVendor = () => {
 
   return (
     <>
-      <Container className="mt--7" fluid>
+      <Container className="mt-10" fluid>
         <Row>
           <Col className="order-xl-1" xl="12">
             <Card className="bg-secondary shadow mt-7">

@@ -15,6 +15,7 @@ import { useParams } from "react-router-dom"; // Import useParams from React Rou
 import axios from "axios";
 import { toast, ToastContainer } from 'react-toastify'; // Import toast components
 import 'react-toastify/dist/ReactToastify.css'; // Import toastify CSS
+import { useNavigate } from "react-router-dom";
 
 const EditProduct = () => {
     const { id } = useParams(); // Get product ID from the URL
@@ -32,6 +33,7 @@ const EditProduct = () => {
     const [activeCategories, setActiveCategories] = useState([]);
     const [activeVendors, setActiveVendors] = useState([]);
     const [imagePreview, setImagePreview] = useState(""); // State for image preview
+    const navigate = useNavigate();
 
     // Fetch the active categories and vendors when the component mounts
     useEffect(() => {
@@ -304,7 +306,7 @@ const EditProduct = () => {
                                             Save
                                         </Button>
                                        
-                                        <Button color="danger" onClick={() => {/* Handle cancel logic here */ }} size="md">
+                                        <Button color="danger" onClick={() => navigate('/admin/view-product')} size="md">
                                             Cancel
                                         </Button>
                                          {/* Toast container */}

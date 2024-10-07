@@ -1,6 +1,6 @@
 ﻿/*
  * File: OrderService.cs
- * Author: Sanjayan
+ * Author: Krithiga D. B
  * Description: This service handles the business logic for order operations such as fetching, creating, updating, and deleting orders.
  */
 
@@ -90,6 +90,8 @@ namespace E_commerce.Services
             }
         }
 
+
+        // Updates the order status as Cancel with message
         public async Task CancelOrder(string orderId, string customMessage = null)
         {
             customMessage = customMessage ?? "Dear customer, your order has been canceled due to stock unavailability.";
@@ -120,6 +122,7 @@ namespace E_commerce.Services
         //    return _orderRepository.GetOrderStatusById(orderId);
         //}
 
+        // Retrieves the latest order status by date
         public string GetLatestOrderStatusById(string orderId)
         {
             var objectId = new ObjectId(orderId);
@@ -131,6 +134,7 @@ namespace E_commerce.Services
             return GetLatestStatus(orderStatus);
         }
 
+        // helper method to retrieve the latest order status by date
         private string GetLatestStatus(OrderStatus status)
         {
             // Create a dictionary to store statuses and their corresponding dates
@@ -174,11 +178,13 @@ namespace E_commerce.Services
             return filteredProducts;
         }
 
+        // method to update the order status as delivered
         public void UpdateProductDeliveryStatus(string orderId, string vendorId, ObjectId productId)
         {
             _orderRepository.UpdateProductDeliveryStatus(orderId, vendorId, productId);
         }
 
+        // get method the single order with details
         public SingleOrderItemDto GetSingleOrderWithProductDetails(string orderId)
         {
             // Fetch the order by orderId

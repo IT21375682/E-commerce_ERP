@@ -1,4 +1,10 @@
-﻿using MongoDB.Bson;
+﻿/*
+ * File: Product.cs
+ * Author: Krithiga. D. B
+ * Description: This file contains the definition of the Product class, which models an Product in the e-commerce system.
+ * Each order has product details such as image, name, price associated vendorId and categoryId as well as this product class contains the inventory details as stock
+ */
+using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 
 namespace E_commerce.Models

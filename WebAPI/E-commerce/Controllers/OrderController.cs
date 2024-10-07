@@ -1,6 +1,6 @@
 ﻿/*
  * File: OrderController.cs
- * Author: Sanjayan
+ * Author: Krithiga D. B
  * Description: This controller handles API requests related to orders. 
  * It provides endpoints to fetch, create, update, and delete orders.
  */
@@ -113,6 +113,7 @@ namespace E_commerce.Controllers
         //    return NoContent();
         //}
 
+        // Updates the processed status of a order: PATCH api/Order/{orderId}/status/{statusType}
         [HttpPatch("{orderId}/status/{statusType}")]
         public async Task<IActionResult> UpdateOrderStatus(string orderId, string statusType, [FromBody] string customMessage = null)
         {
@@ -162,6 +163,7 @@ namespace E_commerce.Controllers
         //    return Ok(status);
         //}
 
+        // HTTP GET method to get order status by OrderID
         [HttpGet("{orderId}/status")]
         public ActionResult<string> GetLatestOrderStatus(string orderId)
         {
@@ -180,7 +182,7 @@ namespace E_commerce.Controllers
             return Ok(latestStatus);
         }
 
-        // GET api/order/orderList/{vendorId}/{orderId}
+        // GET method to get orders per vendorId "api/order/orderList/{vendorId}/{orderId}"
         [HttpGet("{vendorId}/{orderId}")]
         public ActionResult<List<ProductItem>> GetProductsByVendor(string vendorId, string orderId)
         {
@@ -195,6 +197,7 @@ namespace E_commerce.Controllers
             }
         }
 
+        // Update method to edit order's product delivery status according to condition "api/order/orderList/{vendorId}/{orderId}"
         [HttpPatch("update-delivery-status/{orderId}/{vendorId}/{productId}")]
         public IActionResult UpdateProductDeliveryStatus(string orderId, string vendorId, string productId)
         {

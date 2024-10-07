@@ -1,4 +1,10 @@
-﻿using E_commerce.DTOs;
+﻿/*
+ * File: ProductController.cs
+ * Author: Krithiga D. B
+ * Description: This controller handles API requests related to products. 
+ * It provides endpoints to fetch, create, update, and delete products, toggle status of products and handle products inventory.
+ */
+using E_commerce.DTOs;
 using E_commerce.Models;
 using E_commerce.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -17,6 +23,8 @@ namespace E_commerce.Controllers
             _productService = productService;
         }
 
+
+        // GET all Products api/Product
         [HttpGet]
         public ActionResult<IEnumerable<Product>> GetAllProducts()
         {
@@ -24,6 +32,7 @@ namespace E_commerce.Controllers
             return Ok(products);
         }
 
+        // GET a single product per Id api/Product/{id}
         [HttpGet("{id}")]
         public ActionResult<Product> GetProductById(string id)
         {
@@ -35,6 +44,7 @@ namespace E_commerce.Controllers
             return Ok(product);
         }
 
+        // GET all products per categoryId api/Product/category/{categoryId}
         [HttpGet("category/{categoryId}")]
         public ActionResult<IEnumerable<Product>> GetProductsByCategoryId(string categoryId)
         {
@@ -48,6 +58,21 @@ namespace E_commerce.Controllers
             return Ok(products);
         }
 
+        // GET all products per vendorId api/Product/vendor/{vendorId}
+        [HttpGet("vendor/{vendorId}")]
+        public ActionResult<IEnumerable<Product>> GetProductsByVendorId(string vendorId)
+        {
+            var products = _productService.GetProductsByVendorId(vendorId);
+
+            if (products == null || !products.Any())
+            {
+                return NotFound("No products found for the given vendor.");
+            }
+
+            return Ok(products);
+        }
+
+        // Create product api/Product
         [HttpPost]
         public ActionResult<Product> CreateProduct([FromBody] Product newProduct)
         {
@@ -62,6 +87,7 @@ namespace E_commerce.Controllers
             }
         }
 
+        // Update product per productId api/Product/{id}
         [HttpPut("{id}")]
         public IActionResult UpdateProduct(string id, [FromBody] Product updatedProduct)
         {
@@ -75,6 +101,7 @@ namespace E_commerce.Controllers
             return NoContent();
         }
 
+        // DELETE a product per productId api/Product/vendor/{vendorId}
         [HttpDelete("{id}")]
         public IActionResult DeleteProduct(string id)
         {
@@ -101,6 +128,8 @@ namespace E_commerce.Controllers
         //    _productService.RemoveStock(productId, quantity);
         //    return NoContent();
         //}
+
+        // Update or ADD inventory stock api/Product/{id}/stock
         [HttpPut("{id}/stock")]
         public ActionResult UpdateStock(string id, [FromBody] int quantity)
         {
@@ -112,6 +141,7 @@ namespace E_commerce.Controllers
             return BadRequest(message);
         }
 
+        // Remove or reduce inventory stock api/Product/{id}/stock
         [HttpDelete("{id}/stock")]
         public ActionResult RemoveStock(string id, [FromBody] int quantity)
         {
@@ -138,7 +168,7 @@ namespace E_commerce.Controllers
             }
         }
 
-        // GET: api/product/active
+        // GET active products api/product/active
         [HttpGet("active")]
         public ActionResult<IEnumerable<Product>> GetAllActiveProducts()
         {
@@ -146,7 +176,7 @@ namespace E_commerce.Controllers
             return Ok(products);
         }
 
-        // GET: api/product/deactivated
+        // GET inactive products api/product/deactivated
         [HttpGet("deactivated")]
         public ActionResult<IEnumerable<Product>> GetAllDeActivatedProducts()
         {
@@ -154,7 +184,7 @@ namespace E_commerce.Controllers
             return Ok(products);
         }
 
-        // GET: api/product/active/category/{categoryId}
+        // GET active category products api/product/active/category/{categoryId}
         [HttpGet("active/category/{categoryId}")]
         public ActionResult<IEnumerable<Product>> GetAllActiveCategoryProducts(string categoryId)
         {
@@ -162,7 +192,7 @@ namespace E_commerce.Controllers
             return Ok(products);
         }
 
-        // GET: api/product/active-categories-products
+        // GET All Active Category And Active Products api/product/active-categories-products
         [HttpGet("active-categories-products")]
         public ActionResult<IEnumerable<(Category, IEnumerable<Product>)>> GetAllActiveCategoryAndActiveProducts()
         {
@@ -170,6 +200,7 @@ namespace E_commerce.Controllers
             return Ok(result);
         }
 
+        //Get All Active Products With Details
         [HttpGet("active-details")]
         public ActionResult<IEnumerable<ProductDetailsDto>> GetAllActiveProductsWithDetails()
         {
@@ -177,6 +208,7 @@ namespace E_commerce.Controllers
             return Ok(products);
         }
 
+        //Geta single Active Product Details
         [HttpGet("active-details/{productId}")]
         public ActionResult<ProductDetailsDto> GetActiveProductWithDetailsById(string productId)
         {
@@ -190,6 +222,7 @@ namespace E_commerce.Controllers
             return Ok(product);
         }
 
+        //Geta Active Product Details by categoryId
         [HttpGet("active-details/category/{categoryId}")]
         public ActionResult<IEnumerable<ProductDetailsDto>> GetAllActiveProductsWithDetailsByCategory(string? categoryId = null)
         {
@@ -197,7 +230,8 @@ namespace E_commerce.Controllers
             return Ok(products);
         }
 
- [HttpPatch("{id}/toggle-active")]
+        //update Product status
+        [HttpPatch("{id}/toggle-active")]
         public async Task<IActionResult> ToggleIsActive(string id)
         {
             await _productService.ToggleIsActiveAsync(id);

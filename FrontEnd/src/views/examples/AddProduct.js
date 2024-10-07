@@ -14,6 +14,8 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { toast, ToastContainer } from 'react-toastify'; // Import toast components
 import 'react-toastify/dist/ReactToastify.css'; // Import toastify CSS
+import { useNavigate } from 'react-router-dom';
+
 
 const AddProduct = () => {
   const [product, setProduct] = useState({
@@ -29,21 +31,22 @@ const AddProduct = () => {
 
   const [activeCategories, setActiveCategories] = useState([]);
   const [activeVendors, setActiveVendors] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchActiveCategories = async () => {
       try {
         const response = await axios.get("https://localhost:5004/api/Category/active");
         setActiveCategories(response.data); // Assuming the API returns an array of categories
-        toast.success('Product Added successfully!', {
-          position: "top-right",
-          autoClose: 3000, // Auto close after 3 seconds
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-      });
+      //   toast.success('Product Added successfully!', {
+      //     position: "top-right",
+      //     autoClose: 3000, // Auto close after 3 seconds
+      //     hideProgressBar: false,
+      //     closeOnClick: true,
+      //     pauseOnHover: true,
+      //     draggable: true,
+      //     progress: undefined,
+      // });
       } catch (error) {
         console.error("Error fetching active categories:", error);
         toast.error('Error updating product. Please try again.', {
@@ -114,6 +117,15 @@ const AddProduct = () => {
         },
       });
       console.log(response.data); // Handle successful response
+      toast.success('Product Added successfully!', {
+            position: "top-right",
+            autoClose: 3000, // Auto close after 3 seconds
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+        });
       // Optionally reset the form or redirect the user
     } catch (error) {
       console.error("Error creating product:", error); // Handle error
@@ -296,9 +308,9 @@ const AddProduct = () => {
                       <Button color="primary" type="submit" size="md">
                         Save
                       </Button>
-                      <Button color="danger" onClick={() => {/* Handle cancel logic here */ }} size="md">
-                        Cancel
-                      </Button>
+                      <Button color="danger" onClick={() => navigate('/admin/view-product')} size="md">
+  Cancel
+</Button>
                     </Col>
                   </Row>
                 </Form>

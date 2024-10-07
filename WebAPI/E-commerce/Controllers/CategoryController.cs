@@ -1,4 +1,10 @@
-﻿using E_commerce.Models;
+﻿/*
+ * File: CategoryController.cs
+ * Author: Krithiga D. B
+ * Description: This controller handles API requests related to category. 
+ * It provides endpoints to fetch, create, update, and delete category and toggle status of category.
+ */
+using E_commerce.Models;
 using E_commerce.Services;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
@@ -118,12 +124,12 @@ namespace E_commerce.Controllers
             return NoContent(); // 204 No Content response after successful update
         }
 
-    
 
 
 
 
 
+        // Delete category by id wby checking active products
         [HttpPatch("{id}/ChkDelete")]
         public async Task<IActionResult> CheckAndDelete(string id)
         {
