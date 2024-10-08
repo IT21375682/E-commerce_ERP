@@ -1,4 +1,12 @@
-﻿using E_commerce.DTOs;
+﻿/*
+ * File: UserController.cs
+ * Author: Shandeep. J    IT21375682
+ * Description: This file defines the API endpoints for managing User in the e-commerce system. 
+ * It includes routes for adding, retrieving, updating, and deleting User details.
+ */
+
+
+using E_commerce.DTOs;
 using E_commerce.Models;
 using E_commerce.Services;
 using Microsoft.AspNetCore.Http;
@@ -13,6 +21,7 @@ namespace E_commerce.Controllers
     {
         private readonly UserService _userService;
 
+        // Initializes the controller with the service.
         public UserController(UserService userService)
         {
             _userService = userService;
@@ -27,7 +36,7 @@ namespace E_commerce.Controllers
         }
 
         //GET :api/User/active- Fetch all Active users only
-        [HttpGet("active")] // New endpoint to get active users
+        [HttpGet("active")]
         public ActionResult<IEnumerable<User>> GetActiveUsers()
         {
             var activeUsers = _userService.GetActiveUsers();
@@ -39,7 +48,7 @@ namespace E_commerce.Controllers
 
 
         //GET :api/User/Deactive- Fetch all Active users only
-        [HttpGet("Deactive")] // New endpoint to get active users
+        [HttpGet("Deactive")] 
         public ActionResult<IEnumerable<User>> GetDeactiveUsers()
         {
             var DeactiveUsers = _userService.GetDeactiveUsers();
@@ -138,7 +147,7 @@ namespace E_commerce.Controllers
             }
             return Ok(user);
         }
-
+        // PUT: api/User/{id}/status - change Active status of User
         [HttpPut("{id}/status")]
         public IActionResult ToggleUserStatus(string id, [FromBody] ToggleStatusRequest request)
         {
