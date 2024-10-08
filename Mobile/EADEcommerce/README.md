@@ -29,7 +29,7 @@ This Android mobile application allows customers to browse and shop for products
 2. **Set Up the Retrofit Client**:
    - Ensure the `BASE_URL` in the `RetrofitClient` class points to your backend Web API:
      ```java
-     private static final String BASE_URL = "http://192.168.1.73/ClickCart/";
+     private static final String BASE_URL = "http://<Your_IP_Address>:<Port>/";
      ```
    - Replace the IP address with the appropriate IP or domain name of your Web API if needed.
 
