@@ -1,6 +1,3 @@
-
----
-
 # ClickCart - E-Commerce Android Mobile Application
 
 ## Project Overview
@@ -48,5 +45,3 @@ This Android mobile application allows customers to browse and shop for products
 - **Web API Requirements**: This app relies on a Web API for data management and communication. Ensure the Web API is running and accessible at the specified `BASE_URL`.
 - **User Authentication**: Account creation and activation are handled by CSR or Administrator, so customers must have their accounts activated before logging in.
 - **Data Handling**: The app uses Retrofit for API calls, making it easy to extend and modify as required by the project.
-
----
