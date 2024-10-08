@@ -13,30 +13,17 @@ This repository contains the front-end code for the **ClickCart E-commerce Syste
 - **Vendor Management**: Administrators can manage vendor profiles, while customers can rank and comment on vendors.
 - **Category Management**: Administrators can manage product categories and their statuses.
 
-
 ## Installation and Setup
 
 To get the project running locally, follow these steps:
 
-### Prerequisites
+```bash
+# Clone the repository
+git clone https://github.com/yourusername/clickcart-frontend.git
+cd clickcart-frontend
 
-- **Node.js**: Make sure you have Node.js installed. [Download Node.js](https://nodejs.org/).
-- **npm** : This project uses npm.
+# Install dependencies
+npm install
 
-### Steps
-
-1. Clone the repository:
-
-   ```bash
-   git clone https://github.com/yourusername/clickcart-frontend.git
-   cd clickcart-frontend
-
-2.Install the dependencies:
-
-  ```bash
-  npm install
-
-2.Start the development server:
-
-   ```bash
-   npm start
+# Start the development server
+npm start
