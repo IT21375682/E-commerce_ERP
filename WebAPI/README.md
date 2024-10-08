@@ -1,4 +1,3 @@
----
 # ClickCart- E-Commerce Web Service
 
 ## Project Overview
@@ -55,5 +54,3 @@ This Web API serves as the backbone for an end-to-end E-commerce system, designe
    }
    ```
 2. Launch the API using IIS Express from within Visual Studio for local testing.
-
----

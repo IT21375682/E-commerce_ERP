@@ -1,5 +1,3 @@
----
-
 # ClickCart - E-Commerce System
 
 ## Project Overview
@@ -98,5 +96,3 @@ The Web API is the core service for the ClickCart system, designed to handle all
 ## Additional Information
 
 For more details on specific components, please refer to the individual README files in the respective project directories. For issues or feature requests, feel free to reach out to the project maintainers.
-
----
