@@ -4,9 +4,9 @@
 
 ClickCart is a comprehensive end-to-end E-commerce system designed for seamless interaction between customers, vendors, and administrators. The system consists of three primary components: a Web API, a Web Application for back-office management, and a Mobile Application for customer interaction.
 
-- **Web API**: Serves as the backbone of the application, facilitating all data management and business logic.
-- **Web Application**: Developed using React, it provides a robust interface for Administrators, Vendors, and Customer Service Representatives (CSRs) to manage users, orders, products, and inventory.
-- **Mobile Application**: Enables customers to browse products, manage their carts, place orders, and provide feedback on their shopping experiences.
+- **Web API**: Serves as the backbone of the application, facilitating all data management and business logic. (Folder Name : WebAPI)
+- **Web Application**: Developed using React, it provides a robust interface for Administrators, Vendors, and Customer Service Representatives (CSRs) to manage users, orders, products, and inventory. (Folder Name : FrontEnd)
+- **Mobile Application**: Enables customers to browse products, manage their carts, place orders, and provide feedback on their shopping experiences. (Folder Name : Mobile/EADEcommerce)
 
 ## Features
 
