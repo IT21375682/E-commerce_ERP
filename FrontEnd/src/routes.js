@@ -1,9 +1,6 @@
-import Index from "views/Index.js";
 import AddVendor from "views/examples/AddVendor.js";
-import Register from "views/examples/Register.js";
 import Login from "views/examples/Login.js";
 import Tables from "views/examples/VendorTable.js";
-import Icons from "views/examples/Icons.js";
 import AddProduct from "views/examples/AddProduct";
 import ViewProduct from "views/examples/ViewProducts";
 import CustomerTable from "views/examples/CustomerTable.js"
@@ -19,20 +16,6 @@ import ViewComments from "views/examples/ViewComments";
 import InventoryManagement from "views/examples/inventoryManagement";
 
 var routes = [
-  // {
-  //   path: "/index",
-  //   name: "Dashboard",
-  //   icon: "ni ni-tv-2 text-primary",
-  //   component: <Index />,
-  //   layout: "/admin",
-  // },
-  {
-    path: "/icons",
-    name: "Icons",
-    icon: "ni ni-planet text-blue",
-    component: <Icons />,
-    layout: "/admin",
-  },
   {
     path: "/add-vendor",
     name: "Add Vendor",
@@ -101,13 +84,6 @@ var routes = [
     name: "Login",
     icon: "ni ni-key-25 text-info",
     component: <Login />,
-    layout: "/auth",
-  },
-  {
-    path: "/register",
-    name: "Register",
-    icon: "ni ni-circle-08 text-pink",
-    component: <Register />,
     layout: "/auth",
   },
   {

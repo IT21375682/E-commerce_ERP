@@ -1,28 +1,23 @@
 {
-  "name": "argon-dashboard-react",
+  "name": "clickart-react",
   "version": "1.2.4",
-  "description": "React version of Argon Dashboard by Creative Tim",
+  "description": "React version of clickart Dashboard",
   "main": "index.js",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/creativetimofficial/argon-dashboard-react.git"
+    "url": "git+https://github.com/IT21375682/E-commerce_ERP.git"
   },
   "keywords": [
     "react",
     "reactjs",
-    "argon",
-    "argon-react",
+    "clickart",
+    "clickart-react",
     "dashboard",
     "dashboard-react",
-    "argon-dashboard",
-    "argon-dashboard-react"
+    "clickart-dashboard",
+    "clickart-dashboard-react"
   ],
-  "author": "Creative Tim",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/creativetimofficial/argon-dashboard-react/issues"
-  },
-  "homepage": "https://demos.creative-tim.com/argon-dashboard-react/",
+  "author": "clickart Tim",
   "scripts": {
     "start": "react-scripts start",
     "build": "cross-env PUBLIC_URL=/ react-scripts build",

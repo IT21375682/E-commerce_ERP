@@ -7,7 +7,6 @@ import {
   Row,
   Button
 } from "reactstrap";
-import Header from "components/Headers/Header.js";
 import React, { useState, useEffect } from "react"; 
 import axios from "axios";
 
