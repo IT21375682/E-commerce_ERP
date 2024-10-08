@@ -1,4 +1,11 @@
 ﻿
+/*
+ * File: JwtService.cs
+ * Author: Shandee.J   IT21375682
+ * Description: This service handle JWT token genrating function
+ */
+
+
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;

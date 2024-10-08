@@ -1,4 +1,10 @@
-﻿using E_commerce.DTOs;
+﻿/*
+ * File: UserService.cs
+ * Author: Shandeep .J    IT21375682
+ * Description: This file defines the service layer for managing business logic related to User, such as validation and interaction with the repository.
+ */
+
+using E_commerce.DTOs;
 using E_commerce.Models;
 using E_commerce.Repositories;
 
@@ -8,29 +14,29 @@ namespace E_commerce.Services
     {
         private readonly IUserRepository _userRepository;
         private readonly JwtService _jwtService;
-
+        //initialize UserRepesitory and Jwtservice
         public UserService(IUserRepository userRepository, JwtService jwtService)
         {
             _userRepository = userRepository;
             _jwtService = jwtService;
         }
-
+        //GET all User
         public IEnumerable<User> GetAllUsers()
         {
             return _userRepository.GetAllUsers();
         }
-
+        //Get user by ID 
         public User GetUserById(string id)
         {
             return _userRepository.GetUserById(id);
         }
-
+        //Get user by email
         public User GetUserByEmail(string email)
         {
             return _userRepository.GetUserByEmail(email);
         }
 
-
+        //Create user
         public void CreateUser(User user)
         {
             // Check if the email is already taken
@@ -44,7 +50,7 @@ namespace E_commerce.Services
         }
 
 
-
+        //Login
         public Task<string> LoginAsync(string email, string password)
         {
             if (string.IsNullOrEmpty(email) || string.IsNullOrEmpty(password))
@@ -67,7 +73,7 @@ namespace E_commerce.Services
         }
 
 
-
+        //Update user data
         public void UpdateUser(string id, User user)
         {
             _userRepository.UpdateUser(id, user);
@@ -130,7 +136,7 @@ namespace E_commerce.Services
             return _userRepository.GetAllUsers().Any(user => user.Email == email);
         }
 
-
+        //Deactivate user account
         public void DeactivateUserAccount(string userId)
         {
             var user = _userRepository.GetUserById(userId);

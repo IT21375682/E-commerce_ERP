@@ -157,7 +157,8 @@ const Sidebar = (props) => {
             )}
 
             {/* Non-vendor-specific items */}
-            {(role == "ADMIN" || role === 'CSR') && (
+
+            {(role == "ADMIN") && (
               <>
                 <NavItem>
                   <NavLink href="/admin/view-vendor">
@@ -198,6 +199,37 @@ const Sidebar = (props) => {
 
 
               </>
+            )}
+
+ {/* Non-vendor-specific items */}
+ {(role==='CSR') && (
+              <>
+                <NavItem>
+                  <NavLink href="/admin/Customer-table">
+                    <i className="ni ni-ui-04" />
+                    Customer Management
+                  </NavLink>
+                </NavItem>
+                <NavItem>
+              <NavLink href="/admin/view-product">
+                <i className="ni ni-ui-04" />
+                Product Management
+              </NavLink>
+            </NavItem>
+                <NavItem>
+                  <NavLink href="/admin/view-order">
+                    <i className="ni ni-ui-04" />
+                    Order Management
+                  </NavLink>
+                </NavItem>
+                <NavItem>
+            <NavLink href="/admin/view-category">
+                <i className="ni ni-ui-04" />
+                Category Management
+              </NavLink>
+      </NavItem>
+
+      </>
             )}
           </Nav>
         </Collapse>
